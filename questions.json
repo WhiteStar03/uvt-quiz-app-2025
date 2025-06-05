@@ -1,0 +1,2558 @@
+{
+  "exam": {
+    "title": "Computer Science Final Exam 2025",
+    "description": "Written exam consisting of 30 questions with multiple answers, maximum duration of 2 hours",
+    "topics": [
+      {
+        "topic_id": 1,
+        "topic_name": "Discrete Structures and Algorithms",
+        "subtopics": [
+          {
+            "subtopic_name": "Algorithms and Data Structures",
+            "questions": [
+              {
+                "question_id": 1,
+                "question_text": "Let f(n) = n², g(n) = n log n, h(n) = sin(n). Which of the following statements is true? There may be more than one correct answer.",
+                "options": [
+                  {"id": "a", "text": "f = Θ(g)"},
+                  {"id": "b", "text": "h = o(g)"},
+                  {"id": "c", "text": "f = Ω(h)"},
+                  {"id": "d", "text": "h = O(g)"}
+                ],
+                "correct_answers": ["b", "c", "d"]
+              },
+              {
+                "question_id": 2,
+                "question_text": "A recursive program satisfies equation T(n) = 9T(n/3) + Θ(n²). What can we say about T(n)? There may be several correct answers.",
+                "options": [
+                  {"id": "a", "text": "T(n) = O(n log n)"},
+                  {"id": "b", "text": "T(n) = Ω(n²)"},
+                  {"id": "c", "text": "T(n) = Θ(n²)"},
+                  {"id": "d", "text": "T(n) = O(n³)"}
+                ],
+                "correct_answers": ["b", "d"]
+              },
+              {
+                "question_id": 3,
+                "question_text": "In which of the following data structures does searching an item has worst-case complexity Θ(log n)? There may be more than one.",
+                "options": [
+                  {"id": "a", "text": "Linked lists"},
+                  {"id": "b", "text": "Heaps"},
+                  {"id": "c", "text": "Red-black trees"},
+                  {"id": "d", "text": "Splay trees"}
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 4,
+                "question_text": "Which binary tree traversal can be used to list all numbers in a binary search tree in sorted order? There may be more than one correct answer.",
+                "options": [
+                  {"id": "a", "text": "Breadth-first search"},
+                  {"id": "b", "text": "Preorder"},
+                  {"id": "c", "text": "Inorder"},
+                  {"id": "d", "text": "Postorder"}
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 5,
+                "question_text": "Which of the following sorting methods is not a comparison-based sort? There may be more than one right answer.",
+                "options": [
+                  {"id": "a", "text": "Quicksort"},
+                  {"id": "b", "text": "Radix Sort"},
+                  {"id": "c", "text": "Insertion Sort"},
+                  {"id": "d", "text": "HeapSort"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 6,
+                "question_text": "Which of the following problems can be solved by an algorithm with complexity O(n log n)? There may be more than one right answer.",
+                "options": [
+                  {"id": "a", "text": "Given a list L of n integers, find three numbers x, y, z ∈ L (if they exist) such that x+y = z"},
+                  {"id": "b", "text": "Given a list L of n integers and a target value z, find two numbers in x, y ∈ L (if they exist) such that x + y = z"},
+                  {"id": "c", "text": "Given a list L of n integers and a target value z, find two numbers in x, y ∈ L (if they exist) such that x − y = z"},
+                  {"id": "d", "text": "Given a list L of n integers, find three numbers x, y, z ∈ L (if they exist) such that x+y+z = 0"}
+                ],
+                "correct_answers": ["b", "c"]
+              },
+              {
+                "question_id": 7,
+                "question_text": "Which of the following algorithms correctly computes the length of a longest increasing subsequence (LIS), problem and has complexity O(n²)? There may be more than one right answer.",
+                "options": [
+                  {"id": "a", "text": "Put the numbers in the list in piles of decreasing numbers. A new number is added greedily to the first pile it can be added to, or starts a new pile if it cannot be added to any existing pile. The length of the LIS is the number of piles."},
+                  {"id": "b", "text": "We run a greedy algorithm, maintaining a list of increasing numbers. When processing a new number we add it to the LIS if possible, we discard it and proceed otherwise."},
+                  {"id": "c", "text": "We run a backtracking algorithm, maintaining the list of the biggest LIS seen so far. When encountering a new number we add it to the sequence if possible. If not we backtrack and continue with the next sequence."},
+                  {"id": "d", "text": "We solve the problem by dynamic programming, computing the length of the LIS subsequence ending in a given term ak of the sequence. We then take the maximum of the so-computed LIS's."}
+                ],
+                "correct_answers": ["a", "d"]
+              },
+              {
+                "question_id": 8,
+                "question_text": "We are given a list of courses, each with a start and an end time. We only have one room and want to schedule as many of these courses as possible. Which of the following algorithms finds an optimal solution? There may be more than one correct answer.",
+                "options": [
+                  {"id": "a", "text": "Greedily choose the shortest courses"},
+                  {"id": "b", "text": "Greedily choose courses that start first"},
+                  {"id": "c", "text": "Greedily choose courses that end first"},
+                  {"id": "d", "text": "Sort courses by their endtime. Compute, for each course Ck, a longest sequence of courses that ends with Ck. Take the best such sequence over all k's."}
+                ],
+                "correct_answers": ["c", "d"]
+              },
+              {
+                "question_id": 9,
+                "question_text": "A recursive algorithm reduces solving the problem on inputs of size n to solving four subproblems on size n/2 and then combining the results. The combining step takes f(n) steps. We want our algorithm to have complexity O(n²). Which of the following are acceptable complexities for the combining step? There may be several right answers.",
+                "options": [
+                  {"id": "a", "text": "f(n) = O(1)"},
+                  {"id": "b", "text": "f(n) = O(n)"},
+                  {"id": "c", "text": "f(n) = O(n log n)"},
+                  {"id": "d", "text": "f(n) = Θ(n²)"}
+                ],
+                "correct_answers": ["a", "b", "c"]
+              },
+              {
+                "question_id": 10,
+                "question_text": "What is the complexity of inserting a new item in a sorted linked list of integers, such that the list remains sorted?",
+                "options": [
+                  {"id": "a", "text": "O(1)"},
+                  {"id": "b", "text": "Θ(1)"},
+                  {"id": "c", "text": "O(n)"},
+                  {"id": "d", "text": "Θ(log n)"}
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 11,
+                "question_text": "What data structure can we use to implement an iterative pre-order tree traversal?",
+                "options": [
+                  {"id": "a", "text": "Queue"},
+                  {"id": "b", "text": "Stack"},
+                  {"id": "c", "text": "Hash Table"},
+                  {"id": "d", "text": "Red-black tree"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 12,
+                "question_text": "What is the complexity of computing the median?",
+                "options": [
+                  {"id": "a", "text": "Θ(n)"},
+                  {"id": "b", "text": "Θ(n log n)"},
+                  {"id": "c", "text": "Θ(1)"},
+                  {"id": "d", "text": "Θ(n²)"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 13,
+                "question_text": "In a red-black tree which of the following is not necessarily true? There may be several correct answers.",
+                "options": [
+                  {"id": "a", "text": "The root is red"},
+                  {"id": "b", "text": "The root is black"},
+                  {"id": "c", "text": "Every path from the root to leaves has the same number of red nodes"},
+                  {"id": "d", "text": "A black parent can only have red children"}
+                ],
+                "correct_answers": ["a", "c", "d"]
+              },
+              {
+                "question_id": 14,
+                "question_text": "Which of the following is correct? There may be several correct answers.",
+                "options": [
+                  {"id": "a", "text": "The worst-case complexity of insert, delete, search operations in a binary search tree is O(log n)"},
+                  {"id": "b", "text": "The worst-case complexity of insert, delete, search operations in an AVL tree is O(log n)"},
+                  {"id": "c", "text": "The worst-case complexity of insert, delete, search operations in a splay tree is O(log n)"},
+                  {"id": "d", "text": "The worst-case complexity of insert, delete, search operations in a red-black tree is O(log n)"}
+                ],
+                "correct_answers": ["b", "d"]
+              },
+              {
+                "question_id": 15,
+                "question_text": "Which of the following sorting algorithm is not subject to the Ω(n log n) lower bound for sorting?",
+                "options": [
+                  {"id": "a", "text": "Counting sort"},
+                  {"id": "b", "text": "Heapsort"},
+                  {"id": "c", "text": "Radix Sort"},
+                  {"id": "d", "text": "MergeSort"}
+                ],
+                "correct_answers": ["a", "c"]
+              },
+              {
+                "question_id": 16,
+                "question_text": "Consider two strings A = \"abcca\" and B = \"abacbcaa\". Let x be the length of the longest common subsequence (not necessarily contiguous) between A and B and let y be the number of such longest common subsequences between A and B. Then x + 100y = ...",
+                "options": [
+                  {"id": "a", "text": "304"},
+                  {"id": "b", "text": "305"},
+                  {"id": "c", "text": "405"},
+                  {"id": "d", "text": "205"}
+                ],
+                "correct_answers": ["d"]
+              },
+              {
+                "question_id": 17,
+                "question_text": "Suppose we sort n ≥ 3 values using quicksort, and after the first pivoting there are equally many numbers on the left of the pivot as they are on the right. Which of the following are true? There may be multiple answers.",
+                "options": [
+                  {"id": "a", "text": "All the elements could have been the pivot"},
+                  {"id": "b", "text": "The pivot is the median"},
+                  {"id": "c", "text": "The pivot is not the maximum"},
+                  {"id": "d", "text": "none of the other statements"}
+                ],
+                "correct_answers": ["b", "c"]
+              },
+              {
+                "question_id": 18,
+                "question_text": "What is the second operation needed for inserting a value x at the front of a singly linked list? We assume the list is represented by one pointer head only.",
+                "options": [
+                  {"id": "a", "text": "allocate a node with the value x"},
+                  {"id": "b", "text": "x.next = head"},
+                  {"id": "c", "text": "head.prev = x"},
+                  {"id": "d", "text": "head = x"},
+                  {"id": "e", "text": "none of the other options"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 19,
+                "question_text": "What is the formula which defines the relation grandpa(i, j) in a binary min-heap?",
+                "options": [
+                  {"id": "a", "text": "(4 · j + 3 ≤ i) ∧ (i ≤ 4 · j + 6)"},
+                  {"id": "b", "text": "(4 · i + 3 ≤ j) ∧ (j ≤ 4 · i + 6)"},
+                  {"id": "c", "text": "j = ⌊i/4⌋"},
+                  {"id": "d", "text": "(4 · j + 1 ≤ i) ∧ (i ≤ 4 · j + 2)"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 20,
+                "question_text": "What is the maximum number of nodes in a binary min-heap with depth h?",
+                "options": [
+                  {"id": "a", "text": "2^(h+1) - 1"},
+                  {"id": "b", "text": "2^h"},
+                  {"id": "c", "text": "h² - 1"},
+                  {"id": "d", "text": "2^(h-1) + 1"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 21,
+                "question_text": "(i) If A is a binary min-heap then A is sorted in the ascending order of the keys from its nodes? True/False (ii) If A is sorted in the ascending order of the keys from its nodes then A is a binary min-heap? True/False",
+                "options": [
+                  {"id": "a", "text": "(i) True (ii) False"},
+                  {"id": "b", "text": "(i) False (ii) True"},
+                  {"id": "c", "text": "(i) False (ii) False"},
+                  {"id": "d", "text": "(i) True (ii) True"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 22,
+                "question_text": "What is the runtime complexity of the deletion of the node with minimum key from a binary min-heap with n nodes?",
+                "options": [
+                  {"id": "a", "text": "O(log n)"},
+                  {"id": "b", "text": "O(1)"},
+                  {"id": "c", "text": "Θ(n log n)"},
+                  {"id": "d", "text": "Θ(n)"}
+                ],
+                "correct_answers": ["a"]
+              }
+            ]
+          },
+          {
+            "subtopic_name": "Graph Theory and Combinatorics",
+            "questions": [
+              {
+                "question_id": 1,
+                "question_text": "Which is the rank of the permutation ⟨4, 1, 6, 2, 3, 5⟩ in lexicographic order?",
+                "options": [
+                  {"id": "a", "text": "376"},
+                  {"id": "b", "text": "378"},
+                  {"id": "c", "text": "380"},
+                  {"id": "d", "text": "720"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 2,
+                "question_text": "A message is a sequence of two types of signals: of type A which last for 1 second and of type B which last for 2 seconds. E.g., the message ABAAB lasts 7 seconds. How many different messages last 10 seconds?",
+                "options": [
+                  {"id": "a", "text": "68"},
+                  {"id": "b", "text": "32"},
+                  {"id": "c", "text": "89"},
+                  {"id": "d", "text": "144"}
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 3,
+                "question_text": "In how many ways can be colored the following configuration by using 2 colors: red and black?",
+                "options": [
+                  {"id": "a", "text": "64"},
+                  {"id": "b", "text": "48"},
+                  {"id": "c", "text": "128"},
+                  {"id": "d", "text": "36"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 4,
+                "question_text": "In how many ways can we split a group of 50 persons in 49 nonempty groups?",
+                "options": [
+                  {"id": "a", "text": "50"},
+                  {"id": "b", "text": "1225"},
+                  {"id": "c", "text": "49"},
+                  {"id": "d", "text": "2450"},
+                  {"id": "e", "text": "19600"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 5,
+                "question_text": "In how many ways can we choose 5 fruits from a market stall if on the stall there are: 5 apples, 5 pears and 5 apricots?",
+                "options": [
+                  {"id": "a", "text": "21"},
+                  {"id": "b", "text": "56"},
+                  {"id": "c", "text": "120"},
+                  {"id": "d", "text": "6"},
+                  {"id": "e", "text": "30"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 6,
+                "question_text": "Which of the following recurrence relations hold for any n > k > 0?",
+                "options": [
+                  {"id": "a", "text": "C(n,k) = C(n-1,k) + C(n-1,k-1)"},
+                  {"id": "b", "text": "S(n,k) = S(n-1,k) + k·S(n-1,k-1)"},
+                  {"id": "c", "text": "S(n,k) = k·S(n-1,k) + S(n-1,k-1)"},
+                  {"id": "d", "text": "C(n,k) = C(n-1,k) + (n-1)·C(n-1,k-1)"}
+                ],
+                "correct_answers": ["a", "c"]
+              },
+              {
+                "question_id": 7,
+                "question_text": "Which is the minimum weight spanning tree of the following connected graph? (hint: apply the Kruskal algorithm)",
+                "options": [
+                  {"id": "a", "text": "43"},
+                  {"id": "b", "text": "40"},
+                  {"id": "c", "text": "36"},
+                  {"id": "d", "text": "41"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 8,
+                "question_text": "Which is the Prüfer sequence of the following tree?",
+                "options": [
+                  {"id": "a", "text": "8, 3, 4, 5, 7, 6, 1, 9, 10, 11, 2"},
+                  {"id": "b", "text": "3, 4, 5, 7, 6, 1, 8, 2, 10, 11"},
+                  {"id": "c", "text": "8, 11, 9, 6, 1, 8, 8, 2, 2"},
+                  {"id": "d", "text": "8, 11, 9, 6, 1, 8, 2, 2, 8"}
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 9,
+                "question_text": "How many different trees with 5 nodes, labeled with numbers from 1 to 5 exists?",
+                "options": [
+                  {"id": "a", "text": "10"},
+                  {"id": "b", "text": "273"},
+                  {"id": "c", "text": "32"},
+                  {"id": "d", "text": "120"},
+                  {"id": "e", "text": "125"}
+                ],
+                "correct_answers": ["e"]
+              },
+              {
+                "question_id": 10,
+                "question_text": "In how many ways can we color the following graph G with three colors?",
+                "options": [
+                  {"id": "a", "text": "0"},
+                  {"id": "b", "text": "288"},
+                  {"id": "c", "text": "336"},
+                  {"id": "d", "text": "1874"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 11,
+                "question_text": "Which of the following graphs are eulerian graphs and which ones are not?",
+                "options": [
+                  {"id": "a", "text": "G1 : no, G2, G3 : yes"},
+                  {"id": "b", "text": "G1 : yes, G2, G3 : no"},
+                  {"id": "c", "text": "G1, G2 : yes, G3 : no"},
+                  {"id": "d", "text": "none"},
+                  {"id": "e", "text": "all of them are eulerian"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 12,
+                "question_text": "How many different IPv4 addresses are available for the internet network connections?",
+                "options": [
+                  {"id": "a", "text": "2^29"},
+                  {"id": "b", "text": "2^30 · 2^31"},
+                  {"id": "c", "text": "2^31"},
+                  {"id": "d", "text": "7 · 2^29"},
+                  {"id": "e", "text": "2^32"}
+                ],
+                "correct_answers": ["d"]
+              },
+              {
+                "question_id": 13,
+                "question_text": "In a drawer there are 8 brown socks and 12 black socks. A child picks socks from the drawer at random in the dark. How many socks must he take out to be sure that he picked at least two black socks?",
+                "options": [
+                  {"id": "a", "text": "3"},
+                  {"id": "b", "text": "10"},
+                  {"id": "c", "text": "14"},
+                  {"id": "d", "text": "9"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 14,
+                "question_text": "How many integer numbers between 1 and 1000 are divisible with 7, but are not divisible with 3?",
+                "options": [
+                  {"id": "a", "text": "93"},
+                  {"id": "b", "text": "95"},
+                  {"id": "c", "text": "92"},
+                  {"id": "d", "text": "136"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 15,
+                "question_text": "What is the total weight of a minimum spanning tree of this graph?",
+                "options": [
+                  {"id": "a", "text": "229"},
+                  {"id": "b", "text": "216"},
+                  {"id": "c", "text": "230"},
+                  {"id": "d", "text": "234"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 16,
+                "question_text": "What is the number of simple undirected graphs with n nodes labeled from 1 to n?",
+                "options": [
+                  {"id": "a", "text": "2^(n(n-1)/2)"},
+                  {"id": "b", "text": "2^n"},
+                  {"id": "c", "text": "n(n-1)/2"},
+                  {"id": "d", "text": "n-1"},
+                  {"id": "e", "text": "n·(n-1)"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 17,
+                "question_text": "What is the number of simple undirected graphs with n nodes labeled from 1 to n?",
+                "options": [
+                  {"id": "a", "text": "2^(n(n-1)/2)"},
+                  {"id": "b", "text": "2^n"},
+                  {"id": "c", "text": "n(n-1)/2"},
+                  {"id": "d", "text": "n-1"},
+                  {"id": "e", "text": "n·(n-1)"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 18,
+                "question_text": "What is the runtime complexity of this algorithm?",
+                "options": [
+                  {"id": "a", "text": "Θ(p·n²)"},
+                  {"id": "b", "text": "Θ(p·n)"},
+                  {"id": "c", "text": "Θ(p·n³)"},
+                  {"id": "d", "text": "Θ(n)"},
+                  {"id": "e", "text": "Θ(p·2^n)"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 19,
+                "question_text": "Which of the following assertions holds when B[i][j] = 1?",
+                "options": [
+                  {"id": "a", "text": "There is a path of length at most p + 1 from node i to node j"},
+                  {"id": "b", "text": "There is a path of length p from node i to node j"},
+                  {"id": "c", "text": "There is a path from node i to node j which goes through node p"},
+                  {"id": "d", "text": "There is a path from node i to node j which goes through all nodes from the set {1, 2, ..., p}"}
+                ],
+                "correct_answers": ["a"]
+              }
+            ]
+          },
+          {
+            "subtopic_name": "Computational Logic",
+            "questions": [
+              {
+                "question_id": 1,
+                "question_text": "Which of the following are terms over this language?",
+                "options": [
+                  {"id": "a", "text": "(0 * x) - 1"},
+                  {"id": "b", "text": "1 + (z * x) < 0"},
+                  {"id": "c", "text": "x + ((-1) * 0)"},
+                  {"id": "d", "text": "0 * (y + 1)"}
+                ],
+                "correct_answers": ["c", "d"]
+              },
+              {
+                "question_id": 2,
+                "question_text": "For the following propositional formulae, and for the truth valuation {P, ¬Q}:",
+                "options": [
+                  {"id": "a", "text": "((P ⇒ Q) ∧ ((¬Q) ∧ P)) evaluates to T"},
+                  {"id": "b", "text": "((P ⇒ Q) ⇒ (Q ⇒ P) evaluates to T"},
+                  {"id": "c", "text": "((¬(P ∨ Q)) ∧ (¬Q)) evaluates to F"}
+                ],
+                "correct_answers": ["b", "c"]
+              },
+              {
+                "question_id": 3,
+                "question_text": "Which of the following statements are true:",
+                "options": [
+                  {"id": "a", "text": "if a propositional formula is valid then it is satisfiable"},
+                  {"id": "b", "text": "if a propositional formula is not valid then it is satisfiable"},
+                  {"id": "c", "text": "if a propositional formula is not valid then its negation is satisfiable"},
+                  {"id": "d", "text": "if a propositional formula is not valid, then its negation is valid"}
+                ],
+                "correct_answers": ["a", "c"]
+              },
+              {
+                "question_id": 4,
+                "question_text": "What is the relation between propositions (F ∧ G) ⇒ H and F ⇒ (G ⇒ H)?",
+                "options": [
+                  {"id": "a", "text": "they are logically equivalent"},
+                  {"id": "b", "text": "the first one is a logical consequence of the second one"},
+                  {"id": "c", "text": "the second one is a logical consequence of the first one"},
+                  {"id": "d", "text": "they are not related in any of the ways above"}
+                ],
+                "correct_answers": ["a", "b", "c"]
+              },
+              {
+                "question_id": 5,
+                "question_text": "The formula P ⇔ Q is:",
+                "options": [
+                  {"id": "a", "text": "logically equivalent to the conjunction of"},
+                  {"id": "b", "text": "a logical consequence of"},
+                  {"id": "c", "text": "logically equivalent to the disjunction of"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 6,
+                "question_text": "Which of the following formulae are in Disjunctive Normal Form?",
+                "options": [
+                  {"id": "a", "text": "P"},
+                  {"id": "b", "text": "¬P ∨ Q"},
+                  {"id": "c", "text": "P ∧ ¬Q ∧ S"},
+                  {"id": "d", "text": "(P ∧ ¬Q ∧ S) ∨ ¬S"}
+                ],
+                "correct_answers": ["a", "b", "c", "d"]
+              },
+              {
+                "question_id": 7,
+                "question_text": "What is a resolvent of clauses {P, ¬Q, R} and {¬P, Q, S}?",
+                "options": [
+                  {"id": "a", "text": "∅"},
+                  {"id": "b", "text": "{P, ¬P, R, S}"},
+                  {"id": "c", "text": "{R, S}"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 8,
+                "question_text": "To establish whether a formula G is a logical consequence of formulae F1, ..., Fn, which of the following methods can be applied:",
+                "options": [
+                  {"id": "a", "text": "check that (F1 ∧ ... ∧ Fn) ⇒ G is unsatisfiable"},
+                  {"id": "b", "text": "check that ¬F1 ∨ ... ∨ ¬Fn ∨ G is unsatisfiable"},
+                  {"id": "c", "text": "check that ¬F1 ∨ ... ∨ ¬Fn ∨ G is valid"},
+                  {"id": "d", "text": "check that F1 ∧ ... ∧ Fn ∧ ¬G is unsatisfiable"}
+                ],
+                "correct_answers": ["c", "d"]
+              },
+              {
+                "question_id": 9,
+                "question_text": "There is a formula which is logically equivalent to the given expression and contains only propositional connectives from:",
+                "options": [
+                  {"id": "a", "text": "{¬, ∨}"},
+                  {"id": "b", "text": "{∨, ∧}"},
+                  {"id": "c", "text": "{|}"},
+                  {"id": "d", "text": "{⊥, ⇒}"}
+                ],
+                "correct_answers": ["a", "c", "d"]
+              },
+              {
+                "question_id": 10,
+                "question_text": "The clause set corresponding to the formula (¬P ⇒ (Q ∧ R)) ⇒ (P ⇒ ¬Q) is:",
+                "options": [
+                  {"id": "a", "text": "{{¬P, ¬Q}}"},
+                  {"id": "b", "text": "{{P, ¬Q}, {P, R}, {¬Q, R}}"},
+                  {"id": "c", "text": "{{P, ¬Q, ¬R}, {P, Q, R}, {¬P, ¬Q, R}}"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 11,
+                "question_text": "The formula corresponding to this clause set is:",
+                "options": [
+                  {"id": "a", "text": "valid"},
+                  {"id": "b", "text": "satisfiable"},
+                  {"id": "c", "text": "unsatisfiable"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 12,
+                "question_text": "The Davis-Putnam method returns the answer satisfiable:",
+                "options": [
+                  {"id": "a", "text": "when the empty clause is generated"},
+                  {"id": "b", "text": "when the empty clause set is generated"},
+                  {"id": "c", "text": "when no new clauses can be generated, and the empty clause is not in the clause set"}
+                ],
+                "correct_answers": ["b", "c"]
+              },
+              {
+                "question_id": 13,
+                "question_text": "To prove a goal G when a disjunction A ∨ B is known:",
+                "options": [
+                  {"id": "a", "text": "assume A and prove G then assume B and prove G"},
+                  {"id": "b", "text": "assume A and prove G"},
+                  {"id": "c", "text": "assume ¬A and prove B and G"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 14,
+                "question_text": "Which of the following propositional formulas correspond to the boolean function with 3 arguments that returns T when its inputs represent the binary encoding of a prime number:",
+                "options": [
+                  {"id": "a", "text": "P ∧ Q ∧ ¬R"},
+                  {"id": "b", "text": "(¬P ∧ Q) ∨ (P ∧ R)"},
+                  {"id": "c", "text": "(¬P ∧ Q ∧ ¬R) ∨ (((¬P ∧ Q) ∨ P) ∧ R)"},
+                  {"id": "d", "text": "((¬P ∧ Q) ∨ (P ∧ ¬Q) ∨ (P ∧ Q))"}
+                ],
+                "correct_answers": ["b", "c"]
+              },
+              {
+                "question_id": 15,
+                "question_text": "The first step in running the Davis Putnam method is:",
+                "options": [
+                  {"id": "a", "text": "applying the splitting rule (using the literal ¬P)"},
+                  {"id": "b", "text": "applying the pure literal rule (where the pure literal is ¬Q)"},
+                  {"id": "c", "text": "applying the resolution rule"},
+                  {"id": "d", "text": "applying the one literal rule (using the last clause)"}
+                ],
+                "correct_answers": ["b"]
+              }
+            ]
+          },
+          {
+            "subtopic_name": "Formal Languages and Automata Theory",
+            "questions": [
+              {
+                "question_id": 1,
+                "question_text": "Which of the following regular expressions express your needs:",
+                "options": [
+                  {"id": "a", "text": "(+407|00407)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9); ((a|...|z|A|...|Z)+.(a|...|z|A|...|Z)+@(a|...|z)+.ro)|((a|...|z|A|...|Z)+@(a|...|z)*. ro)"},
+                  {"id": "b", "text": "(+407|00407)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9); ((a|...|z|A|...|Z)+.(a|...|z|A|...|Z)+@(a|...|z)+.ro)|((a|...|z|A|...|Z)+@(a|...|z)+.ro)"},
+                  {"id": "c", "text": "(+407|00407)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9); ((a|...|z|A|...|Z)+.(a|...|z|A|...|Z)+@(a|...|z)+.ro) ((a|...|z|A|...|Z)+@(a|...|z)+.ro)"},
+                  {"id": "d", "text": "(+407|00407)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9); ((a|...|z|A|...|Z)+.(a|...|z|A|...|Z)+@(a|...|z)+.ro)|((a|...|z|A|...|Z)+@(a|...|z)+.ro)"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 2,
+                "question_text": "Which of the following grammars help you building the solution:",
+                "options": [
+                  {"id": "a", "text": "VN = {S}, VT = {0, ..., 9}, S, P = {S → 0S0|1S1|...|9S9|λ}"},
+                  {"id": "b", "text": "VN = {S}, VT = {0, ..., 9}, S, P = {S → 0S0|1S1|...|9S9|0|...|9}"},
+                  {"id": "c", "text": "VN = {S}, VT = {0, ..., 9}, S, P = {S → 0S0|1S1|...|9S9|0|...|9|λ}"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 3,
+                "question_text": "The regular expression (a|b|c)a*b*c*:",
+                "options": [
+                  {"id": "a", "text": "generates the language containing words composed of a,b,c, starting with either a or b or c followed by 0 or more occurrences of a, followed by 0 or more occurrences of b, followed by 0 or more occurrences of c"},
+                  {"id": "b", "text": "L = {a^n b^m c^p | n ≥ 1, m ≥ 0, p ≥ 0} ∪ {a^n b^m c^p | n ≥ 0, m ≥ 1, p ≥ 0} ∪ {a^n b^m c^p | n ≥ 0, m ≥ 0, p ≥ 1}"},
+                  {"id": "c", "text": "can be rewritten as the regular expression a+b+c+"},
+                  {"id": "d", "text": "generates the language which is recognized by the automaton with states q0, q1, q2, q3"}
+                ],
+                "correct_answers": ["a", "d"]
+              },
+              {
+                "question_id": 4,
+                "question_text": "Which of the following sets of strings are not regular languages?",
+                "options": [
+                  {"id": "a", "text": "The set of bitstrings with equal number of 0s and 1s"},
+                  {"id": "b", "text": "The set of decimal strings that represent prime numbers"},
+                  {"id": "c", "text": "The set of bitstrings with more 1s than 0s"}
+                ],
+                "correct_answers": ["a", "b", "c"]
+              },
+              {
+                "question_id": 5,
+                "question_text": "Which of the following regular expressions describe genomes which contain a Fragile X Syndrome?",
+                "options": [
+                  {"id": "a", "text": "gcg(cgg|agg)*ctg"},
+                  {"id": "b", "text": "gcg(cgg|agg)+ctg"},
+                  {"id": "c", "text": "gcg*(cgg|agg)*ctg*"},
+                  {"id": "d", "text": "gcg(cgg|agg)*ctge"}
+                ],
+                "correct_answers": ["a", "b"]
+              },
+              {
+                "question_id": 6,
+                "question_text": "Which of the following strings are accepted by the DFA:",
+                "options": [
+                  {"id": "a", "text": "Bitstrings that end in 1"},
+                  {"id": "b", "text": "Bitstrings with an equal number of occurrences of 01 and 10"},
+                  {"id": "c", "text": "Bitstrings with more 1s than 0s"},
+                  {"id": "d", "text": "Bitstrings with an equal number of occurrences of 0 and 1"},
+                  {"id": "e", "text": "Bitstrings with at least one 1"},
+                  {"id": "f", "text": "None"}
+                ],
+                "correct_answers": ["f"]
+              },
+              {
+                "question_id": 7,
+                "question_text": "Which of the following proteins is in the C2H2-type zinc finger domain?",
+                "options": [
+                  {"id": "a", "text": "CAASCGGPYACGGWAGYHAGWH"},
+                  {"id": "b", "text": "CAVLIMCRKHDENQSTYFWP"},
+                  {"id": "c", "text": "CAASCGGPYACGGWAGYHGWH"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 8,
+                "question_text": "Which of the following Java code snippets implements a GREP matcher for the C2H2-type zinc finger domain signature?",
+                "options": [
+                  {"id": "a", "text": "String re = \"C.{2,4}C...[LIVMFYWCX].{8}H.{3,5}H\";"},
+                  {"id": "b", "text": "String re = \"C.{2,4}C...[^LIVMFYWCX].{8}H.{3,5}H\";"},
+                  {"id": "c", "text": "String re = \"C.{2,4}C...{LIVMFYWCX}.{8}H.{3,5}H\";"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 9,
+                "question_text": "Which of the following Java code snippets implements a GREP matcher for email addresses with the edu or com domains?",
+                "options": [
+                  {"id": "a", "text": "String re = \"[a-z]*@([a-z]+\\.)+( edu|com)\";"},
+                  {"id": "b", "text": "String re = \"[a-z]+@([a-z]+\\.)+( edu|com)\";"},
+                  {"id": "c", "text": "String re = \"[^a-z]+@([a-z]+\\.)+( edu|com)\";"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 10,
+                "question_text": "Which of the following strings match the regular expression a*bb(ab | ba)*:",
+                "options": [
+                  {"id": "a", "text": "abb"},
+                  {"id": "b", "text": "aaba"},
+                  {"id": "c", "text": "abba"},
+                  {"id": "d", "text": "bbbaab"},
+                  {"id": "e", "text": "cbb"},
+                  {"id": "f", "text": "bbababbab"}
+                ],
+                "correct_answers": ["a", "d"]
+              },
+              {
+                "question_id": 11,
+                "question_text": "Is L a regular language?",
+                "options": [
+                  {"id": "a", "text": "YES"},
+                  {"id": "b", "text": "NO"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 12,
+                "question_text": "How many strings of length 4 does L contain?",
+                "options": [
+                  {"id": "a", "text": "16"},
+                  {"id": "b", "text": "24"},
+                  {"id": "c", "text": "32"},
+                  {"id": "d", "text": "81"},
+                  {"id": "e", "text": "243"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 13,
+                "question_text": "Which of the following statements is true?",
+                "options": [
+                  {"id": "a", "text": "L = {w ∈ V*T | w does not contain consecutive identical letters}"},
+                  {"id": "b", "text": "L = {w ∈ V*T | w contains identical consecutive letters}"},
+                  {"id": "c", "text": "L = {w ∈ V*T | w contains the substring abc }"},
+                  {"id": "d", "text": "L = {λ}"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 14,
+                "question_text": "For every n > 1, the following recursive relation holds:",
+                "options": [
+                  {"id": "a", "text": "sn = 2 · sn-1"},
+                  {"id": "b", "text": "sn = 3 · sn-1"},
+                  {"id": "c", "text": "sn = sn-1 + 2 · sn-2"},
+                  {"id": "d", "text": "sn = 3 sn-1 + sn-2"}
+                ],
+                "correct_answers": ["a"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "topic_id": 2,
+        "topic_name": "Programming Languages and Software Engineering",
+        "subtopics": [
+          {
+            "subtopic_name": "Python Language",
+            "questions": [
+              {
+                "question_id": 1,
+                "question_text": "Analyze the following code:\nclass A:\n    def __init__(self, s):\n        self.s = s\n    def print(self):\n        print(s)\na = A(\"Welcome\")\na.print()",
+                "options": [
+                  {"id": "a", "text": "The program has an error because class A does not have a constructor"},
+                  {"id": "b", "text": "The program has an error because class A should have a print method with signature print(self, s)"},
+                  {"id": "c", "text": "The program has an error because class A should have a print method with signature print(s)"},
+                  {"id": "d", "text": "The program would run if the line print(s) is changed to print(self.s)"}
+                ],
+                "correct_answers": ["d"]
+              },
+              {
+                "question_id": 2,
+                "question_text": "What is the result of the execution of the following code?\nx = 2\nfor i in range(x):\n    x += 1\nprint(x)",
+                "options": [
+                  {"id": "a", "text": "0 1 2 3 4 ..."},
+                  {"id": "b", "text": "0 1"},
+                  {"id": "c", "text": "3 4"},
+                  {"id": "d", "text": "0 1 2 3"}
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 3,
+                "question_text": "Which is the output of the following code?\nnames1 = ['Amir', 'Barry', 'Charles', 'Dao']\nnames2 = names1\nnames3 = names1[:]\nnames2[0] = 'Alice'\nnames3[1] = 'Bob'\nsum = 0\nfor ls in (names1, names2, names3):\n    if ls[0] == 'Alice':\n        sum += 1\n    if ls[1] == 'Bob':\n        sum += 10\nprint(sum)",
+                "options": [
+                  {"id": "a", "text": "11"},
+                  {"id": "b", "text": "12"},
+                  {"id": "c", "text": "21"},
+                  {"id": "d", "text": "22"},
+                  {"id": "e", "text": "33"},
+                  {"id": "f", "text": "0"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 4,
+                "question_text": "Which of the following is/are features of DocString?",
+                "options": [
+                  {"id": "a", "text": "Provide a convenient way of associating documentation with Python modules, functions, classes, and methods"},
+                  {"id": "b", "text": "Provide a convenient way of associating documentation only with Python classes, and methods"},
+                  {"id": "c", "text": "All functions should have a docstring"},
+                  {"id": "d", "text": "Providing documentation to a application is time-waste"},
+                  {"id": "e", "text": "Docstrings can be accessed by the __doc__ attribute on objects"}
+                ],
+                "correct_answers": ["a", "e"]
+              },
+              {
+                "question_id": 5,
+                "question_text": "Which of the following statements are TRUE about generators (in Python):",
+                "options": [
+                  {"id": "a", "text": "Generators are lazy in nature"},
+                  {"id": "b", "text": "Generators are eager in nature"},
+                  {"id": "c", "text": "Generators could make your program to perform faster if the values are generated only once"},
+                  {"id": "d", "text": "Generators could make your program to perform faster if the values are generated multiple times"},
+                  {"id": "e", "text": "Generators could make your program to perform slower"}
+                ],
+                "correct_answers": ["a", "c", "d"]
+              },
+              {
+                "question_id": 6,
+                "question_text": "Which statements is/are true about \"assertion\" (in Python):",
+                "options": [
+                  {"id": "a", "text": "Best way to test precondition violation"},
+                  {"id": "b", "text": "Can be disabled in production environments"},
+                  {"id": "c", "text": "An example of good defensive programming"},
+                  {"id": "d", "text": "Are used for debugging in production environments"},
+                  {"id": "e", "text": "Assertions and exceptions are used to provide feedback to the client"}
+                ],
+                "correct_answers": ["a", "b", "c"]
+              },
+              {
+                "question_id": 7,
+                "question_text": "Which is the output of the following code?\nclass A:\n    def __init__(self):\n        self.calcI(30)\n    def calcI(self, i):\n        self.i = 2 * i;\n\nclass B(A):\n    def __init__(self):\n        super().__init__()\n        print(\"i from B is\", self.i)\n    def calcI(self, i):\n        self.i = 3 * i;\n\nb = B()",
+                "options": [
+                  {"id": "a", "text": "Just the __init__ method of class B gets invoked"},
+                  {"id": "b", "text": "The __init__ method of class A gets invoked and it displays \"i from B is 0\""},
+                  {"id": "c", "text": "The __init__ method of class A gets invoked and it displays \"i from B is 60\""},
+                  {"id": "d", "text": "The __init__ method of class A gets invoked and it displays \"i from B is 90\""}
+                ],
+                "correct_answers": ["d"]
+              },
+              {
+                "question_id": 8,
+                "question_text": "Which of the following statements are true regarding the opening modes of a file?",
+                "options": [
+                  {"id": "a", "text": "When you open a file for reading, if the file does not exist, an error occurs"},
+                  {"id": "b", "text": "When you open a file for writing, if the file does not exist, an error occurs"},
+                  {"id": "c", "text": "When you open a file for reading, if the file does not exist, the program will open an empty file"},
+                  {"id": "d", "text": "When you open a file for writing, if the file does not exist, a new file is created"},
+                  {"id": "e", "text": "When you open a file for writing, if the file exists, the existing file is overwritten with the new content"}
+                ],
+                "correct_answers": ["a", "d", "e"]
+              },
+              {
+                "question_id": 9,
+                "question_text": "Which of the following statements are true about the following code?\ns=0\ntry:\n    f = open(\"test.txt\",encoding = 'utf-8')\n    for i in f:\n        s += len(i)\nfinally:\n    f.close()\nprint(s)",
+                "options": [
+                  {"id": "a", "text": "the program will print the size of an existing \"test.txt\" file, in bytes"},
+                  {"id": "b", "text": "the program will crash because i is an integer"},
+                  {"id": "c", "text": "the program will crash if the file does not exist"},
+                  {"id": "d", "text": "the program will print 0 if the file does not exist"}
+                ],
+                "correct_answers": ["a", "c"]
+              }
+            ]
+          },
+          {
+            "subtopic_name": "C Language",
+            "questions": [
+              {
+                "question_id": 1,
+                "question_text": "What's wrong with the sequence:\nint t[N], *low=t, *mid, *high=&t[N-1];\nmid = (low+high) / 2;",
+                "options": [
+                  {"id": "a", "text": "addition of two pointers is an illegal operation"},
+                  {"id": "b", "text": "a pointer can't be initialized with an array"},
+                  {"id": "c", "text": "the initialization of low and high is incorrect"},
+                  {"id": "d", "text": "mid can't be initialized with a real value (when low+high is odd!)"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 2,
+                "question_text": "Knowing that the . and the -> operator have equal precedence, higher than the precedence of the * operator and assuming the following declarations, which of the expressions below are correct?",
+                "options": [
+                  {"id": "a", "text": "r[i].p1.x"},
+                  {"id": "b", "text": "r[i]->p1.x"},
+                  {"id": "c", "text": "(*r[i]).p1.x"},
+                  {"id": "d", "text": "*r[i].p1.x"}
+                ],
+                "correct_answers": ["b", "c"]
+              },
+              {
+                "question_id": 3,
+                "question_text": "Which of the following storage classes is implicit, due to the place of the variable's declaration:",
+                "options": [
+                  {"id": "a", "text": "static"},
+                  {"id": "b", "text": "auto"},
+                  {"id": "c", "text": "register"},
+                  {"id": "d", "text": "extern"}
+                ],
+                "correct_answers": ["a", "b"]
+              },
+              {
+                "question_id": 4,
+                "question_text": "Can two functions, neither of whom calls the other, communicate (share data)?",
+                "options": [
+                  {"id": "a", "text": "no"},
+                  {"id": "b", "text": "yes, through messages"},
+                  {"id": "c", "text": "yes, through global variables"}
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 5,
+                "question_text": "Given float x=2.5; the value of the expression 3.0*x+10/4 is:",
+                "options": [
+                  {"id": "a", "text": "10.0"},
+                  {"id": "b", "text": "9.5"},
+                  {"id": "c", "text": "of type double"},
+                  {"id": "d", "text": "of type float"}
+                ],
+                "correct_answers": ["b", "c"]
+              },
+              {
+                "question_id": 6,
+                "question_text": "The type of p, used in the expression p->m is:",
+                "options": [
+                  {"id": "a", "text": "pointer to some structure"},
+                  {"id": "b", "text": "the type of m"},
+                  {"id": "c", "text": "void *"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 7,
+                "question_text": "Knowing that \"0123456789\" is a C string constant, which is the result of evaluating the expression: \"0123456789\"[i] if i=10?",
+                "options": [
+                  {"id": "a", "text": "the expression is syntactically wrong"},
+                  {"id": "b", "text": "undefined"},
+                  {"id": "c", "text": "'\\0'"},
+                  {"id": "d", "text": "of type char"}
+                ],
+                "correct_answers": ["c", "d"]
+              },
+              {
+                "question_id": 8,
+                "question_text": "What would the value of q-p be if:\nint t[20], *p=t, *q=&t[19];",
+                "options": [
+                  {"id": "a", "text": "19"},
+                  {"id": "b", "text": "20"},
+                  {"id": "c", "text": "t[19]- t[0]"},
+                  {"id": "d", "text": "It is illegal to substract a pointer from another pointer!"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 9,
+                "question_text": "What will be the value of variable a (before return) by running the following C code:\nint main(){\n    char a, a1=200, a2=110;\n    a = a1 + a2;\n    return 0;\n}",
+                "options": [
+                  {"id": "a", "text": "a = 54"},
+                  {"id": "b", "text": "a = 310"},
+                  {"id": "c", "text": "a = 182"},
+                  {"id": "d", "text": "a = −54"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 10,
+                "question_text": "What will be the value of variable \"b\" after execution of the following code:\nunsigned char a; int b=0;\nfor (a=0; a<256; a++) { b++;}",
+                "options": [
+                  {"id": "a", "text": "there is an infinite loop"},
+                  {"id": "b", "text": "0"},
+                  {"id": "c", "text": "256"},
+                  {"id": "d", "text": "compilation error"},
+                  {"id": "e", "text": "-1"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 11,
+                "question_text": "Select the correct statement(s) regarding the following lines:\nconst int a = 12;\n#define b 12",
+                "options": [
+                  {"id": "a", "text": "there is no difference between const and define"},
+                  {"id": "b", "text": "the const definition will allocate space in memory"},
+                  {"id": "c", "text": "b will be processed by the preprocesor and will not appear at compilation"},
+                  {"id": "d", "text": "we cannot see in debug the constant b but we can see the constant a"}
+                ],
+                "correct_answers": ["b", "c", "d"]
+              },
+              {
+                "question_id": 12,
+                "question_text": "Which of the following statements will generate a memory allocation:",
+                "options": [
+                  {"id": "a", "text": "int x;"},
+                  {"id": "b", "text": "typedef int integer"},
+                  {"id": "c", "text": "struct {char x; long y; short z};"},
+                  {"id": "d", "text": "double *p;"}
+                ],
+                "correct_answers": ["a", "d"]
+              },
+              {
+                "question_id": 13,
+                "question_text": "Which of the following allocations occupies more space:",
+                "options": [
+                  {"id": "a", "text": "int *pi;"},
+                  {"id": "b", "text": "char *pc;"},
+                  {"id": "c", "text": "long *pl;"},
+                  {"id": "d", "text": "double **ppd;"},
+                  {"id": "e", "text": "none of them (all pointers have the same amount of bytes)"}
+                ],
+                "correct_answers": ["e"]
+              },
+              {
+                "question_id": 14,
+                "question_text": "What will be the output after running the following code:\nint compute(int x){\n    static int b=20;\n    b--;\n    return b+x;\n}\nint main (void){\n    int i;\n    for (i=3;i>=0;i--)\n        printf(\"%d \",compute(i));\n    return 0;\n}",
+                "options": [
+                  {"id": "a", "text": "22 20 18 16"},
+                  {"id": "b", "text": "23 22 21 20"},
+                  {"id": "c", "text": "23 21 19 17"},
+                  {"id": "d", "text": "3 2 1 0"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 15,
+                "question_text": "Let suppose that we have an int variable x and an int* pointer variable p. We have initialized x by 2 and p to the address of x. Which of the following statements are true?",
+                "options": [
+                  {"id": "a", "text": "The address of x and the value of p is the same"},
+                  {"id": "b", "text": "The value of x and the value of *p is the same"},
+                  {"id": "c", "text": "The address of p and the value of &x are equal"},
+                  {"id": "d", "text": "&x == *p"}
+                ],
+                "correct_answers": ["a", "b"]
+              }
+            ]
+          },
+          {
+            "subtopic_name": "C++ Language",
+            "questions": [
+              {
+                "question_id": 1,
+                "question_text": "Which of the following statements is true (in a C++ context)?",
+                "options": [
+                  {"id": "a", "text": "A static function cannot throw an exception"},
+                  {"id": "b", "text": "A static function cannot access a non-static member of the class"},
+                  {"id": "c", "text": "A static function cannot access a static member of the class"},
+                  {"id": "d", "text": "A static member cannot be modified in const non-static member functions"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 2,
+                "question_text": "Match the verb with the class relationship it describes",
+                "options": [
+                  {"id": "a", "text": "(1, a), (2, b), (3, c)"},
+                  {"id": "b", "text": "(1, b), (2, c), (3, a)"},
+                  {"id": "c", "text": "(1, c), (2, b), (3, a)"},
+                  {"id": "d", "text": "(1, b), (2, a), (3, c)"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 3,
+                "question_text": "The OCP principle refers to:",
+                "options": [
+                  {"id": "a", "text": "responsibilities that a class must implement"},
+                  {"id": "b", "text": "defining a consistent class hierarchy"},
+                  {"id": "c", "text": "problems that appear because of duplicate code"},
+                  {"id": "d", "text": "the possibility of class extension and avoidance of the modification of existing classes / code"}
+                ],
+                "correct_answers": ["d"]
+              },
+              {
+                "question_id": 4,
+                "question_text": "If a class X has pointer variable members, then the class should also contain:",
+                "options": [
+                  {"id": "a", "text": "an empty destructor X(){}"},
+                  {"id": "b", "text": "a fiend function that copies an object of class X"},
+                  {"id": "c", "text": "an overload of the assignment operator"},
+                  {"id": "d", "text": "a copy constructor"},
+                  {"id": "e", "text": "an overload of the == operator"},
+                  {"id": "f", "text": "a destructor that releases the memory pointed by the members of type pointer"}
+                ],
+                "correct_answers": ["c", "d", "f"]
+              },
+              {
+                "question_id": 5,
+                "question_text": "How many times the constructors of class Date are invoked?",
+                "options": [
+                  {"id": "a", "text": "2"},
+                  {"id": "b", "text": "3"},
+                  {"id": "c", "text": "4"},
+                  {"id": "d", "text": "5"}
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 6,
+                "question_text": "Which of the following statements is true?",
+                "options": [
+                  {"id": "a", "text": "class Rectangle cannot be instantiated because of the method addControlPoint that is not implementated"},
+                  {"id": "b", "text": "class Rectangle cannot be instantiated because it is an abstract class"},
+                  {"id": "c", "text": "the code compiles successfully"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 7,
+                "question_text": "Which of the following code snippets is the correct implementation of the static function MyClass* instance() declared in class MyClass?",
+                "options": [
+                  {"id": "a", "text": "static MyClass* MyClass::instance() {return new MyClass; }"},
+                  {"id": "b", "text": "MyClass* instance() { return new MyClass; }"},
+                  {"id": "c", "text": "MyClass MyClass::instance() { return new MyClass; }"},
+                  {"id": "d", "text": "MyClass* MyClass::instance() { return new MyClass; }"},
+                  {"id": "e", "text": "MyClass::MyClass* instance() { return new MyClass; }"}
+                ],
+                "correct_answers": ["d"]
+              },
+              {
+                "question_id": 8,
+                "question_text": "What is the minimal implementation of class INT so that the declarations INT i{10}, ii{i}; are correct.",
+                "options": [
+                  {"id": "a", "text": "struct INT { INT(int x); };"},
+                  {"id": "b", "text": "struct INT { INT(int x) {}; };"},
+                  {"id": "c", "text": "struct INT { INT(int x) {} INT(const INT& r) {} };"},
+                  {"id": "d", "text": "struct INT { INT(int x); INT(const INT& r); };"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 9,
+                "question_text": "Which condition needs to be satisfied so that the code below compiles and the execution of function min returns the minimum value of the arguments?",
+                "options": [
+                  {"id": "a", "text": "?: operator needs to be overloaded for type T"},
+                  {"id": "b", "text": "< operator needs to be overloaded for type T"},
+                  {"id": "c", "text": "T need to be a numeric type"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 10,
+                "question_text": "Running the C++ code below will print",
+                "options": [
+                  {"id": "a", "text": "Red Vehicle Car"},
+                  {"id": "b", "text": "Red Car Vehicle"},
+                  {"id": "c", "text": "Car Vehicle Red"},
+                  {"id": "d", "text": "Car Red Vehicle"},
+                  {"id": "e", "text": "Vehicle Red Car"},
+                  {"id": "f", "text": "Vehicle Car Red"}
+                ],
+                "correct_answers": ["e"]
+              },
+              {
+                "question_id": 11,
+                "question_text": "Which C++ keyword is used to create a custom error object when a problem is detected at runtime?",
+                "options": [
+                  {"id": "a", "text": "try"},
+                  {"id": "b", "text": "catch"},
+                  {"id": "c", "text": "throw"},
+                  {"id": "d", "text": "return"}
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 12,
+                "question_text": "When an Overflow exception is thrown, then the code will print ...",
+                "options": [
+                  {"id": "a", "text": "Overflow"},
+                  {"id": "b", "text": "Overflow MathException"},
+                  {"id": "c", "text": "MathException"},
+                  {"id": "d", "text": "MathException Overflow"},
+                  {"id": "e", "text": "None"}
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 13,
+                "question_text": "Fill in the space below the message that reflects the result",
+                "options": [
+                  {"id": "a", "text": "Found Timisoara"},
+                  {"id": "b", "text": "Did not find Timisoara"},
+                  {"id": "c", "text": "Timisoara is the last element in the list"},
+                  {"id": "d", "text": "Timisoara is the first element in the list"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 14,
+                "question_text": "Which members of a base class are accessible in member functions of derived classes?",
+                "options": [
+                  {"id": "a", "text": "private"},
+                  {"id": "b", "text": "protected"},
+                  {"id": "c", "text": "public"}
+                ],
+                "correct_answers": ["b", "c"]
+              },
+              {
+                "question_id": 15,
+                "question_text": "Which of the following declarations are correct",
+                "options": [
+                  {"id": "a", "text": "vec<int, 10> v;"},
+                  {"id": "b", "text": "vec<Int, 100-10/2> v;"},
+                  {"id": "c", "text": "const int x = 12; vec<int, x> v;"},
+                  {"id": "d", "text": "int x = 12; vec<int, x> v;"},
+                  {"id": "e", "text": "vec<int, int> v;"}
+                ],
+                "correct_answers": ["a", "b", "c"]
+              },
+              {
+                "question_id": 16,
+                "question_text": "Which declarations are not correct?",
+                "options": [
+                  {"id": "a", "text": "date d;"},
+                  {"id": "b", "text": "date d = 1;"},
+                  {"id": "c", "text": "date d{1};"},
+                  {"id": "d", "text": "date d{1, 2};"},
+                  {"id": "e", "text": "date d{1, 6, 2024};"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 17,
+                "question_text": "Which assertions are true with respect to Virtual Functions Table (VTBL)",
+                "options": [
+                  {"id": "a", "text": "one VTBL is created for each class that has at least one virtual function"},
+                  {"id": "b", "text": "one VTBL is created for each object (instance) of a class that has at least one virtual function"},
+                  {"id": "c", "text": "the VTBL contains one entry for each member function of a class"},
+                  {"id": "d", "text": "the VTBL contains one entry only for virtual member functions of a class"}
+                ],
+                "correct_answers": ["a", "d"]
+              },
+              {
+                "question_id": 18,
+                "question_text": "What do you need to do in order to successfully compile the code.",
+                "options": [
+                  {"id": "a", "text": "override the virtual method make_noise in class cat"},
+                  {"id": "b", "text": "override the virtual method eat in class cat"},
+                  {"id": "c", "text": "implement cat::fur_color non-static member function"},
+                  {"id": "d", "text": "define a default constructor for class cat"}
+                ],
+                "correct_answers": ["a", "b"]
+              },
+              {
+                "question_id": 19,
+                "question_text": "Select all the true statements",
+                "options": [
+                  {"id": "a", "text": "A class can have zero or more user-defined constructors"},
+                  {"id": "b", "text": "It is not possible to invoke a member function from a constructor"},
+                  {"id": "c", "text": "If there are no user-defined constructors, the compiler generates one default constructor"},
+                  {"id": "d", "text": "The programmer needs to explicitly call a constructor to initialize the object"}
+                ],
+                "correct_answers": ["a", "c"]
+              },
+              {
+                "question_id": 20,
+                "question_text": "Select all true statements",
+                "options": [
+                  {"id": "a", "text": "given the declaration complex c{1, 2}; will print 1i2"},
+                  {"id": "b", "text": "compiling the code will produce an error because operator << doesn't have access to internal representation of a complex number (re and im)"},
+                  {"id": "c", "text": "compiling the code will produce an error because operator << is not a member function of complex type"},
+                  {"id": "d", "text": "may be made friend of class complex"}
+                ],
+                "correct_answers": ["c", "d"]
+              }
+            ]
+          },
+          {
+            "subtopic_name": "Java Language",
+            "questions": [
+              {
+                "question_id": 1,
+                "question_text": "What does data encapsulation refer to?",
+                "options": [
+                  {"id": "a", "text": "Encapsulation of specific expertise into a class"},
+                  {"id": "b", "text": "Hiding access to the private state of an object"},
+                  {"id": "c", "text": "Making all the attributes of a class private"},
+                  {"id": "d", "text": "Including no methods in a class but only attributes"},
+                  {"id": "e", "text": "Hiding access to the entire state of an object"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 2,
+                "question_text": "Which of the following statement(s) are FALSE for the Java language?",
+                "options": [
+                  {"id": "a", "text": "The multiple inheritance can be obtained by applying the simple inheritance by a number of times"},
+                  {"id": "b", "text": "The simple inheritance can be simply obtained implementing a single interface"},
+                  {"id": "c", "text": "Only the abstract class can benefit from multiple inheritance"},
+                  {"id": "d", "text": "Multiple inheritance can be simulated by implementing multiple interfaces"}
+                ],
+                "correct_answers": ["a", "b", "c"]
+              },
+              {
+                "question_id": 3,
+                "question_text": "Which statement from the ones below are true in relation with the Java language?",
+                "options": [
+                  {"id": "a", "text": "The final keyword applies to classes, attributes and methods"},
+                  {"id": "b", "text": "A final method can only call other final methods in the same class"},
+                  {"id": "c", "text": "A final method in a class cannot be overriden in subclasses"},
+                  {"id": "d", "text": "A final attribute can be set only once"},
+                  {"id": "e", "text": "Final attributes can only exist in final classes"}
+                ],
+                "correct_answers": ["a", "c", "d"]
+              },
+              {
+                "question_id": 4,
+                "question_text": "Which of the following assertions hold in relation with the Java language?",
+                "options": [
+                  {"id": "a", "text": "Inheritance can always be replaced by objects' composition"},
+                  {"id": "b", "text": "A class can implement any number of interfaces"},
+                  {"id": "c", "text": "Using objects' composition provide a possibility to avoid access restrictions"},
+                  {"id": "d", "text": "Object composition is also referred as objects aggregation"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 5,
+                "question_text": "What is true about the String class in Java?",
+                "options": [
+                  {"id": "a", "text": "The content of a String cannot be modified after creation"},
+                  {"id": "b", "text": "The == operator is used to compare the content of two String objects"},
+                  {"id": "c", "text": "The String class is final"},
+                  {"id": "d", "text": "The String class has an attribute called size providing the length of the string"}
+                ],
+                "correct_answers": ["a", "c"]
+              },
+              {
+                "question_id": 6,
+                "question_text": "Which of the following statement(s) are true about a Java abstract class:",
+                "options": [
+                  {"id": "a", "text": "A class which cannot be instantiated"},
+                  {"id": "b", "text": "A class having at least an abstract method"},
+                  {"id": "c", "text": "A class defined using the abstract keyword"}
+                ],
+                "correct_answers": ["a", "c"]
+              },
+              {
+                "question_id": 7,
+                "question_text": "Which is the output of the following program?",
+                "options": [
+                  {"id": "a", "text": "1"},
+                  {"id": "b", "text": "2"},
+                  {"id": "c", "text": "1 2"},
+                  {"id": "d", "text": "compilation error"},
+                  {"id": "e", "text": "execution error"}
+                ],
+                "correct_answers": ["d"]
+              },
+              {
+                "question_id": 8,
+                "question_text": "Which of the following statements are false about Collections and Collection?",
+                "options": [
+                  {"id": "a", "text": "Collections is a special type of collection which holds a Set of collection"},
+                  {"id": "b", "text": "Both Collection and Collections entity belongs to java.util package"},
+                  {"id": "c", "text": "Collections is a utility class"},
+                  {"id": "d", "text": "Collection is an interface to Set and List"},
+                  {"id": "e", "text": "Collection instances do not use erasure when are instantiated"}
+                ],
+                "correct_answers": ["a", "e"]
+              },
+              {
+                "question_id": 9,
+                "question_text": "Which of the following lines of code is suitable to start a thread?",
+                "options": [
+                  {"id": "a", "text": "X obj = new X(); Thread t=new Thread(obj); t.start();"},
+                  {"id": "b", "text": "X obj = new X(); Thread t=new Thread(X);"},
+                  {"id": "c", "text": "X x= new X(); Thread t=new Thread(); x.run();"},
+                  {"id": "d", "text": "Thread t=new Thread(X()); t.start();"},
+                  {"id": "e", "text": "None of these"},
+                  {"id": "f", "text": "Thread t=new Thread(new X()); t.start();"}
+                ],
+                "correct_answers": ["a", "f"]
+              },
+              {
+                "question_id": 10,
+                "question_text": "What is the result of the following statements?",
+                "options": [
+                  {"id": "a", "text": "onetwo"},
+                  {"id": "b", "text": "onetwo followed by an exception"},
+                  {"id": "c", "text": "Compiler error on line 6"},
+                  {"id": "d", "text": "Compiler error on line 7"}
+                ],
+                "correct_answers": ["c"]
+              }
+            ]
+          },
+          {
+            "subtopic_name": "Databases",
+            "questions": [
+              {
+                "question_id": 1,
+                "question_text": "If T2 is executed under repeatable read isolation level, which statements are true?",
+                "options": [
+                  {"id": "a", "text": "IF AVG(A) = 1.5 then MAX(A) equals to 2 or 4"},
+                  {"id": "b", "text": "AVG(A) = 1.5 and MAX(A) = 2 , always"},
+                  {"id": "c", "text": "Possible values for AVG(A) are 1.5 or 3, and possible values for MAX(A) are 2 or 4"},
+                  {"id": "d", "text": "If MAX(A) = 4 then AVG(A) = 1.5"}
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 2,
+                "question_text": "Three of the following four expressions find the names of all students who did not apply to major in CS or PH. Which one finds something different?",
+                "options": [
+                  {"id": "a", "text": "πsName(Student ▷◁ (πsID(Student) − (πsID(σmajor='CS'Apply) ∪ πsID(σmajor='PH'Apply))))"},
+                  {"id": "b", "text": "πsName(Student ▷◁ (πsIDStudent − πsID(σmajor='CS' ∨ major='PH'Apply)))"},
+                  {"id": "c", "text": "πsName(πsID,sNameStudent − πsID,sName(Student ▷◁ πsID(σmajor='CS' ∨ major='PH'Apply)))"},
+                  {"id": "d", "text": "πsNameStudent − πsName(Student ▷◁ πsID(σmajor='CS' ∨ major='PH'Apply))"}
+                ],
+                "correct_answers": ["d"]
+              },
+              {
+                "question_id": 3,
+                "question_text": "Which are the functional dependencies that hold for the data below?",
+                "options": [
+                  {"id": "a", "text": "A → {B, C}, E → {F}"},
+                  {"id": "b", "text": "D → {A, B, C, E, F}, F → {E}"},
+                  {"id": "c", "text": "{A, E} → {D}"},
+                  {"id": "d", "text": "{D, E} → {A, B}"}
+                ],
+                "correct_answers": ["a", "c"]
+              },
+              {
+                "question_id": 4,
+                "question_text": "Which of the following sets of attributes is/are candidate keys in R?",
+                "options": [
+                  {"id": "a", "text": "{B, F}"},
+                  {"id": "b", "text": "{A, E}"},
+                  {"id": "c", "text": "{A, E, D}"},
+                  {"id": "d", "text": "{A}"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 5,
+                "question_text": "Which of the below statements are false?",
+                "options": [
+                  {"id": "a", "text": "The relation R is in the first normal form"},
+                  {"id": "b", "text": "The relation R is in the second normal form"},
+                  {"id": "c", "text": "In the relation R the values in column B determines the values in column A"},
+                  {"id": "d", "text": "The relation R can not contain two tuples with different values in column D when the values in column A match"}
+                ],
+                "correct_answers": ["b", "c", "d"]
+              },
+              {
+                "question_id": 6,
+                "question_text": "Which of the following relations appear in the relational model representation of the diagram?",
+                "options": [
+                  {"id": "a", "text": "Courses(CID, title)"},
+                  {"id": "b", "text": "Students(SID, name)"},
+                  {"id": "c", "text": "Enroll(SID,CID)"},
+                  {"id": "d", "text": "Enroll(SID, name, CID, title, grade)"},
+                  {"id": "e", "text": "Students(SID, name, CID)"},
+                  {"id": "f", "text": "Enroll(SID, CID, grade)"}
+                ],
+                "correct_answers": ["a", "b", "f"]
+              },
+              {
+                "question_id": 7,
+                "question_text": "How many rows will return the following query?",
+                "options": [
+                  {"id": "a", "text": "No rows (empty)"},
+                  {"id": "b", "text": "One row"},
+                  {"id": "c", "text": "Two row"},
+                  {"id": "d", "text": "Other variant"}
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 8,
+                "question_text": "Which of the following queries returns the identifier (ID) and the name of all departments without any employee?",
+                "options": [
+                  {"id": "a", "text": "SELECT d.department_id, d.department_name FROM departments d WHERE NOT EXISTS (SELECT 1 FROM employees e WHERE e.department_id=d.department_id);"},
+                  {"id": "b", "text": "SELECT d.department_id, d.department_name FROM employees e LEFT OUTER JOIN departments d ON (d.department_id=e.department_id) WHERE e.department_id IS NULL;"},
+                  {"id": "c", "text": "SELECT d.department_id, d.department_name FROM employees e RIGHT OUTER JOIN departments d ON (d.department_id=e.department_id) WHERE e.department_id IS NULL;"},
+                  {"id": "d", "text": "SELECT department_id, department_name FROM departments MINUS SELECT d.department_id, d.department_name FROM employees e JOIN departments d ON e.department_id=d.department_id;"}
+                ],
+                "correct_answers": ["a", "c", "d"]
+              },
+              {
+                "question_id": 9,
+                "question_text": "Which type of join between DEPARTMENTS and LOCATIONS tables would produce this information as part of its output?",
+                "options": [
+                  {"id": "a", "text": "NATURAL JOIN"},
+                  {"id": "b", "text": "FULL OUTER JOIN"},
+                  {"id": "c", "text": "LEFT OUTER JOIN"},
+                  {"id": "d", "text": "RIGHT OUTER JOIN"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 10,
+                "question_text": "Which statements are correct regarding indexes?",
+                "options": [
+                  {"id": "a", "text": "When a table is dropped, the corresponding indexes are automatically dropped"},
+                  {"id": "b", "text": "For each DML operation performed, the corresponding indexes are automatically updated"},
+                  {"id": "c", "text": "Indexes should be created on columns that are frequently referenced as part of an expression"},
+                  {"id": "d", "text": "A PRIMARY KEY or a UNIQUE constraint in a table automatically creates a unique index"}
+                ],
+                "correct_answers": ["a", "b", "d"]
+              },
+              {
+                "question_id": 11,
+                "question_text": "Which statement is true regarding this SQL statement?",
+                "options": [
+                  {"id": "a", "text": "The statement would execute and give you the desired result"},
+                  {"id": "b", "text": "The statement would not execute because the aggregate function is used in the WHERE clause"},
+                  {"id": "c", "text": "The WHERE clause should have the OR logical operator instead of AND"},
+                  {"id": "d", "text": "The statement would not execute because in the SELECT clause, the unit_price column is placed after the column having the aggregate function"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 12,
+                "question_text": "Which of the following queries will return the specified columns?",
+                "options": [
+                  {"id": "a", "text": "Query A"},
+                  {"id": "b", "text": "Query B"},
+                  {"id": "c", "text": "Query C"},
+                  {"id": "d", "text": "Query D"},
+                  {"id": "e", "text": "Query E"}
+                ],
+                "correct_answers": ["d", "e"]
+              },
+              {
+                "question_id": 13,
+                "question_text": "Which statement is true regarding the PROD_ID_PK constraint?",
+                "options": [
+                  {"id": "a", "text": "It would be created only if a unique index is manually created first"},
+                  {"id": "b", "text": "It would be created and would use an automatically created unique index"},
+                  {"id": "c", "text": "It would be created and would use an automatically created non-unique index"},
+                  {"id": "d", "text": "It would be created and remains in a disabled state because no index is specified in the command"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 14,
+                "question_text": "When does the WITH CHECK OPTION clause generate an exception?",
+                "options": [
+                  {"id": "a", "text": "always"},
+                  {"id": "b", "text": "only if the student with ID = 101 applied and he/she is accepted in the Algebra course"},
+                  {"id": "c", "text": "only if the student with ID = 101 applied and he/she is accepted in the Database II course"},
+                  {"id": "d", "text": "if the student with ID = 101 applied for Algebra course, regardless of the value of the Accepted column"}
+                ],
+                "correct_answers": ["b"]
+              }
+            ]
+          },
+          {
+            "subtopic_name": "Software Applications Design",
+            "questions": [
+              {
+                "question_id": 1,
+                "question_text": "Software verification can imply",
+                "options": [
+                  {"id": "a", "text": "automatic static analysis"},
+                  {"id": "b", "text": "assesing usefulness and usability of the software in operational situations"},
+                  {"id": "c", "text": "debugging"},
+                  {"id": "d", "text": "software inspections"},
+                  {"id": "e", "text": "testing to prove error existence"},
+                  {"id": "f", "text": "verify that software meets user requirements"}
+                ],
+                "correct_answers": ["a", "d", "e"]
+              },
+              {
+                "question_id": 2,
+                "question_text": "State machine diagram shows",
+                "options": [
+                  {"id": "a", "text": "system functions"},
+                  {"id": "b", "text": "system response to internal events"},
+                  {"id": "c", "text": "system response to external events"},
+                  {"id": "d", "text": "interactions between objects in the system"},
+                  {"id": "e", "text": "data structures"},
+                  {"id": "f", "text": "interactions between actors and the system"},
+                  {"id": "g", "text": "data flow in the system"}
+                ],
+                "correct_answers": ["b", "c"]
+              },
+              {
+                "question_id": 3,
+                "question_text": "Agile methods in software development imply",
+                "options": [
+                  {"id": "a", "text": "Incremental delivery"},
+                  {"id": "b", "text": "Customer involvement during development process"},
+                  {"id": "c", "text": "Establishing normative processes for team working"},
+                  {"id": "d", "text": "Periodic activities to eliminate complexity from the system"},
+                  {"id": "e", "text": "Modeling the whole software before writting the code"}
+                ],
+                "correct_answers": ["a", "b", "d"]
+              },
+              {
+                "question_id": 4,
+                "question_text": "Select the cases in which only concepts are reused:",
+                "options": [
+                  {"id": "a", "text": "Software services"},
+                  {"id": "b", "text": "Design patterns"},
+                  {"id": "c", "text": "Program libraries"},
+                  {"id": "d", "text": "Architectural patterns"}
+                ],
+                "correct_answers": ["b", "d"]
+              },
+              {
+                "question_id": 5,
+                "question_text": "Check the true statements?",
+                "options": [
+                  {"id": "a", "text": "An object of type ComputeScience contains a collection of objects of type Student"},
+                  {"id": "b", "text": "Class Questionnaire has a public attribute of type String"},
+                  {"id": "c", "text": "Class ComputerScience has a public operation addStudent(s:Student)"},
+                  {"id": "d", "text": "Class ComputerScience has a private operation setSchedule(s:String)"},
+                  {"id": "e", "text": "Class Tutor is superclass for the class Masterand"},
+                  {"id": "f", "text": "Class ComputerScience defines a composition of objects of type Questionnaire"},
+                  {"id": "g", "text": "A unidirectional association exists between class ComputerScience and class Tutor"},
+                  {"id": "h", "text": "Class ComputerScience inherits interface Specialization"},
+                  {"id": "i", "text": "Class Tutor defines an aggregate of objects of type Masterand"}
+                ],
+                "correct_answers": ["a", "c", "e", "f"]
+              },
+              {
+                "question_id": 6,
+                "question_text": "Which sequence of Java code correctly and completely describes the relations of class Project?",
+                "options": [
+                  {"id": "a", "text": "class Project extends Student { private Collection <UMLDiagram> diagrams = new LinkedList<>(); private SourceCode code; ...}"},
+                  {"id": "b", "text": "class Project { private Collection <Student> students; private Collection <UMLDiagram> diagrams = new LinkedList<>(); private SourceCode code; ...}"},
+                  {"id": "c", "text": "class Project { private Student student; private UMLDiagram diagram; private SourceCode code; ...}"},
+                  {"id": "d", "text": "class Project { private Collection <Student> students = new LinkedList<>(); private Collection <UMLDiagram> diagrams; private SourceCode code; ...}"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 7,
+                "question_text": "Which sequence of Java code correctly and completely describes the relations of class Journal?",
+                "options": [
+                  {"id": "a", "text": "class Journal extends OnlineJurnal implements Product { private Collection <Article> articles; ...}"},
+                  {"id": "b", "text": "class Journal implements Product { private Collection <Article> articles = new ArrayList<>(); private OnlineJurnal jurnal; ...}"},
+                  {"id": "c", "text": "class Journal implements Product { private Collection <Article> articles = new ArrayList<>(); ...}"},
+                  {"id": "d", "text": "class Journal extends OnlineJurnal { private Collection <Article> articles = new ArrayList<>(); private Product product; ...}"}
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 8,
+                "question_text": "Check the complete and correct description of the relations represented on the diagram:",
+                "options": [
+                  {"id": "a", "text": "Bidirectional association between classes Project and SourceCode; composition between classes Project (composite) and UMLDiagram (component); aggregation between classes Project (aggregate) and Student (component); generalization between interface IStudent (implemented) and class Student (implements); realization between classes Student (superclass) and class ScholarshipStudent( subclass)"},
+                  {"id": "b", "text": "Bidirectional association between classes Project and SourceCode; composition between classes Project (composite) and UMLDiagram (component); aggregation between classes Project (aggregate) and Student (component); realization between interface IStudent (implemented) and class Student (implements); generalization between classes Student (superclass) and class ScholarshipStudent (subclass)"},
+                  {"id": "c", "text": "Bidirectional association between classes Project and SourceCode; aggregation between classes Project (aggregate) and UMLDiagram (component); composition between classes Project (composite) and Student (component); generalization between interface IStudent (implemented) and class Student (implements); realization between classes Student (superclass) and class ScholarshipStudent (subclass)"},
+                  {"id": "d", "text": "Bidirectional association between classes Project and SourceCode; composition between classes UMLDiagram (composite) and Project (component); aggregation between classes Student (aggregate) and Project (component); realization between interface IStudent (implemented) and class Student (implements); generalization between classes Student (superclass) and class ScholarshipStudent (subclass)"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 9,
+                "question_text": "Which sequence of Java code correctly describes the relationship between classes Student and Project?",
+                "options": [
+                  {"id": "a", "text": "class Student extends Project{...} class Project{...}"},
+                  {"id": "b", "text": "class Project extends Student{...} class Student{...}"},
+                  {"id": "c", "text": "class Project { private Collection <Student> ...} class Student{...}"},
+                  {"id": "d", "text": "class Project { private Collection <Student> ...} class Student { private Project project; ...}"},
+                  {"id": "e", "text": "class Project { private Collection <Student> ...} class Student { private Collection<Project> projects; ...}"}
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 10,
+                "question_text": "Which operations of class RegistrationController result from it?",
+                "options": [
+                  {"id": "a", "text": "getCourses()"},
+                  {"id": "b", "text": "display(offeredCourses)"},
+                  {"id": "c", "text": "register(student, selectedCourses)"},
+                  {"id": "d", "text": "new Schedule(selectedCourses)"},
+                  {"id": "e", "text": "addSchedule(theSchedule)"},
+                  {"id": "f", "text": "displayMsg(\"OK\")"}
+                ],
+                "correct_answers": ["a", "c"]
+              },
+              {
+                "question_id": 11,
+                "question_text": "Check the classes from which the objects in the previously depicted interactions are instantiated:",
+                "options": [
+                  {"id": "a", "text": "RegistrationForm"},
+                  {"id": "b", "text": "RegistrtationControler"},
+                  {"id": "c", "text": "selectedCourses"},
+                  {"id": "d", "text": "current"},
+                  {"id": "e", "text": "Student"},
+                  {"id": "f", "text": "Schedule"},
+                  {"id": "g", "text": "theSchedule"}
+                ],
+                "correct_answers": ["a", "b", "e", "f"]
+              },
+              {
+                "question_id": 12,
+                "question_text": "Which statements are true?",
+                "options": [
+                  {"id": "a", "text": "Home page is a boundary object"},
+                  {"id": "b", "text": "GetBooksList can be a persistent object"},
+                  {"id": "c", "text": "DisplayLinks is an object for interfacing with the system"},
+                  {"id": "d", "text": "GetBooksList could be implemented as a method of an entity class"},
+                  {"id": "e", "text": "Catalog is an entity object"}
+                ],
+                "correct_answers": ["a", "d", "e"]
+              },
+              {
+                "question_id": 13,
+                "question_text": "Select the pair of terms to be filled in the spaces of the next statement:",
+                "options": [
+                  {"id": "a", "text": "criteria / activities"},
+                  {"id": "b", "text": "components / roles"},
+                  {"id": "c", "text": "alphas / activity spaces"},
+                  {"id": "d", "text": "criteria / alpha states"},
+                  {"id": "e", "text": "alpha states / criteria"}
+                ],
+                "correct_answers": ["d"]
+              },
+              {
+                "question_id": 14,
+                "question_text": "Realize the correct mapping between the concept and its definition:",
+                "options": [
+                  {"id": "a", "text": "a – 5, b – 1, c – 4, d – 3, e – 2"},
+                  {"id": "b", "text": "a – 5, b – 3, c – 4, d – 1, e – 2"},
+                  {"id": "c", "text": "a – 2, b – 1, c – 3, d – 4, e – 5"},
+                  {"id": "d", "text": "a – 1, b – 2, c – 3, d – 4, e – 5"},
+                  {"id": "e", "text": "a – 3, b – 2, c – 4, d – 5, e – 1"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 15,
+                "question_text": "Check the methods to avoid introducing faults into the program developing process.",
+                "options": [
+                  {"id": "a", "text": "Every class should have a single responsibility"},
+                  {"id": "b", "text": "Use regular expressions to validate input values"},
+                  {"id": "c", "text": "Avoid deeply nested conditional statements"},
+                  {"id": "d", "text": "Logging the interactions of the users with the program"},
+                  {"id": "e", "text": "Replace the body of a method with a more clear algorithm that returns the same result"},
+                  {"id": "f", "text": "Minimize the depth of inheritance hierarchies"},
+                  {"id": "g", "text": "Automatically save the user's data at set intervals"},
+                  {"id": "h", "text": "Identify the aspects of the application that vary and separate them from what stays the same"},
+                  {"id": "i", "text": "Check input values against the range defined by input rules"},
+                  {"id": "j", "text": "Using assertions to check results from an external service"}
+                ],
+                "correct_answers": ["a", "c", "e", "f", "h"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "topic_id": 3,
+        "topic_name": "Computing Systems",
+        "subtopics": [
+          {
+            "subtopic_name": "Computer Architecture",
+            "questions": [
+              {
+                "question_id": 1,
+                "question_text": "By translation,",
+                "options": [
+                  {"id": "a", "text": "a program P that was written for a high-level machine M is transformed by a translator into a program P1 that can then be executed on a lower level of that machine, without further need for P"},
+                  {"id": "b", "text": "each instruction of a program P written for a high-level machine M is transformed into a sequence of instructions for a lower level of that machine, then immediately executed, before the same process is applied to the next instruction from P"},
+                  {"id": "c", "text": "a program P that is written for a high-level virtual machine VM is transformed into a program P1 which can be executed on a physical machine M"}
+                ],
+                "correct_answers": ["a", "c"]
+              },
+              {
+                "question_id": 2,
+                "question_text": "The data path is defined as:",
+                "options": [
+                  {"id": "a", "text": "the connection between input-output devices and the processor"},
+                  {"id": "b", "text": "the representation of data types in the memory of a computing system"},
+                  {"id": "c", "text": "the connection, through buses, between registers, arithmetic-logical unit and back to registers, used for instruction execution"},
+                  {"id": "d", "text": "networks interconnecting computing systems (like the Internet)"}
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 3,
+                "question_text": "The program counter:",
+                "options": [
+                  {"id": "a", "text": "is a global variable in a program that is used to count the number of instructions executed, and measure program complexity"},
+                  {"id": "b", "text": "is a register that holds an address to the next instruction that has to be executed"},
+                  {"id": "c", "text": "is a register that holds the instruction that is being executed in a processor"},
+                  {"id": "d", "text": "is an operating system variable that counts the number of processes in execution at a given time"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 4,
+                "question_text": "Microprogramming is",
+                "options": [
+                  {"id": "a", "text": "the activity of writing programs that run on microprocessors"},
+                  {"id": "b", "text": "the use of a set of instructions (microinstructions), stored in a memory, that are used to control the data path, for the purpose of executing instructions in one or several data path cycles"},
+                  {"id": "c", "text": "the interaction with input/output devices by issuing commands to controllers (e.g commands for the hard drive controller to read a word from an address)"},
+                  {"id": "d", "text": "automated generation of small programs for embedded devices"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 5,
+                "question_text": "A kilobyte is",
+                "options": [
+                  {"id": "a", "text": "1000 bits"},
+                  {"id": "b", "text": "1024 bytes"},
+                  {"id": "c", "text": "2^13 bits"}
+                ],
+                "correct_answers": ["b", "c"]
+              },
+              {
+                "question_id": 6,
+                "question_text": "A typical use for a demultiplexer circuit is the implementation of",
+                "options": [
+                  {"id": "a", "text": "a 1 bit full adder circuit"},
+                  {"id": "b", "text": "a serial-to-parallel convertor"},
+                  {"id": "c", "text": "a parallel-to-serial convertor"},
+                  {"id": "d", "text": "an integer multiplication circuit"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 7,
+                "question_text": "For cache memories, the locality principle refers to:",
+                "options": [
+                  {"id": "a", "text": "the fact that memory locations close to the previously used one are likely to be used in the near future"},
+                  {"id": "b", "text": "the fact that memory locations that were accessed recently will likely be accessed again"},
+                  {"id": "c", "text": "the position of cache levels with respect to the processor (on processor, or very near the processor)"}
+                ],
+                "correct_answers": ["a", "b"]
+              },
+              {
+                "question_id": 8,
+                "question_text": "Which type of branch instruction causes most delay in a typical five stage pipeline:",
+                "options": [
+                  {"id": "a", "text": "unconditional branches"},
+                  {"id": "b", "text": "conditional branches"},
+                  {"id": "c", "text": "none of the branch prediction causes any delay in the pipeline"},
+                  {"id": "d", "text": "both types of branch prediction cause the same amount of delay, on average"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 9,
+                "question_text": "Which of the following are necessary to describe the Instruction Set Architecture level:",
+                "options": [
+                  {"id": "a", "text": "the memory model"},
+                  {"id": "b", "text": "the configuration of the cache"},
+                  {"id": "c", "text": "the configuration of registers"},
+                  {"id": "d", "text": "data types"},
+                  {"id": "e", "text": "instructions"}
+                ],
+                "correct_answers": ["a", "c", "d", "e"]
+              },
+              {
+                "question_id": 10,
+                "question_text": "The result of the following addition 11110111 +11110111 in 2's complement representation on 8 bits is:",
+                "options": [
+                  {"id": "a", "text": "11101110 and the result is correct"},
+                  {"id": "b", "text": "11101110 but there is an overflow"},
+                  {"id": "c", "text": "11101111 and the result is correct"},
+                  {"id": "d", "text": "11101111 but there is an overflow"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 11,
+                "question_text": "The sequence 3D800000 represents the following number in IEEE 754 single precision floating point representation:",
+                "options": [
+                  {"id": "a", "text": "0.0625"},
+                  {"id": "b", "text": "16.25"},
+                  {"id": "c", "text": "41"},
+                  {"id": "d", "text": "221"}
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 12,
+                "question_text": "[In general] the Instruction Sets are growing larger and larger over time. Why is that?:",
+                "options": [
+                  {"id": "a", "text": "because Moore's law dictates that we double the amount of computation every 2 years"},
+                  {"id": "b", "text": "because the RAM (and memory in general) is growing larger and larger each year"},
+                  {"id": "c", "text": "because with each new generation of CPU's more instructions are added; thus growing the list"},
+                  {"id": "d", "text": "because there is an increase in the number of users and the applications that they use"},
+                  {"id": "e", "text": "because old OPT codes must be kept for backwards compatibility"}
+                ],
+                "correct_answers": ["e"]
+              },
+              {
+                "question_id": 13,
+                "question_text": "In the Cache, the role of the Dirty bit is to :",
+                "options": [
+                  {"id": "a", "text": "signal that the data in the cache is old"},
+                  {"id": "b", "text": "There is no such thing as a \"dirty bit\""},
+                  {"id": "c", "text": "signal that the cache line might contain a different value than the corresponding memory location in RAM"},
+                  {"id": "d", "text": "keep track if there was a Cache Hit or Cache Miss in the previous instruction"},
+                  {"id": "e", "text": "None of the above"}
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 14,
+                "question_text": "Select the correct statements in regard to the Central Processing Unit",
+                "options": [
+                  {"id": "a", "text": "Its role is to execute instructions"},
+                  {"id": "b", "text": "it contains multiple registers"},
+                  {"id": "c", "text": "Each computer has one CPU in it"},
+                  {"id": "d", "text": "Uses multiple phases to process each instruction"},
+                  {"id": "e", "text": "It controls how the data is written into the RAM memory"}
+                ],
+                "correct_answers": ["a", "b", "d"]
+              },
+              {
+                "question_id": 15,
+                "question_text": "Upon completing the Execute Phase the Control Unit...",
+                "options": [
+                  {"id": "a", "text": "transfers control to the memory to store the result of the execution"},
+                  {"id": "b", "text": "increments the instruction address"},
+                  {"id": "c", "text": "checks if the next memory address contains and instruction or data"},
+                  {"id": "d", "text": "clears all registers to prepare the CPU for the next instruction"},
+                  {"id": "e", "text": "none of the above"}
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 16,
+                "question_text": "What is the role of the Clock inside a computer?",
+                "options": [
+                  {"id": "a", "text": "It is just unit of measure that helps rank the CPUs by speed"},
+                  {"id": "b", "text": "Its signal is used by the Control Unit to advance the internal operation of the CPU"},
+                  {"id": "c", "text": "Its main role is to allow overclocking and/or underclocking of CPUs"},
+                  {"id": "d", "text": "Keeps track not only of time but also the date and other useful timing variables"},
+                  {"id": "e", "text": "Triggers an electrical signal at a precise and regular interval"}
+                ],
+                "correct_answers": ["b", "e"]
+              }
+            ]
+          },
+          {
+            "subtopic_name": "Operating Systems",
+          "questions": [
+              {
+                "question_id": 1,
+                "question_text": "What causes a running thread to change its state, from Running to Blocked?",
+                "options": [
+                  { "id": "a", "text": "any I/O event in the system" },
+                  { "id": "b", "text": "starting a new process in the system" },
+                  { "id": "c", "text": "terminating the running process" },
+                  { "id": "d", "text": "any context switch that happens in the system" }
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 2,
+                "question_text": "When designing an operating system for smartphones and other mobile devices, you should",
+                "options": [
+                  { "id": "a", "text": "use bigger page sizes and more states for processes" },
+                  { "id": "b", "text": "use smaller page sizes and less states for processes" },
+                  { "id": "c", "text": "allow apps to run without interruption from the system, for maximizing user interaction" },
+                  { "id": "d", "text": "terminate apps if they run for too long, to avoid starvation of other processes" }
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 3,
+                "question_text": "It is required to use defragmentation in a file system in order to",
+                "options": [
+                  { "id": "a", "text": "improve the speed of the context switching in the system" },
+                  { "id": "b", "text": "allow smaller seek times for mechanic drives" },
+                  { "id": "c", "text": "allow files to be read faster sequentially" },
+                  { "id": "d", "text": "reduce boot times for the operating system" }
+                ],
+                "correct_answers": ["b", "c", "d"]
+              },
+              {
+                "question_id": 4,
+                "question_text": "Suppose process A has a burst of 5, and starts at moment 0. Process B has a burst of 20, and starts at moment 5. A new process C is created at moment 3, with a burst of 3. Which of the following is true?",
+                "options": [
+                  { "id": "a", "text": "in FIFO scheduling, process B runs before process C" },
+                  { "id": "b", "text": "in SJF scheduling, process A finishes before C starts" },
+                  { "id": "c", "text": "in Round-Robin scheduling (quantum = 3), the first process to execute after A is B" },
+                  { "id": "d", "text": "in SRTN (quantum = 3), processes execute as follows: A, C, B, A, B" }
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 5,
+                "question_text": "A 16-bit Von Neumann architecture has a page size of 4,096 bytes and 12 KB of RAM. Access to the pages of the system happen as follows: 5,15,15,5,10. Which of the following is true?",
+                "options": [
+                  { "id": "a", "text": "there are 4 physical pages in the system" },
+                  { "id": "b", "text": "there are 3 physical pages in the system" },
+                  { "id": "c", "text": "there are 16 virtual pages in the system" },
+                  { "id": "d", "text": "the FIFO algorithm causes 2 page faults to be issued" },
+                  { "id": "e", "text": "in the FIFO algorithm, address 17824 belongs to the first virtual page" }
+                ],
+                "correct_answers": ["b", "c"]
+              },
+              {
+                "question_id": 6,
+                "question_text": "Which of the following are true about memory management?",
+                "options": [
+                  { "id": "a", "text": "smaller page sizes are favorable when accessing small memory data chunks" },
+                  { "id": "b", "text": "larger page sizes are favorable when accessing small memory data chunks" },
+                  { "id": "c", "text": "physical addresses usually have a significantly smaller range than virtual addresses" },
+                  { "id": "d", "text": "internal memory fragmentation can be resolved by the operating system" },
+                  { "id": "e", "text": "external memory fragmentation can be resolved by the operating system" }
+                ],
+                "correct_answers": ["a", "c", "e"]
+              },
+              {
+                "question_id": 7,
+                "question_text": "Assume you have a browser tab open in Windows, Linux or MacOS X, where you are playing an YouTube video in 4K (UltraHD) resolution. Which of the following could be true?",
+                "options": [
+                  { "id": "a", "text": "the browser tab’s associated thread is more CPU-bound than I/O-bound" },
+                  { "id": "b", "text": "the browser tab’s associated thread is more I/O-bound than CPU-bound" },
+                  { "id": "c", "text": "the operating system will not schedule any other processes until playback is complete" },
+                  { "id": "d", "text": "new processes that are trying to execute during playback are placed in a FIFO waiting queue" },
+                  { "id": "e", "text": "interrupts are not allowed during YouTube playback" }
+                ],
+                "correct_answers": ["a", "b"]
+              },
+              {
+                "question_id": 8,
+                "question_text": "Assume you are using a Von Neumann system with a CPU that has multiple physical cores. Which of the following is true?",
+                "options": [
+                  { "id": "a", "text": "true parallelism can never be achieved through the kernel scheduler, unless the operating system is Linux or MacOS X" },
+                  { "id": "b", "text": "true parallelism can never be achieved through the kernel scheduler, unless the operating system is Windows and RAM memory is limited to 4 GB" },
+                  { "id": "c", "text": "the kernel can implement true parallelism in a multi-core CPU only if there are no bus limitations" },
+                  { "id": "d", "text": "in an interactive system, a pre-emptive scheduling algorithm is required to ensure responsiveness" }
+                ],
+                "correct_answers": ["c", "d"]
+              },
+              {
+                "question_id": 9,
+                "question_text": "In a system with a single type of resources, processes A, B and C have a maximum requirement of 10, 20 and 30 resources of type R. An initial allocation is made, of 8, 18, and 28 resources is made for these three processes. Which of the following statements is true?",
+                "options": [
+                  { "id": "a", "text": "the minimum number of resources required, so that the state of the system is considered still safe, is 6" },
+                  { "id": "b", "text": "the minimum number of resources required, so that the state of the system is considered still safe, is 2" },
+                  { "id": "c", "text": "if only 2 resources are available for an additional allocation, the entire system is in a deadlock" },
+                  { "id": "d", "text": "an additional allocation of 1 resource to process A will leave the system in a deadlock" }
+                ],
+                "correct_answers": ["b", "d"]
+              },
+              {
+                "question_id": 10,
+                "question_text": "You are asked to design a process scheduling mechanism which favors short processes that perform I/O activities, while retaining the system’s interactive requirement, so that the user experience is satisfactory. Which of the following is true?",
+                "options": [
+                  { "id": "a", "text": "a preemptive scheduling mechanism is preferred for all interactive systems" },
+                  { "id": "b", "text": "a non-preemptive scheduling mechanism is preferred in a situation such as the above" },
+                  { "id": "c", "text": "starvation of high-burst processes is possible in certain scenarios" },
+                  { "id": "d", "text": "statistically, processes offer the best response times when using the optimum quantum value, instead of higher quantum values" }
+                ],
+                "correct_answers": ["a", "c", "d"]
+              },
+              {
+                "question_id": 11,
+                "question_text": "On an interactive operating system, which of the following statements are true:",
+                "options": [
+                  { "id": "a", "text": "An user-level process can voluntarily deny pre-emption, to disallow other processes to run." },
+                  { "id": "b", "text": "Page faults happen less often on systems with a high amount of external memory." },
+                  { "id": "c", "text": "It is required to protect critical regions for read accesses, in order to prevent data corruption." },
+                  { "id": "d", "text": "Setting a thread’s priority to a lower level does not impose a guarantee of that thread’s stall in the next scheduler execution cycle." },
+                  { "id": "e", "text": "None of the above." }
+                ],
+                "correct_answers": ["d"]
+              },
+              {
+                "question_id": 12,
+                "question_text": "A system with 1 CPU and 2 cores runs the following 2 threads:\nThread 0: M = N-2\nThread 1: N -= M/2\nIf each instruction is atomic, which of the following are possible resulting values for the variables N and M, assuming that initially N = 1, M = 2?",
+                "options": [
+                  { "id": "a", "text": "(N = 1.5, M = −1)" },
+                  { "id": "b", "text": "(N = 1.5, M = −1) or (N = 0.5, M = −1)" },
+                  { "id": "c", "text": "(N = 0, M = −1)" },
+                  { "id": "d", "text": "(N = 0, M = −2)" },
+                  { "id": "e", "text": "none of the above" }
+                ],
+                "correct_answers": ["a", "d"]
+              },
+              {
+                "question_id": 13,
+                "question_text": "Assuming you have a system with 1 CPU and 4 cores, and 7 running threads, which of the following statements is true in an interactive operating system:",
+                "options": [
+                  { "id": "a", "text": "There will never be more than 4 running threads at once." },
+                  { "id": "b", "text": "The 7 threads are always scheduled in groups of 4 threads running at once." },
+                  { "id": "c", "text": "In a CPU with a superscalar architecture, execution of the threads should be faster overall than on a CPU that is both non-superscalar and non-out-of-order." },
+                  { "id": "d", "text": "You cannot play more than 4 YouTube videos at once on this CPU in this operating system." },
+                  { "id": "e", "text": "All of the above." }
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 14,
+                "question_text": "A 16-bit system with 16 KB of RAM and a page size of 4 KB has the following page accesses happening in the following order: 0, 1, 1, 0, 2, 1, 2, 0, 1. Which of the following statements are true about this system:",
+                "options": [
+                  { "id": "a", "text": "This system has 16 page frames and 4 virtual pages." },
+                  { "id": "b", "text": "This system has 16 virtual pages and 4 page frames." },
+                  { "id": "c", "text": "The sequence of accesses to the pages above causes 3 page faults." },
+                  { "id": "d", "text": "A pointer to an array of 128 characters that points to the address 0x0011 in memory, resides in virtual page number 11." },
+                  { "id": "e", "text": "A pointer to an array of 32 characters that points to the address 0x0016 in memory, resides in virtual page number 0." }
+                ],
+                "correct_answers": ["b", "c", "e"]
+              },
+              {
+                "question_id": 15,
+                "question_text": "You are asked to design an interactive operating system for users, whose main purpose is playing back YouTube videos. Which of the following choices should you make?",
+                "options": [
+                  { "id": "a", "text": "To ensure videos will play back smoothly, you should consider scheduling computationally-intensive processes with higher priority as opposed to I/O-bound processes." },
+                  { "id": "b", "text": "To ensure network buffering happens fast enough, you should consider scheduling I/O-bound processes with higher priority as opposed to CPU-bound processes." },
+                  { "id": "c", "text": "If the CPU is too slow to render the video smoothly, your OS must focus heavily on I/O to improve playback." },
+                  { "id": "d", "text": "If the CPU is capable of rendering the video at 60fps smoothly, your OS no longer needs to do any type of I/O at all." },
+                  { "id": "e", "text": "None of the above." }
+                ],
+                "correct_answers": ["a", "b"]
+              },
+              {
+                "question_id": 16,
+                "question_text": "A computer has 6 GB of RAM, of which the operating system occupies 1 GB. The processes are all 512 MB and have the same characteristics. If the goal is 98% CPU utilization, what is the maximum I/O wait that can be tolerated?",
+                "options": [
+                  { "id": "a", "text": "2%" },
+                  { "id": "b", "text": "80%" },
+                  { "id": "c", "text": "50%" },
+                  { "id": "d", "text": "67%" }
+                ],
+                "correct_answers": ["d"]
+              },
+              {
+                "question_id": 17,
+                "question_text": "Consider a multiprogrammed system with a degree of 10 (i.e., ten programs in memory at the same time). Assume that each process spends 60% of its time waiting for I/O. What will be the CPU utilization?",
+                "options": [
+                  { "id": "a", "text": "∼ 100%" },
+                  { "id": "b", "text": "∼ 60%" },
+                  { "id": "c", "text": "∼ 40%" },
+                  { "id": "d", "text": "∼ 10%" }
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 18,
+                "question_text": "In a system with threads, is there one stack per thread or one stack per process when different user-level threads and kernel-level threads are used?",
+                "options": [
+                  { "id": "a", "text": "one stack per thread for both cases" },
+                  { "id": "b", "text": "one stack per thread for user-level threads while kernel-level threads are using one stack per process" },
+                  { "id": "c", "text": "one stack per thread for kernel-level threads while user-level threads are using one stack per process" },
+                  { "id": "d", "text": "one stack per process for both cases" }
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 19,
+                "question_text": "Let’s consider a manufacturing assembly line where various workers perform different tasks to assemble a product:\n(1) Component suppliers who supply the necessary components for the assembly process,\n(2) Assemblers that receive the components and assemble them into the final product,\n(3) Inspectors, who check the quality of the finished products to ensure they meet the required standards,\n(4) Packagers, who receive the inspected products and package them for shipping or distribution,\n(5) Shippers that receive the packaged products and prepare them for transportation to customers or retailers. By relating this model to processes in UNIX, what form of interprocess communication best describes this interaction?",
+                "options": [
+                  { "id": "a", "text": "fork functions to create processes" },
+                  { "id": "b", "text": "signals" },
+                  { "id": "c", "text": "pipes" },
+                  { "id": "d", "text": "threads" }
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 20,
+                "question_text": "Consider the following C code; how many child processes are created upon executing this program?\n\nvoid main() {\n  fork();\n  fork();\n  exit();\n  fork();\n}",
+                "options": [
+                  { "id": "a", "text": "2" },
+                  { "id": "b", "text": "3" },
+                  { "id": "c", "text": "4" },
+                  { "id": "d", "text": "8" }
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 21,
+                "question_text": "For the following decimal virtual addresses 20202, compute the virtual page number and offset for a 4-KB page:",
+                "options": [
+                  { "id": "a", "text": "16, 3818" },
+                  { "id": "b", "text": "4, 3818" },
+                  { "id": "c", "text": "5, 202" },
+                  { "id": "d", "text": "20, 202" }
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 22,
+                "question_text": "The application below reads from a file containing only one string, namely \"graduate\". What will be the message printed on the screen if the read is successful:\n\n#define SIZE 5\nwhile((n = read(fd, buffer, SIZE)) > 0)\n{\n  printf(\"%s\\n\",buffer);\n}",
+                "options": [
+                  { "id": "a", "text": "graduate" },
+                  { "id": "b", "text": "gradu" },
+                  { "id": "c", "text": "gradu\nate" },
+                  { "id": "d", "text": "gradu\natedu" }
+                ],
+                "correct_answers": ["d"]
+              },
+              {
+                "question_id": 23,
+                "question_text": "The following code snippet should use pipes in order to communicate between the child and the parent process. Is there something wrong with the pipe mechanism from the code snippet below?\n\nint pipe_fd[2];\nchar buffer[512];\npid_t pid=fork();\nif(pid<0){\n  perror(\"error\");\n  exit(1);\n}\nif(pid==0){\n  write(pipe_fd[1],buffer,sizeof(buffer));\n}\nelse{\n  close(pipe_fd[0]);\n  read(pipe_fd[0],buffer,sizeof(buffer));\n  close(pipe_fd[1]);\n  printf(\"%s\\n\",buffer);\n  wait(NULL);\n}\n",
+                "options": [
+                  { "id": "a", "text": "the pipe is not opened" },
+                  { "id": "b", "text": "the pipe ends are not closed in the child" },
+                  { "id": "c", "text": "the pipe ends are correctly closed in the parent" },
+                  { "id": "d", "text": "the pipe ends are incorrectly closed in the parent" }
+                ],
+                "correct_answers": ["a", "b", "d"]
+              },
+              {
+                "question_id": 24,
+                "question_text": "Which of the following is a function of an operating system?",
+                "options": [
+                  { "id": "a", "text": "Memory management" },
+                  { "id": "b", "text": "Virus protection" },
+                  { "id": "c", "text": "File management" },
+                  { "id": "d", "text": "Database management" }
+                ],
+                "correct_answers": ["a", "c"]
+              },
+              {
+                "question_id": 25,
+                "question_text": "A group of operating system designers is considering ways to reduce the number of backing stores needed in their new operating system. The team leader has suggested not bothering to save the program text in the swap area at all but just paging it directly from the binary file whenever it is needed. Under what conditions, if any, does this idea work for the program text?",
+                "options": [
+                  { "id": "a", "text": "it works for the program if the program cannot be modified" },
+                  { "id": "b", "text": "it works for the data, if the data cannot be modified" },
+                  { "id": "c", "text": "it works if the data is modified and the program is not" },
+                  { "id": "d", "text": "it works if the program is modified and the data is not modified" }
+                ],
+                "correct_answers": ["a", "b"]
+              },
+              {
+                "question_id": 26,
+                "question_text": "Which system call is used to create a new process in Linux?",
+                "options": [
+                  { "id": "a", "text": "fork()" },
+                  { "id": "b", "text": "exec()" },
+                  { "id": "c", "text": "new()" },
+                  { "id": "d", "text": "createProcess()" }
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 27,
+                "question_text": "How can you change the permissions of a file in Linux?",
+                "options": [
+                  { "id": "a", "text": "chmod" },
+                  { "id": "b", "text": "chown" },
+                  { "id": "c", "text": "cp" },
+                  { "id": "d", "text": "mv" }
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 28,
+                "question_text": "In a Linux system, what is the primary function of the cgroups (control groups) feature?",
+                "options": [
+                  { "id": "a", "text": "Managing system logs" },
+                  { "id": "b", "text": "Grouping user accounts" },
+                  { "id": "c", "text": "Limiting, prioritizing, and isolating the resource usage (CPU, memory, disk I/O, etc.) of process groups" },
+                  { "id": "d", "text": "Controlling access to system files" }
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 29,
+                "question_text": "Which command is used to list the content of a directory?",
+                "options": [
+                  { "id": "a", "text": "ls" },
+                  { "id": "b", "text": "dir" },
+                  { "id": "c", "text": "list" },
+                  { "id": "d", "text": "show" }
+                ],
+                "correct_answers": ["a", "b"]
+              },
+              {
+                "question_id": 30,
+                "question_text": "How does the exec() family of functions differ from fork()?",
+                "options": [
+                  { "id": "a", "text": "exec() creates a new process, while fork() does not" },
+                  { "id": "b", "text": "exec() replaces the current process image with a new one" },
+                  { "id": "c", "text": "fork() is used to execute programs" },
+                  { "id": "d", "text": "There is no difference" }
+                ],
+                "correct_answers": ["b"]
+              }
+            ]
+          },
+          {
+            "subtopic_name": "Computer Networks",
+            "questions": [
+              {
+                "question_id": 1,
+                "question_text": "A process socket local address is equal to:",
+                "options": [
+                  { "id": "a", "text": "port number + IP address" },
+                  { "id": "b", "text": "IP address" },
+                  { "id": "c", "text": "port number" },
+                  { "id": "d", "text": "IP address + hostname + port number" }
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 2,
+                "question_text": "Network layer protocol that reports on the success or failure of data delivery:",
+                "options": [
+                  { "id": "a", "text": "IP" },
+                  { "id": "b", "text": "TCP" },
+                  { "id": "c", "text": "ARP" },
+                  { "id": "d", "text": "ICMP" }
+                ],
+                "correct_answers": ["d"]
+              },
+              {
+                "question_id": 3,
+                "question_text": "Which of the following services use UDP?",
+                "options": [
+                  { "id": "a", "text": "SMTP" },
+                  { "id": "b", "text": "SNMP" },
+                  { "id": "c", "text": "FTP" },
+                  { "id": "d", "text": "TFTP" },
+                  { "id": "e", "text": "DHCP" },
+                  { "id": "f", "text": "HTTP" }
+                ],
+                "correct_answers": ["b", "d", "e"]
+              },
+              {
+                "question_id": 4,
+                "question_text": "Which of the following devices are layer 2 devices?",
+                "options": [
+                  { "id": "a", "text": "bridge" },
+                  { "id": "b", "text": "repeater" },
+                  { "id": "c", "text": "router" },
+                  { "id": "d", "text": "switch" },
+                  { "id": "e", "text": "hub" }
+                ],
+                "correct_answers": ["a", "d"]
+              },
+              {
+                "question_id": 5,
+                "question_text": "Which of the following IP addresses fall into the CIDR block of 115.64.4.0/22?",
+                "options": [
+                  { "id": "a", "text": "115.64.8.32" },
+                  { "id": "b", "text": "115.64.6.255" },
+                  { "id": "c", "text": "115.64.8.30" },
+                  { "id": "d", "text": "115.64.5.128" }
+                ],
+                "correct_answers": ["b", "d"]
+              },
+              {
+                "question_id": 6,
+                "question_text": "What is the network topology where each node is connected to the two nearest nodes so that the entire network forms a circle?",
+                "options": [
+                  { "id": "a", "text": "bus" },
+                  { "id": "b", "text": "ring" },
+                  { "id": "c", "text": "star" },
+                  { "id": "d", "text": "bus-star" }
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 7,
+                "question_text": "Which fields are contained within an Ethernet frame header?",
+                "options": [
+                  { "id": "a", "text": "source and destination hardware addresses" },
+                  { "id": "b", "text": "source and destination network addresses" },
+                  { "id": "c", "text": "error correction code" },
+                  { "id": "d", "text": "authentication code" }
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 8,
+                "question_text": "Which of the following statements is true regarding a switch?",
+                "options": [
+                  { "id": "a", "text": "it creates a single collision domain and a single broadcast domain" },
+                  { "id": "b", "text": "it creates separate collision domains but one broadcast domain" },
+                  { "id": "c", "text": "it creates separate collision domains and separate broadcast domains" }
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 9,
+                "question_text": "What is a valid IPv4 address example?",
+                "options": [
+                  { "id": "a", "text": "144.92.254.253" },
+                  { "id": "b", "text": "144-92-43-178" },
+                  { "id": "c", "text": "144.92.256.176" },
+                  { "id": "d", "text": "144,92,43,178" }
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 10,
+                "question_text": "What does CSMA/CD stand for?",
+                "options": [
+                  { "id": "a", "text": "Carrier Service Multiple Access with Collision Detection" },
+                  { "id": "b", "text": "Carrier Sense Multiple Access with Collision Avoidance" },
+                  { "id": "c", "text": "Carrier Sense Multiple Access with Collision Detection" },
+                  { "id": "d", "text": "Control Sense Multiple Access with Collision Direction" }
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 11,
+                "question_text": "When does a computer send an ARP request?",
+                "options": [
+                  { "id": "a", "text": "When it knows the IP address but not the MAC address" },
+                  { "id": "b", "text": "After receiving a packet" },
+                  { "id": "c", "text": "Before sending an email" },
+                  { "id": "d", "text": "During a reboot" }
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 12,
+                "question_text": "What is a VLAN?",
+                "options": [
+                  { "id": "a", "text": "Virtual Local Area Network" },
+                  { "id": "b", "text": "Visual LAN" },
+                  { "id": "c", "text": "Variable LAN" },
+                  { "id": "d", "text": "Very Large Area Network" }
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 13,
+                "question_text": "What does a /24 network notation signify?",
+                "options": [
+                  { "id": "a", "text": "24 devices in the network" },
+                  { "id": "b", "text": "24 networks connected" },
+                  { "id": "c", "text": "A subnet mask of 255.255.255.0" },
+                  { "id": "d", "text": "24 bits used for the network address" }
+                ],
+                "correct_answers": ["c", "d"]
+              },
+              {
+                "question_id": 14,
+                "question_text": "What is a subnet?",
+                "options": [
+                  { "id": "a", "text": "A network within the Internet" },
+                  { "id": "b", "text": "A smaller segment of a larger network" },
+                  { "id": "c", "text": "A network exclusively for submarines" },
+                  { "id": "d", "text": "A globally distributed network" }
+                ],
+                "correct_answers": ["b"]
+              },
+              {
+                "question_id": 15,
+                "question_text": "How many ports are available in TCP/UDP?",
+                "options": [
+                  { "id": "a", "text": "1024" },
+                  { "id": "b", "text": "2048" },
+                  { "id": "c", "text": "65536" },
+                  { "id": "d", "text": "8080" }
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 16,
+                "question_text": "What is port forwarding?",
+                "options": [
+                  { "id": "a", "text": "Redirecting traffic from one IP to another" },
+                  { "id": "b", "text": "Increasing port speed" },
+                  { "id": "c", "text": "Redirecting traffic from one port to another" },
+                  { "id": "d", "text": "A security feature to block ports" }
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 17,
+                "question_text": "What is NAT?",
+                "options": [
+                  { "id": "a", "text": "Network Address Translation" },
+                  { "id": "b", "text": "Network Allocation Table" },
+                  { "id": "c", "text": "Network Access Token" },
+                  { "id": "d", "text": "New Age Technology" }
+                ],
+                "correct_answers": ["a"]
+              },
+              {
+                "question_id": 18,
+                "question_text": "What is the primary purpose of a firewall?",
+                "options": [
+                  { "id": "a", "text": "Speed up the network" },
+                  { "id": "b", "text": "Translate network addresses" },
+                  { "id": "c", "text": "Monitor data usage" },
+                  { "id": "d", "text": "Control incoming and outgoing network traffic" }
+                ],
+                "correct_answers": ["d"]
+              },
+              {
+                "question_id": 19,
+                "question_text": "What is the maximum length of an IPv6 address?",
+                "options": [
+                  { "id": "a", "text": "32 bits" },
+                  { "id": "b", "text": "64 bits" },
+                  { "id": "c", "text": "128 bits" },
+                  { "id": "d", "text": "256 bits" }
+                ],
+                "correct_answers": ["c"]
+              },
+              {
+                "question_id": 20,
+                "question_text": "In which topology does each device have exactly two neighbors for communication purposes?",
+                "options": [
+                  { "id": "a", "text": "Star" },
+                  { "id": "b", "text": "Ring" },
+                  { "id": "c", "text": "Mesh" },
+                  { "id": "d", "text": "Tree" }
+                ],
+                "correct_answers": ["b"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
