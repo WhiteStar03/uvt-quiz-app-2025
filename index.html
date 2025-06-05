@@ -36,7 +36,8 @@
             color: #333;
             text-align: center;
             margin-bottom: 30px;
-            font-size: 2.5em;
+            font-size: 2.2em; /* Slightly reduced for longer title */
+            line-height: 1.3; /* Added for better readability if title wraps */
             background: linear-gradient(135deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -409,12 +410,21 @@
             margin: 20px 0;
         }
 
+        .made-by-footer {
+            text-align: center;
+            margin-top: 35px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            font-size: 0.9em;
+            color: #777;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
             }
             h1 {
-                font-size: 2em;
+                font-size: 1.8em; /* Further reduce for small screens */
             }
             .dashboard-stats {
                 flex-direction: column;
@@ -438,12 +448,15 @@
             #categoryName {
                  width: 100%; text-align: center; /* Make category name take full width if wrapped */
             }
+            .made-by-footer {
+                margin-top: 25px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Knowledge Assessment Platform</h1>
+        <h1>Knowledge Assessment Platform (Testing Bachelor Thesis Questions for English Informatics)</h1>
 
         <!-- Dashboard Screen -->
         <div class="dashboard-screen" id="dashboardScreen">
@@ -521,6 +534,10 @@
             <button class="nav-button secondary" onclick="resetTest()">Back to Dashboard</button>
             <div class="answer-review" id="answerReview" style="display: none;"></div>
         </div>
+
+        <div class="made-by-footer">
+            Made by Paul
+        </div>
     </div>
 
     <script>
@@ -536,7 +553,7 @@
         let isRandomTestActive = false;
         let testTimerInterval = null;
         let testTimeRemaining = 0; // in seconds
-        const RANDOM_TEST_DURATION = 90 * 60; // 30 minutes for random test
+        const RANDOM_TEST_DURATION = 30 * 60; // 30 minutes for random test (corrected from 90)
         const RANDOM_TEST_QUESTION_COUNT = 30;
 
         async function loadTestData() {
@@ -794,15 +811,6 @@
                          input.dispatchEvent(event);
                     } else if (target.tagName.toLowerCase() === 'label') {
                         // Let default label behavior handle it, which should trigger input's change.
-                        // If it doesn't, we might need to manually trigger change for label clicks.
-                        // For safety, let's ensure 'change' is triggered if clicking label changes state.
-                        // const oldChecked = input.checked;
-                        // setTimeout(() => { // Allow default behavior to occur
-                        //     if (input.checked !== oldChecked) {
-                        //         const event = new Event('change', { bubbles: true });
-                        //         input.dispatchEvent(event);
-                        //     }
-                        // }, 0);
                     }
                 };
                 optionsContainer.appendChild(optionDiv);
@@ -906,7 +914,6 @@
                 isFeedbackMode = false; 
                 currentQuestionIndex--;
                 displayQuestion(); 
-                // NextButtonState will be updated by displayQuestion
             }
         }
         
@@ -919,7 +926,7 @@
         }
 
         function finishTest() {
-            stopTimer(); // Stop timer if it was a random test
+            stopTimer(); 
             isRandomTestActive = false;
 
             const testEndTime = new Date();
@@ -958,7 +965,7 @@
                 <p>You answered <strong>${correctCount}</strong> out of <strong>${totalQuestions}</strong> questions correctly.</p>
                 <p>Time taken: <strong>${minutes}m ${seconds}s</strong></p>
                 <p>Test Type: <strong>${currentCategory.subtopic_name || currentCategory.name}</strong></p>`;
-            if (currentCategory.parent_topic_name) { // For non-random tests
+            if (currentCategory.parent_topic_name) { 
                 summaryHTML += `<p>Parent Topic: <strong>${currentCategory.parent_topic_name}</strong></p>`;
             }
             document.getElementById('resultsSummary').innerHTML = summaryHTML;
@@ -991,19 +998,16 @@
                     }
                     if (isUserSelectedOpt) {
                         if (isCorrectOpt) {
-                           // optFeedbackClass = 'correct-answer'; // Class on div already indicates correctness of user choice
                             optFeedbackTextParts.push('<span class="correct-answer">(Your Choice)</span>');
                         } else {
-                           // optFeedbackClass = 'incorrect-answer';
                             optFeedbackTextParts.push('<span class="incorrect-answer">(Your Choice - Incorrect)</span>');
                         }
                     }
-                     // Highlight correct options user missed
                     if(isCorrectOpt && !isUserSelectedOpt){
-                        optFeedbackClass += ' correct-answer'; // Make text green for missed correct answers
+                        optFeedbackClass += ' correct-answer'; 
                     }
                     if(isUserSelectedOpt && !isCorrectOpt){
-                         optFeedbackClass += ' incorrect-answer'; // Make text red for chosen incorrect answers
+                         optFeedbackClass += ' incorrect-answer'; 
                     }
 
 
@@ -1011,7 +1015,7 @@
                 }).join('');
                 
                 let originInfo = '';
-                if (question.subtopic_name_origin) { // If it's a question from a random test, show origin
+                if (question.subtopic_name_origin) { 
                     originInfo = `<p style="font-size:0.8em; color:#777;"><em>Origin: ${question.parent_topic_name_origin} > ${question.subtopic_name_origin}</em></p>`;
                 }
 
@@ -1033,20 +1037,18 @@
         }
 
         function resetTest() {
-            stopTimer(); // Ensure timer is stopped
+            stopTimer(); 
             isRandomTestActive = false;
 
             document.getElementById('resultsScreen').style.display = 'none';
             document.getElementById('answerReview').style.display = 'none';
-            // No need to hide testScreen or categoryScreen explicitly as showDashboard will handle it
             
             currentQuestionIndex = 0;
             userAnswers = {};
             currentCategory = null;
             isFeedbackMode = false;
             
-            showDashboard(); // Go back to dashboard
-            // Data is already loaded, no need to call loadTestData() unless you want to re-fetch
+            showDashboard(); 
         }
 
         window.onload = loadTestData;
