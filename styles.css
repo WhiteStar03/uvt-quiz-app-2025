@@ -277,7 +277,7 @@ h1 {
 
 #questionStatus {
     order: 2;
-    flex-grow: 1; /* Allow questionStatus to take available space */
+    flex: 1;
     text-align: center;
 }
 
@@ -444,19 +444,19 @@ h1 {
         flex-direction: column;
     }
     
-    /* Mobile: Next button first, then status, then Previous */
+    /* Mobile: Reset order and margins to match HTML (Next first, Previous second) */
     #nextButton {
-        order: 1;
+        order: 0;
     }
     
     #questionStatus {
-        order: 2;
-        flex-grow: 0; /* Reset flex-grow for mobile */
+        order: 1;
+        flex: none;
         text-align: center;
     }
     
     #prevButton {
-        order: 3;
+        order: 2;
     }
     .nav-button {
         width: 100%;
