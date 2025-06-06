@@ -272,16 +272,15 @@ h1 {
 /* Desktop: Previous button on the left, Next button on the right */
 #prevButton {
     order: 1;
-    margin-right: auto;
-}
-
-#nextButton {
-    order: 2;
 }
 
 #questionStatus {
-    order: 1.5;
+    order: 2;
     margin: 0 auto;
+}
+
+#nextButton {
+    order: 3;
 }
 
 .nav-button {
@@ -448,14 +447,13 @@ h1 {
         order: 0;
     }
     
-    #prevButton {
+    #questionStatus {
         order: 1;
-        margin-right: 0;
+        margin: 0;
     }
     
-    #questionStatus {
-        order: 0.5;
-        margin: 0;
+    #prevButton {
+        order: 2;
     }
     .nav-button {
         width: 100%;
