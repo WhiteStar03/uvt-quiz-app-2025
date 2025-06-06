@@ -264,19 +264,24 @@ h1 {
 
 .navigation {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     margin-top: 30px;
     gap: 20px;
 }
 
-/* Desktop: Next button on the right */
+/* Desktop: Previous button on the left, Next button on the right */
+#prevButton {
+    order: 1;
+    margin-right: auto;
+}
+
 #nextButton {
     order: 2;
 }
 
-#prevButton {
-    order: 1;
+#questionStatus {
+    order: 1.5;
+    margin: 0 auto;
 }
 
 .nav-button {
@@ -438,13 +443,19 @@ h1 {
         flex-direction: column;
     }
     
-    /* Mobile: Reset order to match HTML (Next first, Previous second) */
+    /* Mobile: Reset order and margins to match HTML (Next first, Previous second) */
     #nextButton {
         order: 0;
     }
     
     #prevButton {
         order: 1;
+        margin-right: 0;
+    }
+    
+    #questionStatus {
+        order: 0.5;
+        margin: 0;
     }
     .nav-button {
         width: 100%;
