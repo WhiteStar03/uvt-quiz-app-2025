@@ -1,0 +1,506 @@
+let fullQuestionsData = null;
+let displayableCategories = [];
+let allQuestionsFlat = []; // For random test generation
+let currentCategory = null;
+let currentQuestionIndex = 0;
+let userAnswers = {};
+let testStartTime = null;
+let isFeedbackMode = false;
+
+let isRandomTestActive = false;
+let testTimerInterval = null;
+let testTimeRemaining = 0; // in seconds
+const RANDOM_TEST_DURATION = 90 * 60; // 30 minutes for random test (corrected from 90)
+const RANDOM_TEST_QUESTION_COUNT = 30;
+
+async function loadTestData() {
+   document.getElementById('dashboardLoading').style.display = 'block';
+   try {
+     const res = await fetch('questions.json');
+     if (!res.ok) {
+         const errorMsg = `Failed to fetch questions.json: HTTP ${res.status} ${res.statusText}`;
+         console.error(errorMsg);
+         document.getElementById('categoryGrid').innerHTML = `<div class="error">${errorMsg}. Ensure questions.json is accessible.</div>`;
+         document.getElementById('dashboardScreen').innerHTML = `<div class="error">${errorMsg}. Check console.</div>`;
+         throw new Error(`HTTP error! status: ${res.status}`);
+     }
+     fullQuestionsData = await res.json();
+
+     if (!fullQuestionsData || typeof fullQuestionsData.exam !== 'object' || !Array.isArray(fullQuestionsData.exam.topics)) {
+        const errorMsg = 'Loaded questions data is not in the expected format (exam.topics is missing or not an array).';
+        console.error(errorMsg, fullQuestionsData);
+        document.getElementById('categoryGrid').innerHTML = `<div class="error">${errorMsg} Check console.</div>`;
+        document.getElementById('dashboardScreen').innerHTML = `<div class="error">${errorMsg}. Check console.</div>`;
+        return;
+     }
+
+     displayableCategories = [];
+     allQuestionsFlat = [];
+     fullQuestionsData.exam.topics.forEach(topic => {
+         if (topic.subtopics && Array.isArray(topic.subtopics)) {
+             topic.subtopics.forEach(subtopic => {
+                 if (subtopic && typeof subtopic.subtopic_name === 'string' && Array.isArray(subtopic.questions) && subtopic.questions.length > 0) {
+                     displayableCategories.push({
+                         ...subtopic,
+                         parent_topic_name: topic.topic_name
+                     });
+                     subtopic.questions.forEach(q => allQuestionsFlat.push({...q, subtopic_name_origin: subtopic.subtopic_name, parent_topic_name_origin: topic.topic_name}));
+                 } else {
+                     // console.warn('Skipping malformed or empty subtopic:', subtopic, 'under topic:', topic.topic_name);
+                 }
+             });
+         }
+     });
+
+     if (displayableCategories.length === 0) {
+        document.getElementById('categoryGrid').innerHTML = '<div class="loading">No test subtopics found.</div>';
+     } else {
+        displayCategories(displayableCategories);
+     }
+     updateDashboardStats();
+     showDashboard(); // Show dashboard after data is loaded
+
+   } catch (err) {
+     console.error('Error loading or processing questions.json:', err);
+     const commonErrorMsg = `<div class="error">Failed to load test data: ${err.message}. Check console.</div>`;
+     document.getElementById('categoryGrid').innerHTML = commonErrorMsg;
+     document.getElementById('dashboardScreen').innerHTML = commonErrorMsg; // Also show error on dashboard
+   } finally {
+       document.getElementById('dashboardLoading').style.display = 'none';
+   }
+ }
+
+function updateDashboardStats() {
+    document.getElementById('totalQuestionsStat').textContent = allQuestionsFlat.length;
+    document.getElementById('totalCategoriesStat').textContent = displayableCategories.length;
+}
+
+function showDashboard() {
+    document.getElementById('dashboardScreen').style.display = 'block';
+    document.getElementById('categoryScreen').style.display = 'none';
+    document.getElementById('testScreen').style.display = 'none';
+    document.getElementById('resultsScreen').style.display = 'none';
+    stopTimer(); // Ensure timer is stopped if returning to dashboard
+}
+
+function showCategorySelectionScreen() {
+    document.getElementById('dashboardScreen').style.display = 'none';
+    document.getElementById('categoryScreen').style.display = 'block';
+    document.getElementById('testScreen').style.display = 'none';
+    document.getElementById('resultsScreen').style.display = 'none';
+}
+
+function displayCategories(subtopicsToDisplay) {
+    const grid = document.getElementById('categoryGrid');
+    grid.innerHTML = '';
+
+    if (!subtopicsToDisplay || subtopicsToDisplay.length === 0) {
+        grid.innerHTML = '<div class="loading">No subtopics with questions available.</div>';
+        return;
+    }
+
+    subtopicsToDisplay.forEach((subtopic, index) => {
+        const card = document.createElement('div');
+        card.className = 'category-card';
+        card.onclick = () => startTest(index); // Pass index for regular category test
+
+        const questionCount = subtopic.questions.length;
+        card.innerHTML = `
+        <h3>${subtopic.subtopic_name}</h3>
+        ${subtopic.parent_topic_name ? `<p style="font-size:0.8em; color:#555; margin-top: 5px;"><em>Topic: ${subtopic.parent_topic_name}</em></p>` : ''}
+        <p style="margin-top: 10px;">${questionCount} question${questionCount !== 1 ? 's' : ''}</p>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+function generateRandomTest() {
+    if (allQuestionsFlat.length === 0) {
+        alert("No questions available to generate a random test.");
+        return;
+    }
+    const shuffledQuestions = shuffleArray([...allQuestionsFlat]);
+    const selectedQuestions = shuffledQuestions.slice(0, Math.min(RANDOM_TEST_QUESTION_COUNT, shuffledQuestions.length));
+
+    if (selectedQuestions.length === 0) {
+        alert("Not enough questions to generate a random test.");
+        return;
+    }
+    
+    isRandomTestActive = true;
+    currentCategory = { // Create a temporary "category" for this random test
+        subtopic_name: "Random Test",
+        questions: selectedQuestions,
+        name: "Randomly Generated Test" // For display
+    };
+    startTest(null); // Pass null index, as currentCategory is already set
+    startTimer(RANDOM_TEST_DURATION);
+}
+
+function startTimer(durationInSeconds) {
+    stopTimer(); // Clear any existing timer
+    testTimeRemaining = durationInSeconds;
+    document.getElementById('timerDisplay').style.display = 'block';
+    updateTimerDisplay();
+
+    testTimerInterval = setInterval(() => {
+        testTimeRemaining--;
+        updateTimerDisplay();
+        if (testTimeRemaining <= 0) {
+            stopTimer();
+            alert("Time's up! The test will be submitted automatically.");
+            finishTest();
+        }
+    }, 1000);
+}
+
+function stopTimer() {
+    clearInterval(testTimerInterval);
+    testTimerInterval = null;
+    document.getElementById('timerDisplay').style.display = 'none';
+}
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(testTimeRemaining / 60);
+    const seconds = testTimeRemaining % 60;
+    document.getElementById('timerDisplay').textContent = 
+        `Time: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+}
+
+function startTest(subtopicIndexOrNull) {
+    if (subtopicIndexOrNull !== null) { // Regular category test
+        currentCategory = displayableCategories[subtopicIndexOrNull];
+        isRandomTestActive = false;
+         document.getElementById('timerDisplay').style.display = 'none';
+    }
+    // If subtopicIndexOrNull is null, currentCategory is assumed to be set by generateRandomTest()
+    
+    if (!currentCategory || !currentCategory.questions || currentCategory.questions.length === 0) {
+        alert("This category/test has no questions or is invalid. Please select another.");
+        return;
+    }
+    currentQuestionIndex = 0;
+    userAnswers = {};
+    testStartTime = new Date();
+    isFeedbackMode = false;
+
+    document.getElementById('dashboardScreen').style.display = 'none';
+    document.getElementById('categoryScreen').style.display = 'none';
+    document.getElementById('testScreen').style.display = 'block';
+    document.getElementById('resultsScreen').style.display = 'none';
+
+    let categoryDisplayName = currentCategory.subtopic_name || currentCategory.name;
+    document.getElementById('categoryName').textContent = `Test: ${categoryDisplayName}`;
+    displayQuestion();
+}
+
+function updateNextButtonState() {
+    const nextButton = document.getElementById('nextButton');
+    if (isFeedbackMode) {
+        nextButton.disabled = false;
+        return;
+    }
+    if (!currentCategory || !currentCategory.questions[currentQuestionIndex]) {
+        nextButton.disabled = true;
+        return;
+    }
+    const question = currentCategory.questions[currentQuestionIndex];
+    const userSelection = userAnswers[question.question_id] || [];
+    nextButton.disabled = userSelection.length === 0;
+}
+
+function displayQuestion() {
+    const question = currentCategory.questions[currentQuestionIndex];
+    const totalQuestions = currentCategory.questions.length;
+
+    const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+    document.getElementById('progressFill').style.width = `${progress}%`;
+
+    document.getElementById('questionNumber').textContent = `Question ${currentQuestionIndex + 1} of ${totalQuestions}`;
+    document.getElementById('questionText').textContent = question.question_text;
+    document.getElementById('questionStatus').textContent = `${currentQuestionIndex + 1} / ${totalQuestions}`;
+
+    const optionsContainer = document.getElementById('optionsContainer');
+    optionsContainer.innerHTML = '';
+    const isMultipleChoice = question.correct_answers.length > 1;
+
+    question.options.forEach(option => {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'option';
+        const savedAnswers = userAnswers[question.question_id] || [];
+        const isChecked = savedAnswers.includes(option.id);
+
+        const inputId = `option_${question.question_id}_${option.id}`;
+        optionDiv.innerHTML = `
+            <input type="${isMultipleChoice ? 'checkbox' : 'radio'}"
+                   name="question_${question.question_id}" 
+                   value="${option.id}"
+                   id="${inputId}"
+                   ${isChecked ? 'checked' : ''}>
+            <label for="${inputId}" class="option-text">${option.id}. ${option.text}</label>
+        `;
+        // Add onchange to input directly
+        optionDiv.querySelector('input').onchange = () => selectAnswer(option.id, isMultipleChoice);
+
+
+        if (isChecked) optionDiv.classList.add('selected');
+        
+        optionDiv.onclick = function(e) {
+            if (isFeedbackMode) return; 
+
+            const target = e.target;
+            const input = this.querySelector('input');
+            if (!input) return;
+
+            if (target.tagName.toLowerCase() !== 'input' && target.tagName.toLowerCase() !== 'label') {
+                if (input.type === 'radio' && input.checked) return; 
+                input.checked = !input.checked;
+                 const event = new Event('change', { bubbles: true });
+                 input.dispatchEvent(event);
+            } else if (target.tagName.toLowerCase() === 'label') {
+                // Let default label behavior handle it, which should trigger input's change.
+            }
+        };
+        optionsContainer.appendChild(optionDiv);
+    });
+    
+    isFeedbackMode = false; 
+    
+    const nextButton = document.getElementById('nextButton');
+    const prevButton = document.getElementById('prevButton');
+    prevButton.disabled = currentQuestionIndex === 0;
+
+    if (currentQuestionIndex === totalQuestions - 1) {
+        nextButton.textContent = 'Finish';
+        nextButton.onclick = handleFinishClick;
+    } else {
+        nextButton.textContent = 'Next';
+        nextButton.onclick = handleNextClick;
+    }
+    updateNextButtonState(); // Crucial for enabling/disabling next button
+}
+
+function selectAnswer(optionId, isMultipleChoice) {
+    if (isFeedbackMode) return; 
+
+    const question = currentCategory.questions[currentQuestionIndex];
+    const questionId = question.question_id;
+
+    if (isMultipleChoice) {
+        if (!userAnswers[questionId]) userAnswers[questionId] = [];
+        const index = userAnswers[questionId].indexOf(optionId);
+        if (index > -1) userAnswers[questionId].splice(index, 1);
+        else userAnswers[questionId].push(optionId);
+    } else {
+        userAnswers[questionId] = [optionId];
+    }
+
+    document.querySelectorAll(`#optionsContainer .option`).forEach(optDiv => {
+        const input = optDiv.querySelector('input');
+        if (input.checked) optDiv.classList.add('selected');
+        else optDiv.classList.remove('selected');
+    });
+    updateNextButtonState(); // Update button state after selection
+}
+
+function showAnswerFeedback() {
+    const question = currentCategory.questions[currentQuestionIndex];
+    const userSelection = userAnswers[question.question_id] || [];
+    const correctAnswers = question.correct_answers;
+
+    document.querySelectorAll('#optionsContainer .option').forEach(optDiv => {
+        const input = optDiv.querySelector('input');
+        input.disabled = true;
+        optDiv.classList.add('disabled-option');
+
+        const optionId = input.value;
+        const isCorrect = correctAnswers.includes(optionId);
+        const isSelected = userSelection.includes(optionId);
+
+        if (isCorrect) { 
+            optDiv.classList.add('reveal-correct');
+        }
+        if (isSelected) { 
+            if (isCorrect) {
+                optDiv.classList.add('correct-selection');
+            } else {
+                optDiv.classList.add('incorrect-selection');
+            }
+        }
+    });
+    document.getElementById('prevButton').disabled = true; 
+}
+
+function handleNextClick() {
+    const nextButton = document.getElementById('nextButton');
+    if (isFeedbackMode) { 
+        isFeedbackMode = false;
+        currentQuestionIndex++;
+        displayQuestion(); 
+    } else { 
+        showAnswerFeedback();
+        isFeedbackMode = true;
+        nextButton.textContent = 'Continue';
+    }
+    updateNextButtonState(); // After mode change / question change
+}
+
+function handleFinishClick() {
+    const nextButton = document.getElementById('nextButton');
+    if (isFeedbackMode) { 
+        finishTest();
+    } else { 
+        showAnswerFeedback();
+        isFeedbackMode = true; 
+        nextButton.textContent = 'View Results';
+    }
+    updateNextButtonState(); // After mode change
+}
+
+function previousQuestion() {
+    if (currentQuestionIndex > 0) {
+        isFeedbackMode = false; 
+        currentQuestionIndex--;
+        displayQuestion(); 
+    }
+}
+
+function handleQuitTest() {
+    if (confirm("Are you sure you want to quit this test? Your progress will be lost.")) {
+        stopTimer();
+        isRandomTestActive = false;
+        resetTest();
+    }
+}
+
+function finishTest() {
+    stopTimer(); 
+    isRandomTestActive = false;
+
+    const testEndTime = new Date();
+    const timeTaken = Math.floor((testEndTime - testStartTime) / 1000);
+    let correctCount = 0;
+    const totalQuestions = currentCategory.questions.length;
+
+    currentCategory.questions.forEach(question => {
+        const userAnswer = userAnswers[question.question_id] || [];
+        const correctAnswer = question.correct_answers;
+        const sortedUserAnswer = [...userAnswer].sort();
+        const sortedCorrectAnswer = [...correctAnswer].sort();
+        if (sortedUserAnswer.length === sortedCorrectAnswer.length &&
+            sortedUserAnswer.every((val, index) => val === sortedCorrectAnswer[index])) {
+            correctCount++;
+        }
+    });
+
+    const score = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
+
+    document.getElementById('testScreen').style.display = 'none';
+    document.getElementById('resultsScreen').style.display = 'block';
+
+    const circumference = 2 * Math.PI * 85;
+    const scoreCircleEl = document.getElementById('scoreCircle');
+    scoreCircleEl.style.strokeDasharray = circumference;
+    scoreCircleEl.style.strokeDashoffset = circumference;
+    setTimeout(() => {
+        scoreCircleEl.style.strokeDashoffset = circumference - (score / 100) * circumference;
+        document.getElementById('scoreText').textContent = `${score}%`;
+    }, 100);
+
+    const minutes = Math.floor(timeTaken / 60);
+    const seconds = timeTaken % 60;
+    let summaryHTML = `
+        <p>You answered <strong>${correctCount}</strong> out of <strong>${totalQuestions}</strong> questions correctly.</p>
+        <p>Time taken: <strong>${minutes}m ${seconds}s</strong></p>
+        <p>Test Type: <strong>${currentCategory.subtopic_name || currentCategory.name}</strong></p>`;
+    if (currentCategory.parent_topic_name) { 
+        summaryHTML += `<p>Parent Topic: <strong>${currentCategory.parent_topic_name}</strong></p>`;
+    }
+    document.getElementById('resultsSummary').innerHTML = summaryHTML;
+    prepareReview();
+}
+
+function prepareReview() {
+    const reviewContainer = document.getElementById('answerReview');
+    reviewContainer.innerHTML = '<h3 style="margin-bottom: 20px;">Answer Review</h3>';
+    currentCategory.questions.forEach((question, index) => {
+        const userAnswer = userAnswers[question.question_id] || [];
+        const correctAnswer = question.correct_answers;
+        const sortedUserAnswer = [...userAnswer].sort();
+        const sortedCorrectAnswer = [...correctAnswer].sort();
+        const isCorrect = sortedUserAnswer.length === sortedCorrectAnswer.length &&
+            sortedUserAnswer.every((val, index) => val === sortedCorrectAnswer[index]);
+
+        const reviewDiv = document.createElement('div');
+        reviewDiv.className = `review-question ${isCorrect ? 'correct' : 'incorrect'}`;
+
+        const optionsHtml = question.options.map(opt => {
+            const isCorrectOpt = correctAnswer.includes(opt.id);
+            const isUserSelectedOpt = userAnswer.includes(opt.id);
+            let optFeedbackClass = '';
+            let optFeedbackTextParts = [];
+            
+            if(isUserSelectedOpt){
+                if(isCorrectOpt){
+                    optFeedbackTextParts.push('<span class="correct-answer">(Your Choice)</span>');
+                } else {
+                    optFeedbackTextParts.push('<span class="incorrect-answer">(Your Choice - Incorrect)</span>');
+                }
+            }
+            if(isCorrectOpt && !isUserSelectedOpt){
+                optFeedbackClass += ' correct-answer'; 
+            }
+            if(isUserSelectedOpt && !isCorrectOpt){
+                 optFeedbackClass += ' incorrect-answer'; 
+            }
+
+
+            return `<div class="${optFeedbackClass}">${opt.id}. ${opt.text} ${optFeedbackTextParts.join(' ')}</div>`;
+        }).join('');
+        
+        let originInfo = '';
+        if (question.subtopic_name_origin) { 
+            originInfo = `<p style="font-size:0.8em; color:#777;"><em>Origin: ${question.parent_topic_name_origin} > ${question.subtopic_name_origin}</em></p>`;
+        }
+
+        reviewDiv.innerHTML = `
+            <h4>Question ${index + 1}: <span style="white-space: pre-wrap;">${question.question_text}</span></h4>
+            ${originInfo}
+            <p><strong>Your answer(s):</strong> ${userAnswer.length > 0 ? userAnswer.join(', ') : 'Not answered'}</p>
+            <p><strong>Correct answer(s):</strong> ${correctAnswer.join(', ')}</p>
+            <div style="margin-top: 10px;">${optionsHtml}</div>
+            <p style="margin-top: 5px;"><strong>Explanation:</strong> ${question.explanation || 'No explanation provided.'}</p>
+        `;
+        reviewContainer.appendChild(reviewDiv);
+    });
+}
+
+function showReview() {
+    const review = document.getElementById('answerReview');
+    review.style.display = review.style.display === 'none' ? 'block' : 'none';
+}
+
+function resetTest() {
+    stopTimer(); 
+    isRandomTestActive = false;
+
+    document.getElementById('resultsScreen').style.display = 'none';
+    document.getElementById('answerReview').style.display = 'none';
+    
+    currentQuestionIndex = 0;
+    userAnswers = {};
+    currentCategory = null;
+    isFeedbackMode = false;
+    
+    showDashboard(); 
+}
+
+window.onload = loadTestData;
