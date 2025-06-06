@@ -270,6 +270,15 @@ h1 {
     gap: 20px;
 }
 
+/* Desktop: Next button on the right */
+#nextButton {
+    order: 2;
+}
+
+#prevButton {
+    order: 1;
+}
+
 .nav-button {
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
@@ -427,6 +436,15 @@ h1 {
     }
     .navigation {
         flex-direction: column;
+    }
+    
+    /* Mobile: Reset order to match HTML (Next first, Previous second) */
+    #nextButton {
+        order: 0;
+    }
+    
+    #prevButton {
+        order: 1;
     }
     .nav-button {
         width: 100%;
