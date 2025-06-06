@@ -618,7 +618,7 @@
               },
               {
                 "question_id": 14,
-                "question_text": "Which of the following propositional formulas correspond to the boolean function with 3 arguments that returns T when its inputs represent the binary encoding of a prime number:",
+                "question_text": "Let P, Q, R be propositional variables. Which of the following propositional formulas correspond to the boolean function with 3 arguments that returns T when its inputs represent the binary encoding of a prime number:",
                 "options": [
                   {"id": "a", "text": "P ∧ Q ∧ ¬R"},
                   {"id": "b", "text": "(¬P ∧ Q) ∨ (P ∧ R)"},
