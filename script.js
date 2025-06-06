@@ -232,29 +232,31 @@ function displayQuestion() {
     const imageContainer = document.getElementById('questionImageContainer');
     imageContainer.innerHTML = ''; // Clear previous image
 
-    let categoryNameForImage = currentCategory.subtopic_name || currentCategory.name || "UnknownCategory";
-    // Replace spaces and special characters for a valid filename
+    let categoryNameForImage = currentCategory.subtopic_name || currentCategory.name || "DefaultCategory";
     categoryNameForImage = categoryNameForImage.replace(/\\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
     
-    const questionIdForImage = question.question_id || "UnknownID";
-    const imageName = `${categoryNameForImage}_${questionIdForImage}.png`; // Assuming png, adjust if other formats are used
-    const imagePath = `photos/${imageName}`;
+    // Ensure question_id is available, otherwise use a placeholder or skip
+    const questionIdForImage = question.question_id ? String(question.question_id) : null;
 
-    const imgElement = document.createElement('img');
-    imgElement.style.maxWidth = '100%'; // Ensure image is responsive
-    imgElement.style.maxHeight = '400px'; // Optional: constrain height
-    imgElement.style.marginTop = '15px';
-    imgElement.style.display = 'none'; // Hide by default
+    if (questionIdForImage) {
+        const imageName = `${categoryNameForImage}_${questionIdForImage}.png`;
+        const imagePath = `photos/${imageName}`;
+        const imgElement = document.createElement('img');
+        imgElement.alt = `Image for ${categoryNameForImage} Question ${questionIdForImage}`;
+        imgElement.style.maxWidth = '100%';
+        imgElement.style.maxHeight = '300px'; // Adjust as needed
+        imgElement.style.display = 'none'; // Hide until loaded
 
-    imgElement.onload = function() {
-        imgElement.style.display = 'block'; // Show if loaded successfully
-    };
-    imgElement.onerror = function() {
-        imgElement.style.display = 'none'; // Keep hidden if error (e.g., file not found)
-        // console.log(`Image not found: ${imagePath}`); // Optional: for debugging
-    };
-    imgElement.src = imagePath;
-    imageContainer.appendChild(imgElement);
+        imgElement.onload = function() {
+            imgElement.style.display = 'block';
+        };
+        imgElement.onerror = function() {
+            imgElement.style.display = 'none';
+            // console.warn(`Question image not found or error loading: ${imagePath}`);
+        };
+        imgElement.src = imagePath;
+        imageContainer.appendChild(imgElement);
+    }
     // --- Image Handling End ---
 
     const optionsContainer = document.getElementById('optionsContainer');
@@ -263,41 +265,78 @@ function displayQuestion() {
 
     question.options.forEach(option => {
         const optionDiv = document.createElement('div');
-        optionDiv.className = 'option';
-        const savedAnswers = userAnswers[question.question_id] || [];
-        const isChecked = savedAnswers.includes(option.id);
+        optionDiv.classList.add('option');
 
-        const inputId = `option_${question.question_id}_${option.id}`;
-        optionDiv.innerHTML = `
-            <input type="${isMultipleChoice ? 'checkbox' : 'radio'}"
-                   name="question_${question.question_id}" 
-                   value="${option.id}"
-                   id="${inputId}"
-                   ${isChecked ? 'checked' : ''}>
-            <label for="${inputId}" class="option-text">${option.id}. ${option.text}</label>
-        `;
-        // Add onchange to input directly
-        optionDiv.querySelector('input').onchange = () => selectAnswer(option.id, isMultipleChoice);
+        const inputType = isMultipleChoice ? 'checkbox' : 'radio';
+        const input = document.createElement('input');
+        input.type = inputType;
+        const qIdForInput = question.question_id || currentQuestionIndex;
+        input.name = `question_${qIdForInput}`;
+        input.id = `option_${qIdForInput}_${option.id}`;
+        input.value = option.id;
 
-
-        if (isChecked) optionDiv.classList.add('selected');
-        
-        optionDiv.onclick = function(e) {
-            if (isFeedbackMode) return; 
-
-            const target = e.target;
-            const input = this.querySelector('input');
-            if (!input) return;
-
-            if (target.tagName.toLowerCase() !== 'input' && target.tagName.toLowerCase() !== 'label') {
-                if (input.type === 'radio' && input.checked) return; 
-                input.checked = !input.checked;
-                 const event = new Event('change', { bubbles: true });
-                 input.dispatchEvent(event);
-            } else if (target.tagName.toLowerCase() === 'label') {
-                // Let default label behavior handle it, which should trigger input's change.
+        const userAnswer = userAnswers[question.question_id];
+        if (userAnswer) {
+            if (isMultipleChoice && userAnswer.includes(option.id)) {
+                input.checked = true;
+            } else if (!isMultipleChoice && userAnswer === option.id) {
+                input.checked = true;
             }
-        };
+        }
+
+        input.onchange = () => selectAnswer(option.id, isMultipleChoice);
+
+        if (isFeedbackMode) {
+            input.disabled = true;
+            optionDiv.classList.add('disabled-option');
+        }
+
+        const label = document.createElement('label');
+        label.htmlFor = input.id;
+        label.textContent = option.text || `Option ${option.id}`;
+        label.classList.add('option-text');
+
+        optionDiv.appendChild(input);
+        optionDiv.appendChild(label);
+
+        // --- Add image for the option ---
+        if (option.id && questionIdForImage) { // questionIdForImage is from the question image part
+            const optionImageName = `${categoryNameForImage}_${questionIdForImage}_${option.id}.png`;
+            const optionImagePath = `photos/${optionImageName}`;
+
+            const optionImgElement = document.createElement('img');
+            optionImgElement.alt = `Image for option ${option.id}`;
+            optionImgElement.style.maxWidth = '80px'; 
+            optionImgElement.style.maxHeight = '80px'; 
+            optionImgElement.style.display = 'none';   
+            // optionImgElement.style.marginLeft = '10px'; // Optional: if flex gap isn't enough
+
+            optionImgElement.onload = function() {
+                optionImgElement.style.display = 'block'; 
+            };
+            optionImgElement.onerror = function() {
+                optionImgElement.style.display = 'none';
+                // console.warn(`Option image not found or error loading: ${optionImagePath}`);
+            };
+            optionImgElement.src = optionImagePath;
+            optionDiv.appendChild(optionImgElement); 
+        }
+        // --- End option image ---
+
+        if (isFeedbackMode && question.correct_answers) {
+            const isCorrect = question.correct_answers.includes(option.id);
+            const isSelected = input.checked;
+
+            if (isCorrect) {
+                optionDiv.classList.add('reveal-correct');
+                if (isSelected) {
+                    optionDiv.classList.add('correct-selection');
+                }
+            } else if (isSelected) {
+                optionDiv.classList.add('incorrect-selection');
+            }
+        }
+        
         optionsContainer.appendChild(optionDiv);
     });
     
@@ -308,13 +347,13 @@ function displayQuestion() {
     prevButton.disabled = currentQuestionIndex === 0;
 
     if (currentQuestionIndex === totalQuestions - 1) {
-        nextButton.textContent = 'Finish';
+        nextButton.textContent = 'Finish Test';
         nextButton.onclick = handleFinishClick;
     } else {
         nextButton.textContent = 'Next';
         nextButton.onclick = handleNextClick;
     }
-    updateNextButtonState(); // Crucial for enabling/disabling next button
+    updateNextButtonState();
 }
 
 function selectAnswer(optionId, isMultipleChoice) {

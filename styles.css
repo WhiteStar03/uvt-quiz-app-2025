@@ -202,8 +202,15 @@ h1 {
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
-    align-items: center;
+    align-items: center; /* Vertically align items in the option div */
     gap: 15px;
+}
+
+.option img { /* Style for images within options */
+    max-width: 80px; /* Or your preferred max width */
+    max-height: 80px; /* Or your preferred max height */
+    border-radius: 5px; /* Optional: if you want rounded corners for images */
+    object-fit: contain; /* Ensures the image is scaled correctly within its bounds */
 }
 
 .option:hover:not(.disabled-option) {
