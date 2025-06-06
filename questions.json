@@ -645,7 +645,7 @@
             "questions": [
               {
                 "question_id": 1,
-                "question_text": "Which of the following regular expressions express your needs:",
+                "question_text": "For the mobile application you are implementing, you have to store in the database only the Romanian phone numbers (e.g. +40724370012 / 0040724370012) and email addresses with a Romanian domain (e.g. ion@domeniu.ro; popescu.maria@dom.ro). The phone numbers must have exactly 9 digits after the Romanian prefix 0040/+40. The name of the domain and the extension of the email are written in lowercase letters and are case sensitive. Which of the following regular expressions express your needs:",
                 "options": [
                   {"id": "a", "text": "(+407|00407)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9); ((a|...|z|A|...|Z)+.(a|...|z|A|...|Z)+@(a|...|z)+.ro)|((a|...|z|A|...|Z)+@(a|...|z)*. ro)"},
                   {"id": "b", "text": "(+407|00407)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9); ((a|...|z|A|...|Z)+.(a|...|z|A|...|Z)+@(a|...|z)+.ro)|((a|...|z|A|...|Z)+@(a|...|z)+.ro)"},
@@ -656,7 +656,7 @@
               },
               {
                 "question_id": 2,
-                "question_text": "Which of the following grammars help you building the solution:",
+                "question_text": "Assume you have to build push-down automaton simulating a natural language processor recognizing numerical palindromes of even length. Which of the following grammars G = (VN , VT , S, P) help you building the solution:",
                 "options": [
                   {"id": "a", "text": "VN = {S}, VT = {0, ..., 9}, S, P = {S → 0S0|1S1|...|9S9|λ}"},
                   {"id": "b", "text": "VN = {S}, VT = {0, ..., 9}, S, P = {S → 0S0|1S1|...|9S9|0|...|9}"},
@@ -687,7 +687,7 @@
               },
               {
                 "question_id": 5,
-                "question_text": "Which of the following regular expressions describe genomes which contain a Fragile X Syndrome?",
+                "question_text": "In genomics, a nucleic acid is represented by one of the letters a, c, t, g. A genome is a string of nucleic acids. A Fragile X Syndrome pattern is a genome having an occurrence of gcg, followed by any number of cgg or agg triplets, followed by ctg (The number of triplets correlates with Fragile X Syndrome, a common cause of mental retardation.). Which of the following regular expressions describe genomes which contain a Fragile X Syndrome?",
                 "options": [
                   {"id": "a", "text": "gcg(cgg|agg)*ctg"},
                   {"id": "b", "text": "gcg(cgg|agg)+ctg"},
@@ -698,7 +698,7 @@
               },
               {
                 "question_id": 6,
-                "question_text": "Which of the following strings are accepted by the DFA:",
+                "question_text": "Which of the following strings are accepted by the DFA with the transition diagram",
                 "options": [
                   {"id": "a", "text": "Bitstrings that end in 1"},
                   {"id": "b", "text": "Bitstrings with an equal number of occurrences of 01 and 10"},
