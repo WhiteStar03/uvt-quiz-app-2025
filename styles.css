@@ -277,15 +277,28 @@ h1 {
 
 .navigation {
     display: flex;
+    flex-direction: column; /* Main axis is vertical: controls on top, slider below */
+    align-items: center;    /* Center children (like the slider if it's not 100% width) */
+    margin-top: 30px;
+    gap: 20px;             /* Space between the controls block and the slider */
+}
+
+.navigation-controls {
+    display: flex; /* Arrange prev, status, next horizontally */
     justify-content: space-between;
     align-items: center;
-    margin-top: 30px;
-    gap: 20px;
+    width: 100%; /* Controls block takes full width */
+    gap: 15px;   /* Space between prev, status, next */
+}
+
+#questionStatus {
+    flex-grow: 1; /* Allows status to take up remaining space */
+    text-align: center;
+    color: #666; /* Explicitly set from original inline style */
 }
 
 .question-slider {
-    flex-grow: 1; /* Allow slider to take available space */
-    margin: 0 15px; /* Add some horizontal margin */
+    width: 100%; /* Slider takes full width of its parent (.navigation) */
     cursor: pointer;
     accent-color: #667eea; /* Match theme color */
     height: 8px;
@@ -311,23 +324,11 @@ h1 {
     background: #667eea;
     border-radius: 50%;
     cursor: grab;
-    border: none; /* Remove default border in Firefox */
+    border: none;
 }
 
-/* Desktop: Previous button on the left, Next button on the right */
-#prevButton {
-    order: 1;
-}
-
-#questionStatus {
-    order: 2;
-    flex: 1;
-    text-align: center;
-}
-
-#nextButton {
-    order: 3;
-}
+/* Desktop ordering is now primarily by HTML structure within .navigation-controls */
+/* No specific #prevButton, #questionStatus, #nextButton order rules needed here for desktop */
 
 .nav-button {
     background: linear-gradient(135deg, #667eea, #764ba2);
@@ -485,23 +486,26 @@ h1 {
         grid-template-columns: 1fr;
     }
     .navigation {
-        flex-direction: column;
+        /* flex-direction: column; /* Already column from base style */
+        /* gap: 10px; /* Adjust gap for mobile if needed */
+    }
+
+    .navigation-controls {
+        flex-direction: column; /* Stack prev, status, next vertically on mobile */
+        gap: 10px; 
     }
     
-    /* Mobile: Reset order and margins to match HTML (Next first, Previous second) */
-    #nextButton {
-        order: 0;
-    }
+    /* Mobile order for items within .navigation-controls */
+    .navigation-controls #nextButton { order: 1; width: 100%; }
+    .navigation-controls #questionStatus { order: 2; width: 100%; margin: 5px 0; flex-grow: 0; /* Reset grow for mobile stacking */ }
+    .navigation-controls #prevButton { order: 3; width: 100%; }
     
-    #questionStatus {
-        order: 1;
-        flex: none;
-        text-align: center;
+    .question-slider {
+        /* Slider is already correctly positioned below controls due to main .navigation flex-direction */
+        margin-top: 10px; /* Add some space above the slider on mobile if needed */
+        width: 100%;
     }
-    
-    #prevButton {
-        order: 2;
-    }
+
     .nav-button {
         width: 100%;
     }
@@ -513,11 +517,6 @@ h1 {
     }
     .made-by-footer {
         margin-top: 25px;
-    }
-    .question-slider {
-        order: 2; /* Slider in the middle on mobile too */
-        margin: 10px 0; /* Add vertical margin on mobile */
-        width: 100%; /* Full width on mobile */
     }
 }
 

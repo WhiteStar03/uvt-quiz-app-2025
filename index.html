@@ -58,10 +58,12 @@
             </div>
 
             <div class="navigation">
+                <div class="navigation-controls">
+                    <button class="nav-button secondary" id="prevButton" onclick="previousQuestion()">Previous</button>
+                    <span id="questionStatus"></span>
+                    <button class="nav-button" id="nextButton">Next</button>
+                </div>
                 <input type="range" id="questionSlider" min="0" value="0" class="question-slider">
-                <button class="nav-button" id="nextButton">Next</button>
-                <span style="color: #666;" id="questionStatus"></span>
-                <button class="nav-button secondary" id="prevButton" onclick="previousQuestion()">Previous</button>
             </div>
         </div>
 
