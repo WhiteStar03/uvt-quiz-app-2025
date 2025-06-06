@@ -7,6 +7,11 @@ let userAnswers = {};
 let testStartTime = null;
 let isFeedbackMode = false;
 
+// Quiz navigation variables
+let currentQuestions = [];
+let totalQuestions = 0;
+let questionSlider = null;
+
 let isRandomTestActive = false;
 let testTimerInterval = null;
 let testTimeRemaining = 0; // in seconds
@@ -187,10 +192,33 @@ function startTest(subtopicIndexOrNull) {
         alert("This category/test has no questions or is invalid. Please select another.");
         return;
     }
+    
+    // Set up quiz navigation variables
+    currentQuestions = currentCategory.questions;
+    totalQuestions = currentQuestions.length;
     currentQuestionIndex = 0;
     userAnswers = {};
     testStartTime = new Date();
     isFeedbackMode = false;
+
+    // Initialize slider
+    questionSlider = document.getElementById('questionSlider');
+    if (questionSlider) {
+        questionSlider.max = totalQuestions - 1;
+        questionSlider.value = 0;
+        
+        // Set up slider event listener
+        questionSlider.addEventListener('input', function() {
+            const newIndex = parseInt(this.value, 10);
+            if (newIndex !== currentQuestionIndex && newIndex >= 0 && newIndex < totalQuestions) {
+                // Save current answer before switching questions
+                saveCurrentAnswer();
+                currentQuestionIndex = newIndex;
+                displayQuestion();
+                updateNextButtonState();
+            }
+        });
+    }
 
     document.getElementById('dashboardScreen').style.display = 'none';
     document.getElementById('categoryScreen').style.display = 'none';
@@ -225,7 +253,6 @@ function displayQuestion() {
     const question = currentQuestions[currentQuestionIndex];
     if (!question) {
         console.error("Question data not found for index:", currentQuestionIndex);
-        // Optionally, handle this by showing an error message or ending the test
         return;
     }
 
@@ -234,36 +261,24 @@ function displayQuestion() {
         questionSlider.value = currentQuestionIndex;
     }
 
-    // Save current answer before displaying next question if an option was selected
-    const selectedOption = getSelectedOptionValue(`question_${question.question_id || currentQuestionIndex}`);
-    if (selectedOption !== undefined) { // Check if any option is selected
-         // For multiple choice, getSelectedOptionValue needs to return an array or be handled differently
-        if (Array.isArray(selectedOption)) { // Assuming getSelectedOptionValue is adapted for multi-choice
-            userAnswers[question.question_id] = selectedOption;
-        } else {
-            userAnswers[question.question_id] = selectedOption;
-        }
-    }
-
     const questionText = document.getElementById('questionText');
     const optionsContainer = document.getElementById('optionsContainer');
-    const prevButton = document.getElementById('prevButton');
-    const nextButton = document.getElementById('nextButton');
     const questionStatus = document.getElementById('questionStatus');
     const progressFill = document.getElementById('progressFill');
-    const timerDisplay = document.getElementById('timerDisplay');
-    const categoryNameDisplay = document.getElementById('categoryName');
-    const questionImageContainer = document.getElementById('questionImageContainer');
 
     questionText.textContent = question.question_text;
     questionStatus.textContent = `${currentQuestionIndex + 1} / ${totalQuestions}`;
+
+    // Update progress bar
+    const progressPercentage = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+    progressFill.style.width = `${progressPercentage}%`;
 
     // --- Image Handling Start ---
     const imageContainer = document.getElementById('questionImageContainer');
     imageContainer.innerHTML = ''; // Clear previous image
 
     let categoryNameForImage = currentCategory.subtopic_name || currentCategory.name || "DefaultCategory";
-    categoryNameForImage = categoryNameForImage.replace(/\\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+    categoryNameForImage = categoryNameForImage.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
     
     // Ensure question_id is available, otherwise use a placeholder or skip
     const questionIdForImage = question.question_id ? String(question.question_id) : null;
@@ -274,15 +289,14 @@ function displayQuestion() {
         const imgElement = document.createElement('img');
         imgElement.alt = `Image for ${categoryNameForImage} Question ${questionIdForImage}`;
         imgElement.style.maxWidth = '100%';
-        imgElement.style.maxHeight = '300px'; // Adjust as needed
-        imgElement.style.display = 'none'; // Hide until loaded
+        imgElement.style.maxHeight = '300px';
+        imgElement.style.display = 'none';
 
         imgElement.onload = function() {
             imgElement.style.display = 'block';
         };
         imgElement.onerror = function() {
             imgElement.style.display = 'none';
-            // console.warn(`Question image not found or error loading: ${imagePath}`);
         };
         imgElement.src = imagePath;
         imageContainer.appendChild(imgElement);
@@ -329,30 +343,42 @@ function displayQuestion() {
         optionDiv.appendChild(label);
 
         // --- Add image for the option ---
-        if (option.id && questionIdForImage) { // questionIdForImage is from the question image part
+        if (option.id && questionIdForImage) {
             const optionImageName = `${categoryNameForImage}_${questionIdForImage}_${option.id}.png`;
             const optionImagePath = `photos/${optionImageName}`;
 
             const optionImgElement = document.createElement('img');
             optionImgElement.alt = `Image for option ${option.id}`;
-            optionImgElement.style.maxWidth = '80px'; 
-            optionImgElement.style.maxHeight = '80px'; 
+            optionImgElement.style.maxWidth = '120px';
+            optionImgElement.style.maxHeight = '120px';
             optionImgElement.style.display = 'none';   
-            // optionImgElement.style.marginLeft = '10px'; // Optional: if flex gap isn't enough
+            optionImgElement.style.cursor = 'zoom-in';
+            optionImgElement.style.border = '1px solid #ddd';
+            optionImgElement.style.borderRadius = '5px';
 
             optionImgElement.onload = function() {
                 optionImgElement.style.display = 'block'; 
             };
             optionImgElement.onerror = function() {
                 optionImgElement.style.display = 'none';
-                // console.warn(`Option image not found or error loading: ${optionImagePath}`);
             };
             optionImgElement.src = optionImagePath;
             
             // Add click event to open modal
-            optionImgElement.onclick = function() {
+            optionImgElement.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Image clicked, opening modal for:', optionImagePath);
                 openImageModal(optionImagePath);
-            };
+            });
+
+            // Add hover effect
+            optionImgElement.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.1)';
+            });
+            optionImgElement.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
 
             optionDiv.appendChild(optionImgElement); 
         }
@@ -380,54 +406,90 @@ function displayQuestion() {
     updateNavigationButtons();
 }
 
-// --- Image Zoom Functionality Start ---
-const modal = document.getElementById('imageZoomModal');
-const zoomedImage = document.getElementById('zoomedImage');
-const closeBtn = document.getElementById('closeZoomBtn');
+function updateNavigationButtons() {
+    const prevButton = document.getElementById('prevButton');
+    const nextButton = document.getElementById('nextButton');
 
-function openImageModal(src) {
-    modal.style.display = 'flex'; // Use flex to center content
-    zoomedImage.src = src;
-}
-
-if (closeBtn) {
-    closeBtn.onclick = function() {
-        modal.style.display = 'none';
+    // Update previous button
+    if (prevButton) {
+        prevButton.disabled = currentQuestionIndex === 0 || isFeedbackMode;
     }
+
+    // Update next button text and state
+    if (nextButton) {
+        if (currentQuestionIndex === totalQuestions - 1) {
+            nextButton.textContent = isFeedbackMode ? 'View Results' : 'Finish Test';
+        } else {
+            nextButton.textContent = isFeedbackMode ? 'Continue' : 'Next';
+        }
+    }
+
+    // Update next button state
+    updateNextButtonState();
 }
 
-// Close modal when clicking outside the image
-if (modal) {
-    modal.onclick = function(event) {
-        if (event.target === modal) { // Check if the click is on the modal background itself
+// --- Image Zoom Functionality Start ---
+let modal, zoomedImage, closeBtn;
+
+function initializeImageZoom() {
+    modal = document.getElementById('imageZoomModal');
+    zoomedImage = document.getElementById('zoomedImage');
+    closeBtn = document.getElementById('closeZoomBtn');
+
+    if (closeBtn) {
+        closeBtn.onclick = function() {
+            if (modal) modal.style.display = 'none';
+        }
+    }
+
+    // Close modal when clicking outside the image
+    if (modal) {
+        modal.onclick = function(event) {
+            if (event.target === modal) { // Check if the click is on the modal background itself
+                modal.style.display = 'none';
+            }
+        }
+    }
+
+    // Also close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && modal && modal.style.display === 'flex') {
             modal.style.display = 'none';
         }
+    });
+}
+
+function openImageModal(src) {
+    if (!modal || !zoomedImage) {
+        console.warn('Modal elements not found, reinitializing...');
+        initializeImageZoom();
+    }
+    
+    if (modal && zoomedImage) {
+        modal.style.display = 'flex'; // Use flex to center content
+        zoomedImage.src = src;
+        zoomedImage.alt = 'Zoomed image';
     }
 }
+
+// Initialize image zoom when DOM is ready
+document.addEventListener('DOMContentLoaded', initializeImageZoom);
 // --- Image Zoom Functionality End ---
 
-// Event listener for the question slider
-if (questionSlider) {
-    questionSlider.addEventListener('input', function() {
-        const newIndex = parseInt(this.value, 10);
-        if (newIndex !== currentQuestionIndex) {
-            // Before changing question, ensure current answer is saved if one was made.
-            // This replicates part of the logic from nextQuestion/previousQuestion
-            // to ensure answer persistence when using the slider.
-            const selectedOption = getSelectedOptionValue(`question_${currentQuestions[currentQuestionIndex].question_id || currentQuestionIndex}`);
-            if (selectedOption !== undefined) { // Check if any option is selected
-                 // For multiple choice, getSelectedOptionValue needs to return an array or be handled differently
-                if (Array.isArray(selectedOption)) { // Assuming getSelectedOptionValue is adapted for multi-choice
-                    userAnswers[currentQuestions[currentQuestionIndex].question_id] = selectedOption;
-                } else {
-                    userAnswers[currentQuestions[currentQuestionIndex].question_id] = selectedOption;
-                }
-            }
-
-            currentQuestionIndex = newIndex;
-            displayQuestion();
-        }
-    });
+function saveCurrentAnswer() {
+    if (!currentQuestions || currentQuestionIndex < 0 || currentQuestionIndex >= currentQuestions.length) {
+        return;
+    }
+    
+    const question = currentQuestions[currentQuestionIndex];
+    if (!question) return;
+    
+    const questionName = `question_${question.question_id || currentQuestionIndex}`;
+    const selectedOption = getSelectedOptionValue(questionName);
+    
+    if (selectedOption !== undefined) {
+        userAnswers[question.question_id] = selectedOption;
+    }
 }
 
 function getSelectedOptionValue(questionName) {
@@ -502,7 +564,8 @@ function showAnswerFeedback() {
             }
         }
     });
-    document.getElementById('prevButton').disabled = true; 
+    isFeedbackMode = true;
+    updateNavigationButtons();
 }
 
 function handleNextClick() {
@@ -510,13 +573,24 @@ function handleNextClick() {
     if (isFeedbackMode) { 
         isFeedbackMode = false;
         currentQuestionIndex++;
-        displayQuestion(); 
+        if (currentQuestionIndex < totalQuestions) {
+            displayQuestion();
+            updateNextButtonState();
+        } else {
+            finishTest();
+        }
     } else { 
+        // Save current answer before showing feedback
+        saveCurrentAnswer();
         showAnswerFeedback();
         isFeedbackMode = true;
-        nextButton.textContent = 'Continue';
+        
+        if (currentQuestionIndex === totalQuestions - 1) {
+            nextButton.textContent = 'View Results';
+        } else {
+            nextButton.textContent = 'Continue';
+        }
     }
-    updateNextButtonState(); // After mode change / question change
 }
 
 function handleFinishClick() {
@@ -524,18 +598,24 @@ function handleFinishClick() {
     if (isFeedbackMode) { 
         finishTest();
     } else { 
+        // Save current answer before showing feedback
+        saveCurrentAnswer();
         showAnswerFeedback();
         isFeedbackMode = true; 
         nextButton.textContent = 'View Results';
     }
-    updateNextButtonState(); // After mode change
 }
 
 function previousQuestion() {
     if (currentQuestionIndex > 0) {
+        // Save current answer before going to previous question
+        if (!isFeedbackMode) {
+            saveCurrentAnswer();
+        }
         isFeedbackMode = false; 
         currentQuestionIndex--;
-        displayQuestion(); 
+        displayQuestion();
+        updateNextButtonState();
     }
 }
 

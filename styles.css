@@ -32,6 +32,7 @@ h1 {
     font-size: 2.2em; /* Slightly reduced for longer title */
     line-height: 1.3; /* Added for better readability if title wraps */
     background: linear-gradient(135deg, #667eea, #764ba2);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: fadeIn 0.6s ease;
@@ -207,12 +208,13 @@ h1 {
 }
 
 .option img { /* Style for images within options */
-    max-width: 80px; /* Or your preferred max width */
-    max-height: 80px; /* Or your preferred max height */
+    max-width: 120px; /* Increased size for better visibility */
+    max-height: 120px; /* Increased size for better visibility */
     border-radius: 5px; /* Optional: if you want rounded corners for images */
     object-fit: contain; /* Ensures the image is scaled correctly within its bounds */
     cursor: zoom-in; /* Indicate that the image is zoomable */
     transition: transform 0.2s ease-in-out; /* Smooth transition for hover effect */
+    border: 1px solid #ddd; /* Add subtle border for better definition */
 }
 
 .option img:hover {
@@ -486,8 +488,8 @@ h1 {
         grid-template-columns: 1fr;
     }
     .navigation {
-        /* flex-direction: column; /* Already column from base style */
-        /* gap: 10px; /* Adjust gap for mobile if needed */
+        flex-direction: column; /* Already column from base style */
+        gap: 15px; /* Adjust gap for mobile if needed */
     }
 
     .navigation-controls {
