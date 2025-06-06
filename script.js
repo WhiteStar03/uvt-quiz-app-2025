@@ -228,6 +228,35 @@ function displayQuestion() {
     document.getElementById('questionText').textContent = question.question_text;
     document.getElementById('questionStatus').textContent = `${currentQuestionIndex + 1} / ${totalQuestions}`;
 
+    // --- Image Handling Start ---
+    const imageContainer = document.getElementById('questionImageContainer');
+    imageContainer.innerHTML = ''; // Clear previous image
+
+    let categoryNameForImage = currentCategory.subtopic_name || currentCategory.name || "UnknownCategory";
+    // Replace spaces and special characters for a valid filename
+    categoryNameForImage = categoryNameForImage.replace(/\\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+    
+    const questionIdForImage = question.question_id || "UnknownID";
+    const imageName = `${categoryNameForImage}_${questionIdForImage}.png`; // Assuming png, adjust if other formats are used
+    const imagePath = `photos/${imageName}`;
+
+    const imgElement = document.createElement('img');
+    imgElement.style.maxWidth = '100%'; // Ensure image is responsive
+    imgElement.style.maxHeight = '400px'; // Optional: constrain height
+    imgElement.style.marginTop = '15px';
+    imgElement.style.display = 'none'; // Hide by default
+
+    imgElement.onload = function() {
+        imgElement.style.display = 'block'; // Show if loaded successfully
+    };
+    imgElement.onerror = function() {
+        imgElement.style.display = 'none'; // Keep hidden if error (e.g., file not found)
+        // console.log(`Image not found: ${imagePath}`); // Optional: for debugging
+    };
+    imgElement.src = imagePath;
+    imageContainer.appendChild(imgElement);
+    // --- Image Handling End ---
+
     const optionsContainer = document.getElementById('optionsContainer');
     optionsContainer.innerHTML = '';
     const isMultipleChoice = question.correct_answers.length > 1;
