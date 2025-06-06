@@ -58,6 +58,7 @@
             </div>
 
             <div class="navigation">
+                <input type="range" id="questionSlider" min="0" value="0" class="question-slider">
                 <button class="nav-button" id="nextButton">Next</button>
                 <span style="color: #666;" id="questionStatus"></span>
                 <button class="nav-button secondary" id="prevButton" onclick="previousQuestion()">Previous</button>
@@ -91,7 +92,11 @@
         </div>
     </div>
 
-<script src="script.js"></script>
+    <script src="script.js"></script>
 
+    <div id="imageZoomModal" class="image-zoom-modal">
+        <span class="close-zoom-btn" id="closeZoomBtn">&times;</span>
+        <img class="image-zoom-modal-content" id="zoomedImage">
+    </div>
 </body>
 </html>

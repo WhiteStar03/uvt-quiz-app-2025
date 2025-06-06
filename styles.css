@@ -211,6 +211,12 @@ h1 {
     max-height: 80px; /* Or your preferred max height */
     border-radius: 5px; /* Optional: if you want rounded corners for images */
     object-fit: contain; /* Ensures the image is scaled correctly within its bounds */
+    cursor: zoom-in; /* Indicate that the image is zoomable */
+    transition: transform 0.2s ease-in-out; /* Smooth transition for hover effect */
+}
+
+.option img:hover {
+    transform: scale(1.1); /* Slightly enlarge on hover */
 }
 
 .option:hover:not(.disabled-option) {
@@ -275,6 +281,37 @@ h1 {
     align-items: center;
     margin-top: 30px;
     gap: 20px;
+}
+
+.question-slider {
+    flex-grow: 1; /* Allow slider to take available space */
+    margin: 0 15px; /* Add some horizontal margin */
+    cursor: pointer;
+    accent-color: #667eea; /* Match theme color */
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    -webkit-appearance: none; /* Override default appearance */
+    appearance: none;
+}
+
+.question-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #667eea;
+    border-radius: 50%;
+    cursor: grab;
+}
+
+.question-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #667eea;
+    border-radius: 50%;
+    cursor: grab;
+    border: none; /* Remove default border in Firefox */
 }
 
 /* Desktop: Previous button on the left, Next button on the right */
@@ -477,4 +514,54 @@ h1 {
     .made-by-footer {
         margin-top: 25px;
     }
+    .question-slider {
+        order: 2; /* Slider in the middle on mobile too */
+        margin: 10px 0; /* Add vertical margin on mobile */
+        width: 100%; /* Full width on mobile */
+    }
+}
+
+/* Image Zoom Modal Styles */
+.image-zoom-modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.85); /* Black w/ opacity */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+.image-zoom-modal-content {
+    margin: auto;
+    display: block;
+    max-width: 90%;
+    max-height: 90%;
+    animation: zoomInAnimation 0.3s ease-out;
+}
+
+@keyframes zoomInAnimation {
+    from {transform: scale(0.5); opacity: 0;}
+    to {transform: scale(1); opacity: 1;}
+}
+
+.close-zoom-btn {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.close-zoom-btn:hover,
+.close-zoom-btn:focus {
+    color: #bbb;
+    text-decoration: none;
 }

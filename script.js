@@ -218,15 +218,45 @@ function updateNextButtonState() {
 }
 
 function displayQuestion() {
-    const question = currentCategory.questions[currentQuestionIndex];
-    const totalQuestions = currentCategory.questions.length;
+    if (currentQuestionIndex < 0 || currentQuestionIndex >= totalQuestions) {
+        console.error("Invalid question index:", currentQuestionIndex);
+        return;
+    }
+    const question = currentQuestions[currentQuestionIndex];
+    if (!question) {
+        console.error("Question data not found for index:", currentQuestionIndex);
+        // Optionally, handle this by showing an error message or ending the test
+        return;
+    }
 
-    const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
-    document.getElementById('progressFill').style.width = `${progress}%`;
+    // Update slider value
+    if (questionSlider) {
+        questionSlider.value = currentQuestionIndex;
+    }
 
-    document.getElementById('questionNumber').textContent = `Question ${currentQuestionIndex + 1} of ${totalQuestions}`;
-    document.getElementById('questionText').textContent = question.question_text;
-    document.getElementById('questionStatus').textContent = `${currentQuestionIndex + 1} / ${totalQuestions}`;
+    // Save current answer before displaying next question if an option was selected
+    const selectedOption = getSelectedOptionValue(`question_${question.question_id || currentQuestionIndex}`);
+    if (selectedOption !== undefined) { // Check if any option is selected
+         // For multiple choice, getSelectedOptionValue needs to return an array or be handled differently
+        if (Array.isArray(selectedOption)) { // Assuming getSelectedOptionValue is adapted for multi-choice
+            userAnswers[question.question_id] = selectedOption;
+        } else {
+            userAnswers[question.question_id] = selectedOption;
+        }
+    }
+
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const prevButton = document.getElementById('prevButton');
+    const nextButton = document.getElementById('nextButton');
+    const questionStatus = document.getElementById('questionStatus');
+    const progressFill = document.getElementById('progressFill');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const categoryNameDisplay = document.getElementById('categoryName');
+    const questionImageContainer = document.getElementById('questionImageContainer');
+
+    questionText.textContent = question.question_text;
+    questionStatus.textContent = `${currentQuestionIndex + 1} / ${totalQuestions}`;
 
     // --- Image Handling Start ---
     const imageContainer = document.getElementById('questionImageContainer');
@@ -259,7 +289,6 @@ function displayQuestion() {
     }
     // --- Image Handling End ---
 
-    const optionsContainer = document.getElementById('optionsContainer');
     optionsContainer.innerHTML = '';
     const isMultipleChoice = question.correct_answers.length > 1;
 
@@ -319,10 +348,17 @@ function displayQuestion() {
                 // console.warn(`Option image not found or error loading: ${optionImagePath}`);
             };
             optionImgElement.src = optionImagePath;
+            
+            // Add click event to open modal
+            optionImgElement.onclick = function() {
+                openImageModal(optionImagePath);
+            };
+
             optionDiv.appendChild(optionImgElement); 
         }
         // --- End option image ---
 
+        // Apply feedback styling if in feedback mode
         if (isFeedbackMode && question.correct_answers) {
             const isCorrect = question.correct_answers.includes(option.id);
             const isSelected = input.checked;
@@ -341,20 +377,82 @@ function displayQuestion() {
     });
     
     isFeedbackMode = false; 
-    
-    const nextButton = document.getElementById('nextButton');
-    const prevButton = document.getElementById('prevButton');
-    prevButton.disabled = currentQuestionIndex === 0;
-
-    if (currentQuestionIndex === totalQuestions - 1) {
-        nextButton.textContent = 'Finish Test';
-        nextButton.onclick = handleFinishClick;
-    } else {
-        nextButton.textContent = 'Next';
-        nextButton.onclick = handleNextClick;
-    }
-    updateNextButtonState();
+    updateNavigationButtons();
 }
+
+// --- Image Zoom Functionality Start ---
+const modal = document.getElementById('imageZoomModal');
+const zoomedImage = document.getElementById('zoomedImage');
+const closeBtn = document.getElementById('closeZoomBtn');
+
+function openImageModal(src) {
+    modal.style.display = 'flex'; // Use flex to center content
+    zoomedImage.src = src;
+}
+
+if (closeBtn) {
+    closeBtn.onclick = function() {
+        modal.style.display = 'none';
+    }
+}
+
+// Close modal when clicking outside the image
+if (modal) {
+    modal.onclick = function(event) {
+        if (event.target === modal) { // Check if the click is on the modal background itself
+            modal.style.display = 'none';
+        }
+    }
+}
+// --- Image Zoom Functionality End ---
+
+// Event listener for the question slider
+if (questionSlider) {
+    questionSlider.addEventListener('input', function() {
+        const newIndex = parseInt(this.value, 10);
+        if (newIndex !== currentQuestionIndex) {
+            // Before changing question, ensure current answer is saved if one was made.
+            // This replicates part of the logic from nextQuestion/previousQuestion
+            // to ensure answer persistence when using the slider.
+            const selectedOption = getSelectedOptionValue(`question_${currentQuestions[currentQuestionIndex].question_id || currentQuestionIndex}`);
+            if (selectedOption !== undefined) { // Check if any option is selected
+                 // For multiple choice, getSelectedOptionValue needs to return an array or be handled differently
+                if (Array.isArray(selectedOption)) { // Assuming getSelectedOptionValue is adapted for multi-choice
+                    userAnswers[currentQuestions[currentQuestionIndex].question_id] = selectedOption;
+                } else {
+                    userAnswers[currentQuestions[currentQuestionIndex].question_id] = selectedOption;
+                }
+            }
+
+            currentQuestionIndex = newIndex;
+            displayQuestion();
+        }
+    });
+}
+
+function getSelectedOptionValue(questionName) {
+    const inputs = document.getElementsByName(questionName);
+    const question = currentQuestions[currentQuestionIndex]; // Get current question to check if it's multiple choice
+    const isMultipleChoice = question && question.correct_answers && question.correct_answers.length > 1;
+
+    if (isMultipleChoice) {
+        const selectedValues = [];
+        inputs.forEach(input => {
+            if (input.checked) {
+                selectedValues.push(input.value);
+            }
+        });
+        return selectedValues.length > 0 ? selectedValues : undefined; // Return array or undefined if none selected
+    } else {
+        for (let i = 0; i < inputs.length; i++) {
+            if (inputs[i].checked) {
+                return inputs[i].value;
+            }
+        }
+    }
+    return undefined; // Return undefined if no option is selected for single choice
+}
+
 
 function selectAnswer(optionId, isMultipleChoice) {
     if (isFeedbackMode) return; 
