@@ -202,14 +202,14 @@ function updateCategoryPerformance(testData) {
 
 function updateWeakQuestions(weakQuestions) {
     weakQuestions.forEach(question => {
-        const existingIndex = userStats.weakQuestions.findIndex(w => w.id === question.id);
+        const existingIndex = userStats.weakQuestions.findIndex(w => w.id === question.question_id);
         
         if (existingIndex >= 0) {
             userStats.weakQuestions[existingIndex].incorrectCount++;
             userStats.weakQuestions[existingIndex].lastIncorrectDate = new Date().toISOString();
         } else {
             userStats.weakQuestions.push({
-                id: question.id,
+                id: question.question_id,
                 questionText: question.question_text,
                 category: question.subtopic_name || question.parent_topic_name_origin,
                 incorrectCount: 1,
@@ -950,7 +950,7 @@ function initializeImageZoom() {
 
     if (closeBtn) {
         closeBtn.onclick = function() {
-            if (modal) modal.style.display = 'none';
+            closeImageModal();
         }
     }
 
@@ -958,7 +958,7 @@ function initializeImageZoom() {
     if (modal) {
         modal.onclick = function(event) {
             if (event.target === modal) { // Check if the click is on the modal background itself
-                modal.style.display = 'none';
+                closeImageModal();
             }
         }
     }
@@ -966,7 +966,7 @@ function initializeImageZoom() {
     // Also close modal with Escape key
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape' && modal && modal.style.display === 'flex') {
-            modal.style.display = 'none';
+            closeImageModal();
         }
     });
 }
@@ -981,6 +981,12 @@ function openImageModal(src) {
         modal.style.display = 'flex'; // Use flex to center content
         zoomedImage.src = src;
         zoomedImage.alt = 'Zoomed image';
+    }
+}
+
+function closeImageModal() {
+    if (modal) {
+        modal.style.display = 'none';
     }
 }
 
@@ -1084,6 +1090,9 @@ function showAnswerFeedback() {
 }
 
 function handleNextClick() {
+    // Close any open image zoom modal
+    closeImageModal();
+    
     const nextButton = document.getElementById('nextButton');
     if (isFeedbackMode) { 
         isFeedbackMode = false;
@@ -1122,6 +1131,9 @@ function handleFinishClick() {
 }
 
 function previousQuestion() {
+    // Close any open image zoom modal
+    closeImageModal();
+    
     if (currentQuestionIndex > 0) {
         // Save current answer before going to previous question
         if (!isFeedbackMode) {

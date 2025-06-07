@@ -98,6 +98,11 @@
         </div>
 
         <div class="statistics-screen" id="statisticsScreen">
+            <div class="stats-actions" style="margin-bottom: 30px;">
+                <button class="nav-button secondary" onclick="showDashboard()">Back to Dashboard</button>
+                <button class="nav-button danger" onclick="clearAllStatistics()">Clear All Statistics</button>
+            </div>
+
             <h2 style="text-align: center; color: #555; margin-bottom: 30px;">Performance Statistics</h2>
             
             <div class="stats-overview">
@@ -169,11 +174,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="stats-actions">
-                <button class="nav-button secondary" onclick="showDashboard()">Back to Dashboard</button>
-                <button class="nav-button danger" onclick="clearAllStatistics()">Clear All Statistics</button>
-            </div>
         </div>
 
         <div class="category-selection" id="categoryScreen">
@@ -185,6 +185,15 @@
         </div>
 
         <div class="custom-test-selection" id="customTestScreen">
+            <div class="custom-test-actions" style="margin-bottom: 30px;">
+                <div class="button-group">
+                    <button class="nav-button" id="generateCustomTestBtn" onclick="generateCustomTest()" disabled>
+                        Generate Custom Test (30 questions)
+                    </button>
+                    <button class="nav-button secondary" onclick="showDashboard()">Back to Dashboard</button>
+                </div>
+            </div>
+
             <h2 style="text-align: center; color: #666; margin-bottom: 20px;">Create Custom 30-Question Test</h2>
             <p style="text-align: center; color: #777; margin-bottom: 20px;">Select categories to include in your custom test:</p>
             
@@ -192,16 +201,8 @@
                 <div class="loading">Loading categories...</div>
             </div>
             
-            <div class="custom-test-actions">
-                <div class="selected-info" id="selectedCategoriesInfo">
-                    Selected: <span id="selectedCount">0</span> categories, <span id="selectedQuestionCount">0</span> questions available
-                </div>
-                <div class="button-group">
-                    <button class="nav-button" id="generateCustomTestBtn" onclick="generateCustomTest()" disabled>
-                        Generate Custom Test (30 questions)
-                    </button>
-                    <button class="nav-button secondary" onclick="showDashboard()">Back to Dashboard</button>
-                </div>
+            <div class="selected-info" id="selectedCategoriesInfo" style="text-align: center; margin-top: 20px;">
+                Selected: <span id="selectedCount">0</span> categories, <span id="selectedQuestionCount">0</span> questions available
             </div>
         </div>
 
