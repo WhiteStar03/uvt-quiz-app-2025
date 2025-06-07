@@ -677,7 +677,7 @@ function getSelectedOptionValue(questionName) {
     } else {
         for (let i = 0; i < inputs.length; i++) {
             if (inputs[i].checked) {
-                return inputs[i].value;
+                return [inputs[i].value]; // Return as array for consistency
             }
         }
     }
@@ -799,6 +799,11 @@ function handleQuitTest() {
 function finishTest() {
     stopTimer(); 
     isRandomTestActive = false;
+    
+    // Ensure the current answer is saved before finishing
+    if (!isFeedbackMode) {
+        saveCurrentAnswer();
+    }
 
     const testEndTime = new Date();
     const timeTaken = Math.floor((testEndTime - testStartTime) / 1000);
@@ -847,20 +852,33 @@ function prepareReview() {
     const reviewContainer = document.getElementById('answerReview');
     reviewContainer.innerHTML = '<h3 style="margin-bottom: 20px;">Answer Review</h3>';
     
-    console.log('prepareReview called for category:', currentCategory.subtopic_name);
+    console.log('=== PREPARE REVIEW DEBUG ===');
+    console.log('Category:', currentCategory.subtopic_name);
+    console.log('Total questions in category:', currentCategory.questions.length);
+    console.log('userAnswers object keys:', Object.keys(userAnswers));
     console.log('userAnswers object:', userAnswers);
-    console.log('currentCategory.questions:', currentCategory.questions);
+    
+    let displayedQuestions = 0;
+    let questionsWithAnswers = 0;
+    let questionsWithoutAnswers = 0;
     
     currentCategory.questions.forEach((question, index) => {
         const userAnswer = userAnswers[question.question_id] || [];
         const correctAnswer = question.correct_answers;
         
-        console.log(`Question ${question.question_id}:`, {
-            questionText: question.question_text,
+        console.log(`Question ${index + 1} (ID: ${question.question_id}):`, {
+            questionText: question.question_text.substring(0, 50) + '...',
             userAnswer: userAnswer,
             correctAnswer: correctAnswer,
-            questionId: question.question_id
+            userAnswerLength: userAnswer.length,
+            hasUserAnswer: userAnswer.length > 0
         });
+        
+        if (userAnswer.length > 0) {
+            questionsWithAnswers++;
+        } else {
+            questionsWithoutAnswers++;
+        }
         
         const sortedUserAnswer = [...userAnswer].sort();
         const sortedCorrectAnswer = [...correctAnswer].sort();
@@ -890,7 +908,6 @@ function prepareReview() {
                  optFeedbackClass += ' incorrect-answer'; 
             }
 
-
             return `<div class="${optFeedbackClass}">${opt.id}. ${opt.text} ${optFeedbackTextParts.join(' ')}</div>`;
         }).join('');
         
@@ -908,7 +925,14 @@ function prepareReview() {
             <p style="margin-top: 5px;"><strong>Explanation:</strong> ${question.explanation || 'No explanation provided.'}</p>
         `;
         reviewContainer.appendChild(reviewDiv);
+        displayedQuestions++;
     });
+    
+    console.log('=== REVIEW SUMMARY ===');
+    console.log('Questions displayed:', displayedQuestions);
+    console.log('Questions with answers:', questionsWithAnswers);
+    console.log('Questions without answers:', questionsWithoutAnswers);
+    console.log('=== END DEBUG ===');
 }
 
 function showReview() {
