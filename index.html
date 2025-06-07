@@ -21,13 +21,106 @@
                     <h3 id="totalCategoriesStat">0</h3>
                     <p>Total Subtopics</p>
                 </div>
+                <div class="stat-item">
+                    <h3 id="testsCompletedStat">0</h3>
+                    <p>Tests Completed</p>
+                </div>
+                <div class="stat-item">
+                    <h3 id="averageScoreStat">0%</h3>
+                    <p>Average Score</p>
+                </div>
             </div>
             <div class="dashboard-actions">
                 <button class="nav-button" onclick="showCategorySelectionScreen()">Select Subtopic Test</button>
                 <button class="nav-button secondary" onclick="generateRandomTest()">Generate Random 30-Question Test</button>
                 <button class="nav-button" onclick="showCustomTestSelection()">Create Custom 30-Question Test</button>
+                <button class="nav-button stats-button" onclick="showStatistics()">📊 View Statistics</button>
             </div>
             <div id="dashboardLoading" class="loading" style="display:none;">Loading data...</div>
+        </div>
+
+        <div class="statistics-screen" id="statisticsScreen">
+            <h2 style="text-align: center; color: #555; margin-bottom: 30px;">Performance Statistics</h2>
+            
+            <div class="stats-overview">
+                <div class="stats-card">
+                    <h3>📊 Overall Performance</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-value" id="totalTestsStat">0</span>
+                            <span class="stat-label">Tests Completed</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="totalQuestionsAnsweredStat">0</span>
+                            <span class="stat-label">Questions Answered</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="overallAccuracyStat">0%</span>
+                            <span class="stat-label">Overall Accuracy</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="totalTimeSpentStat">0h</span>
+                            <span class="stat-label">Total Study Time</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-card">
+                    <h3>🔥 Streak & Achievements</h3>
+                    <div class="streak-info">
+                        <div class="streak-current">
+                            <span class="streak-number" id="currentStreakStat">0</span>
+                            <span class="streak-label">Current Streak</span>
+                        </div>
+                        <div class="streak-best">
+                            <span class="streak-number" id="bestStreakStat">0</span>
+                            <span class="streak-label">Best Streak</span>
+                        </div>
+                    </div>
+                    <div class="achievements-container" id="achievementsContainer">
+                        <p>No achievements yet. Keep practicing!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-tabs">
+                <button class="tab-button active" onclick="showStatsTab('history')">Test History</button>
+                <button class="tab-button" onclick="showStatsTab('categories')">Category Performance</button>
+                <button class="tab-button" onclick="showStatsTab('weakareas')">Weak Areas</button>
+            </div>
+
+            <div class="stats-content">
+                <div class="stats-tab-content active" id="historyTab">
+                    <h3>Recent Test History</h3>
+                    <div class="test-history-container" id="testHistoryContainer">
+                        <p>No test history available.</p>
+                    </div>
+                </div>
+
+                <div class="stats-tab-content" id="categoriesTab">
+                    <h3>Performance by Category</h3>
+                    <div class="category-performance-container" id="categoryPerformanceContainer">
+                        <p>No category data available.</p>
+                    </div>
+                </div>
+
+                <div class="stats-tab-content" id="weakareasTab">
+                    <h3>Questions You've Struggled With</h3>
+                    <div class="weak-areas-container" id="weakAreasContainer">
+                        <p>No weak areas identified yet.</p>
+                    </div>
+                    <div class="practice-section">
+                        <button class="nav-button" id="practiceWeakBtn" onclick="generateWeakAreasPractice()" disabled>
+                            📚 Practice Weak Areas (Generate Test)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-actions">
+                <button class="nav-button secondary" onclick="showDashboard()">Back to Dashboard</button>
+                <button class="nav-button danger" onclick="clearAllStatistics()">Clear All Statistics</button>
+            </div>
         </div>
 
         <div class="category-selection" id="categoryScreen">

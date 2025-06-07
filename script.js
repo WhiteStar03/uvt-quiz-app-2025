@@ -1,3 +1,257 @@
+// Statistics Tracking System
+const STATS_COOKIE_NAME = 'uvt_quiz_stats';
+const STATS_VERSION = '1.0';
+
+// Statistics data structure
+let userStats = {
+    version: STATS_VERSION,
+    totalTests: 0,
+    totalQuestionsAnswered: 0,
+    totalCorrectAnswers: 0,
+    totalTimeSpent: 0, // in seconds
+    testHistory: [],
+    categoryPerformance: {},
+    weakQuestions: [],
+    streakData: {
+        current: 0,
+        best: 0,
+        lastTestDate: null
+    },
+    achievements: [],
+    firstTestDate: null,
+    lastTestDate: null
+};
+
+// Cookie Management Functions
+function setCookie(name, value, days = 365) {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = `${name}=${encodeURIComponent(JSON.stringify(value))};expires=${expires.toUTCString()};path=/`;
+}
+
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) {
+            try {
+                return JSON.parse(decodeURIComponent(c.substring(nameEQ.length, c.length)));
+            } catch (e) {
+                console.warn('Failed to parse cookie data:', e);
+                return null;
+            }
+        }
+    }
+    return null;
+}
+
+function loadUserStats() {
+    const savedStats = getCookie(STATS_COOKIE_NAME);
+    if (savedStats && savedStats.version === STATS_VERSION) {
+        userStats = { ...userStats, ...savedStats };
+        console.log('User statistics loaded from cookies');
+    } else {
+        console.log('No valid statistics found, starting fresh');
+        saveUserStats();
+    }
+}
+
+function saveUserStats() {
+    setCookie(STATS_COOKIE_NAME, userStats);
+    console.log('User statistics saved to cookies');
+}
+
+// Statistics Tracking Functions
+function recordTestResult(testData) {
+    const testRecord = {
+        id: Date.now(),
+        date: new Date().toISOString(),
+        categoryName: testData.categoryName,
+        isRandomTest: testData.isRandomTest,
+        isCustomTest: testData.isCustomTest,
+        totalQuestions: testData.totalQuestions,
+        correctAnswers: testData.correctAnswers,
+        wrongAnswers: testData.wrongAnswers,
+        unansweredQuestions: testData.unansweredQuestions,
+        timeSpent: testData.timeSpent,
+        percentage: testData.percentage,
+        questions: testData.questions, // Store question details for analysis
+        weakQuestions: testData.weakQuestions
+    };
+
+    // Update basic stats
+    userStats.totalTests++;
+    userStats.totalQuestionsAnswered += testData.totalQuestions;
+    userStats.totalCorrectAnswers += testData.correctAnswers;
+    userStats.totalTimeSpent += testData.timeSpent;
+    
+    // Update dates
+    const testDate = new Date().toDateString();
+    if (!userStats.firstTestDate) {
+        userStats.firstTestDate = testDate;
+    }
+    userStats.lastTestDate = testDate;
+
+    // Update streak
+    updateStreak(testData.percentage);
+
+    // Update category performance
+    updateCategoryPerformance(testData);
+
+    // Update weak questions
+    updateWeakQuestions(testData.weakQuestions);
+
+    // Add to test history (keep last 50 tests)
+    userStats.testHistory.unshift(testRecord);
+    if (userStats.testHistory.length > 50) {
+        userStats.testHistory = userStats.testHistory.slice(0, 50);
+    }
+
+    // Check for achievements
+    checkAchievements(testData);
+
+    saveUserStats();
+    console.log('Test result recorded:', testRecord);
+}
+
+function updateStreak(percentage) {
+    const today = new Date().toDateString();
+    const passingGrade = 70;
+    
+    if (percentage >= passingGrade) {
+        if (userStats.streakData.lastTestDate === today) {
+            // Same day, don't increment streak
+        } else {
+            userStats.streakData.current++;
+            if (userStats.streakData.current > userStats.streakData.best) {
+                userStats.streakData.best = userStats.streakData.current;
+            }
+        }
+    } else {
+        userStats.streakData.current = 0;
+    }
+    
+    userStats.streakData.lastTestDate = today;
+}
+
+function updateCategoryPerformance(testData) {
+    const categoryName = testData.categoryName;
+    
+    if (!userStats.categoryPerformance[categoryName]) {
+        userStats.categoryPerformance[categoryName] = {
+            totalTests: 0,
+            totalQuestions: 0,
+            totalCorrect: 0,
+            averageScore: 0,
+            bestScore: 0,
+            recentScores: [],
+            weakTopics: []
+        };
+    }
+
+    const categoryStats = userStats.categoryPerformance[categoryName];
+    categoryStats.totalTests++;
+    categoryStats.totalQuestions += testData.totalQuestions;
+    categoryStats.totalCorrect += testData.correctAnswers;
+    categoryStats.averageScore = Math.round((categoryStats.totalCorrect / categoryStats.totalQuestions) * 100);
+    
+    if (testData.percentage > categoryStats.bestScore) {
+        categoryStats.bestScore = testData.percentage;
+    }
+
+    // Keep recent scores for trend analysis
+    categoryStats.recentScores.unshift(testData.percentage);
+    if (categoryStats.recentScores.length > 10) {
+        categoryStats.recentScores = categoryStats.recentScores.slice(0, 10);
+    }
+}
+
+function updateWeakQuestions(weakQuestions) {
+    weakQuestions.forEach(question => {
+        const existingIndex = userStats.weakQuestions.findIndex(w => w.id === question.id);
+        
+        if (existingIndex >= 0) {
+            userStats.weakQuestions[existingIndex].incorrectCount++;
+            userStats.weakQuestions[existingIndex].lastIncorrectDate = new Date().toISOString();
+        } else {
+            userStats.weakQuestions.push({
+                id: question.id,
+                questionText: question.question_text,
+                category: question.subtopic_name || question.parent_topic_name_origin,
+                incorrectCount: 1,
+                firstIncorrectDate: new Date().toISOString(),
+                lastIncorrectDate: new Date().toISOString()
+            });
+        }
+    });
+
+    // Sort by incorrect count and keep top 100 weak questions
+    userStats.weakQuestions.sort((a, b) => b.incorrectCount - a.incorrectCount);
+    if (userStats.weakQuestions.length > 100) {
+        userStats.weakQuestions = userStats.weakQuestions.slice(0, 100);
+    }
+}
+
+function checkAchievements(testData) {
+    const achievements = [];
+    
+    // First test achievement
+    if (userStats.totalTests === 1) {
+        achievements.push({
+            id: 'first_test',
+            name: 'First Steps',
+            description: 'Completed your first test',
+            date: new Date().toISOString(),
+            icon: '🎯'
+        });
+    }
+
+    // Perfect score achievement
+    if (testData.percentage === 100) {
+        achievements.push({
+            id: 'perfect_score',
+            name: 'Perfect Score',
+            description: 'Achieved 100% on a test',
+            date: new Date().toISOString(),
+            icon: '🏆'
+        });
+    }
+
+    // Streak achievements
+    if (userStats.streakData.current === 5) {
+        achievements.push({
+            id: 'streak_5',
+            name: 'Hot Streak',
+            description: 'Passed 5 tests in a row',
+            date: new Date().toISOString(),
+            icon: '🔥'
+        });
+    }
+
+    // Test count milestones
+    const milestones = [10, 25, 50, 100];
+    milestones.forEach(milestone => {
+        if (userStats.totalTests === milestone) {
+            achievements.push({
+                id: `tests_${milestone}`,
+                name: `${milestone} Tests`,
+                description: `Completed ${milestone} tests`,
+                date: new Date().toISOString(),
+                icon: milestone >= 50 ? '🌟' : '📚'
+            });
+        }
+    });
+
+    // Add new achievements
+    achievements.forEach(achievement => {
+        if (!userStats.achievements.find(a => a.id === achievement.id)) {
+            userStats.achievements.push(achievement);
+        }
+    });
+}
+
 let fullQuestionsData = null;
 let displayableCategories = [];
 let allQuestionsFlat = []; // For random test generation
@@ -41,6 +295,10 @@ function getCategoryNameForImage(categoryName) {
 
 async function loadTestData() {
    document.getElementById('dashboardLoading').style.display = 'block';
+   
+   // Load user statistics
+   loadUserStats();
+   
    try {
      const res = await fetch('questions.json');
      if (!res.ok) {
@@ -48,7 +306,7 @@ async function loadTestData() {
          console.error(errorMsg);
          document.getElementById('categoryGrid').innerHTML = `<div class="error">${errorMsg}. Ensure questions.json is accessible.</div>`;
          document.getElementById('dashboardScreen').innerHTML = `<div class="error">${errorMsg}. Check console.</div>`;
-         throw new Error(`HTTP error! status: ${res.status}`);
+         return;
      }
      fullQuestionsData = await res.json();
 
@@ -99,6 +357,12 @@ async function loadTestData() {
 function updateDashboardStats() {
     document.getElementById('totalQuestionsStat').textContent = allQuestionsFlat.length;
     document.getElementById('totalCategoriesStat').textContent = displayableCategories.length;
+    document.getElementById('testsCompletedStat').textContent = userStats.totalTests;
+    
+    const avgScore = userStats.totalQuestionsAnswered > 0 
+        ? Math.round((userStats.totalCorrectAnswers / userStats.totalQuestionsAnswered) * 100)
+        : 0;
+    document.getElementById('averageScoreStat').textContent = `${avgScore}%`;
 }
 
 function showDashboard() {
@@ -107,6 +371,7 @@ function showDashboard() {
     document.getElementById('customTestScreen').style.display = 'none';
     document.getElementById('testScreen').style.display = 'none';
     document.getElementById('resultsScreen').style.display = 'none';
+    document.getElementById('statisticsScreen').style.display = 'none';
     stopTimer(); // Ensure timer is stopped if returning to dashboard
 }
 
@@ -822,20 +1087,57 @@ function finishTest() {
     const testEndTime = new Date();
     const timeTaken = Math.floor((testEndTime - testStartTime) / 1000);
     let correctCount = 0;
+    let wrongCount = 0;
+    let unansweredCount = 0;
     const totalQuestions = currentCategory.questions.length;
+    const weakQuestions = [];
+    const questionDetails = [];
 
     currentCategory.questions.forEach(question => {
         const userAnswer = userAnswers[question.question_id] || [];
         const correctAnswer = question.correct_answers;
         const sortedUserAnswer = [...userAnswer].sort();
         const sortedCorrectAnswer = [...correctAnswer].sort();
-        if (sortedUserAnswer.length === sortedCorrectAnswer.length &&
-            sortedUserAnswer.every((val, index) => val === sortedCorrectAnswer[index])) {
+        const isCorrect = sortedUserAnswer.length === sortedCorrectAnswer.length &&
+            sortedUserAnswer.every((val, index) => val === sortedCorrectAnswer[index]);
+        
+        if (userAnswer.length === 0) {
+            unansweredCount++;
+        } else if (isCorrect) {
             correctCount++;
+        } else {
+            wrongCount++;
+            weakQuestions.push(question);
         }
+
+        questionDetails.push({
+            id: question.question_id,
+            question_text: question.question_text,
+            userAnswer: userAnswer,
+            correctAnswer: correctAnswer,
+            isCorrect: isCorrect,
+            wasAnswered: userAnswer.length > 0
+        });
     });
 
     const score = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
+
+    // Record test statistics
+    const testData = {
+        categoryName: currentCategory.subtopic_name || currentCategory.name || 'Unknown',
+        isRandomTest: isRandomTestActive,
+        isCustomTest: selectedCustomCategories && selectedCustomCategories.length > 0,
+        totalQuestions: totalQuestions,
+        correctAnswers: correctCount,
+        wrongAnswers: wrongCount,
+        unansweredQuestions: unansweredCount,
+        timeSpent: timeTaken,
+        percentage: score,
+        questions: questionDetails,
+        weakQuestions: weakQuestions
+    };
+    
+    recordTestResult(testData);
 
     document.getElementById('testScreen').style.display = 'none';
     document.getElementById('resultsScreen').style.display = 'block';
@@ -858,6 +1160,14 @@ function finishTest() {
     if (currentCategory.parent_topic_name) { 
         summaryHTML += `<p>Parent Topic: <strong>${currentCategory.parent_topic_name}</strong></p>`;
     }
+    
+    // Add streak information
+    if (score >= 70) {
+        summaryHTML += `<p style="color: #28a745;">🔥 Current Streak: <strong>${userStats.streakData.current}</strong> passed tests</p>`;
+    } else {
+        summaryHTML += `<p style="color: #dc3545;">Streak reset. Keep practicing!</p>`;
+    }
+    
     document.getElementById('resultsSummary').innerHTML = summaryHTML;
     prepareReview();
 }
@@ -970,4 +1280,266 @@ function resetTest() {
     showDashboard(); 
 }
 
-window.onload = loadTestData;
+// Statistics UI Functions
+function showStatistics() {
+    updateStatisticsDisplay();
+    document.getElementById('dashboardScreen').style.display = 'none';
+    document.getElementById('categoryScreen').style.display = 'none';
+    document.getElementById('customTestScreen').style.display = 'none';
+    document.getElementById('testScreen').style.display = 'none';
+    document.getElementById('resultsScreen').style.display = 'none';
+    document.getElementById('statisticsScreen').style.display = 'block';
+}
+
+function updateStatisticsDisplay() {
+    // Update overview stats
+    document.getElementById('totalTestsStat').textContent = userStats.totalTests;
+    document.getElementById('totalQuestionsAnsweredStat').textContent = userStats.totalQuestionsAnswered;
+    
+    const overallAccuracy = userStats.totalQuestionsAnswered > 0 
+        ? Math.round((userStats.totalCorrectAnswers / userStats.totalQuestionsAnswered) * 100)
+        : 0;
+    document.getElementById('overallAccuracyStat').textContent = `${overallAccuracy}%`;
+    
+    const totalHours = Math.round(userStats.totalTimeSpent / 3600 * 10) / 10;
+    document.getElementById('totalTimeSpentStat').textContent = `${totalHours}h`;
+    
+    // Update streak info
+    document.getElementById('currentStreakStat').textContent = userStats.streakData.current;
+    document.getElementById('bestStreakStat').textContent = userStats.streakData.best;
+    
+    // Update achievements
+    updateAchievementsDisplay();
+    
+    // Update test history
+    updateTestHistoryDisplay();
+    
+    // Update category performance
+    updateCategoryPerformanceDisplay();
+    
+    // Update weak areas
+    updateWeakAreasDisplay();
+}
+
+function updateAchievementsDisplay() {
+    const container = document.getElementById('achievementsContainer');
+    
+    if (userStats.achievements.length === 0) {
+        container.innerHTML = '<p>No achievements yet. Keep practicing!</p>';
+        return;
+    }
+    
+    const achievementsHtml = userStats.achievements
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 6) // Show last 6 achievements
+        .map(achievement => `
+            <div class="achievement-item">
+                <span class="achievement-icon">${achievement.icon}</span>
+                <div class="achievement-info">
+                    <strong>${achievement.name}</strong>
+                    <p>${achievement.description}</p>
+                    <small>${new Date(achievement.date).toLocaleDateString()}</small>
+                </div>
+            </div>
+        `).join('');
+    
+    container.innerHTML = achievementsHtml;
+}
+
+function updateTestHistoryDisplay() {
+    const container = document.getElementById('testHistoryContainer');
+    
+    if (userStats.testHistory.length === 0) {
+        container.innerHTML = '<p>No test history available.</p>';
+        return;
+    }
+    
+    const historyHtml = userStats.testHistory
+        .slice(0, 10) // Show last 10 tests
+        .map(test => {
+            const date = new Date(test.date).toLocaleDateString();
+            const time = new Date(test.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const minutes = Math.floor(test.timeSpent / 60);
+            const seconds = test.timeSpent % 60;
+            const scoreClass = test.percentage >= 70 ? 'score-pass' : 'score-fail';
+            
+            return `
+                <div class="test-history-item">
+                    <div class="test-info">
+                        <h4>${test.categoryName}</h4>
+                        <p>${date} at ${time}</p>
+                        <div class="test-stats">
+                            <span>⏱️ ${minutes}m ${seconds}s</span>
+                            <span>✓ ${test.correctAnswers}/${test.totalQuestions}</span>
+                            ${test.isRandomTest ? '<span class="test-type">Random</span>' : ''}
+                            ${test.isCustomTest ? '<span class="test-type">Custom</span>' : ''}
+                        </div>
+                    </div>
+                    <div class="test-score ${scoreClass}">
+                        ${test.percentage}%
+                    </div>
+                </div>
+            `;
+        }).join('');
+    
+    container.innerHTML = historyHtml;
+}
+
+function updateCategoryPerformanceDisplay() {
+    const container = document.getElementById('categoryPerformanceContainer');
+    
+    if (Object.keys(userStats.categoryPerformance).length === 0) {
+        container.innerHTML = '<p>No category data available.</p>';
+        return;
+    }
+    
+    const performanceHtml = Object.entries(userStats.categoryPerformance)
+        .sort(([,a], [,b]) => b.totalTests - a.totalTests)
+        .map(([categoryName, stats]) => {
+            const trend = calculateTrend(stats.recentScores);
+            const trendIcon = trend > 0 ? '📈' : trend < 0 ? '📉' : '➡️';
+            const bestScoreClass = stats.bestScore >= 90 ? 'excellent' : stats.bestScore >= 70 ? 'good' : 'needs-work';
+            
+            return `
+                <div class="category-performance-item">
+                    <div class="category-info">
+                        <h4>${categoryName}</h4>
+                        <div class="category-stats">
+                            <span>Tests: ${stats.totalTests}</span>
+                            <span>Questions: ${stats.totalQuestions}</span>
+                        </div>
+                    </div>
+                    <div class="category-scores">
+                        <div class="score-item">
+                            <span class="score-label">Average</span>
+                            <span class="score-value">${stats.averageScore}%</span>
+                        </div>
+                        <div class="score-item">
+                            <span class="score-label">Best</span>
+                            <span class="score-value ${bestScoreClass}">${stats.bestScore}%</span>
+                        </div>
+                        <div class="trend-indicator">
+                            ${trendIcon}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    
+    container.innerHTML = performanceHtml;
+}
+
+function updateWeakAreasDisplay() {
+    const container = document.getElementById('weakAreasContainer');
+    const practiceBtn = document.getElementById('practiceWeakBtn');
+    
+    if (userStats.weakQuestions.length === 0) {
+        container.innerHTML = '<p>No weak areas identified yet. Great job!</p>';
+        practiceBtn.disabled = true;
+        return;
+    }
+    
+    const weakAreasHtml = userStats.weakQuestions
+        .slice(0, 15) // Show top 15 weak questions
+        .map((weakQuestion, index) => `
+            <div class="weak-question-item">
+                <div class="weak-question-info">
+                    <h4>Question ${index + 1}</h4>
+                    <p>${weakQuestion.questionText.substring(0, 100)}${weakQuestion.questionText.length > 100 ? '...' : ''}</p>
+                    <small>Category: ${weakQuestion.category}</small>
+                </div>
+                <div class="weak-question-stats">
+                    <span class="incorrect-count">❌ ${weakQuestion.incorrectCount}</span>
+                    <small>Last missed: ${new Date(weakQuestion.lastIncorrectDate).toLocaleDateString()}</small>
+                </div>
+            </div>
+        `).join('');
+    
+    container.innerHTML = weakAreasHtml;
+    practiceBtn.disabled = false;
+}
+
+function calculateTrend(recentScores) {
+    if (recentScores.length < 2) return 0;
+    
+    const recent = recentScores.slice(0, Math.min(3, recentScores.length));
+    const older = recentScores.slice(Math.min(3, recentScores.length), Math.min(6, recentScores.length));
+    
+    if (older.length === 0) return 0;
+    
+    const recentAvg = recent.reduce((a, b) => a + b, 0) / recent.length;
+    const olderAvg = older.reduce((a, b) => a + b, 0) / older.length;
+    
+    return recentAvg - olderAvg;
+}
+
+function showStatsTab(tabName) {
+    // Update tab buttons
+    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // Update tab content
+    document.querySelectorAll('.stats-tab-content').forEach(content => content.classList.remove('active'));
+    document.getElementById(tabName + 'Tab').classList.add('active');
+}
+
+function generateWeakAreasPractice() {
+    if (userStats.weakQuestions.length === 0) {
+        alert('No weak areas identified yet. Complete more tests first!');
+        return;
+    }
+    
+    // Get unique question IDs from weak questions (top 30 or all if less)
+    const weakQuestionIds = userStats.weakQuestions
+        .slice(0, 30)
+        .map(wq => wq.id);
+    
+    // Find actual question objects from allQuestionsFlat
+    const practiceQuestions = allQuestionsFlat.filter(q => 
+        weakQuestionIds.includes(q.question_id)
+    );
+    
+    if (practiceQuestions.length === 0) {
+        alert('Could not find questions for practice. Questions may have been updated.');
+        return;
+    }
+    
+    // Create a practice test category
+    isRandomTestActive = false;
+    currentCategory = {
+        subtopic_name: "Weak Areas Practice",
+        questions: shuffleArray([...practiceQuestions]).slice(0, Math.min(30, practiceQuestions.length)),
+        name: "Practice Test - Weak Areas"
+    };
+    
+    startTest(null);
+}
+
+function clearAllStatistics() {
+    if (confirm('Are you sure you want to clear ALL statistics? This action cannot be undone.')) {
+        // Reset userStats to initial state
+        userStats = {
+            version: STATS_VERSION,
+            totalTests: 0,
+            totalQuestionsAnswered: 0,
+            totalCorrectAnswers: 0,
+            totalTimeSpent: 0,
+            testHistory: [],
+            categoryPerformance: {},
+            weakQuestions: [],
+            streakData: {
+                current: 0,
+                best: 0,
+                lastTestDate: null
+            },
+            achievements: [],
+            firstTestDate: null,
+            lastTestDate: null
+        };
+        
+        saveUserStats();
+        updateStatisticsDisplay();
+        updateDashboardStats();
+        alert('All statistics have been cleared.');
+    }
+}
