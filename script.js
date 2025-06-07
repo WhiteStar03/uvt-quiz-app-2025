@@ -18,6 +18,23 @@ let testTimeRemaining = 0; // in seconds
 const RANDOM_TEST_DURATION = 90 * 60; // 30 minutes for random test (corrected from 90)
 const RANDOM_TEST_QUESTION_COUNT = 30;
 
+// Category name mapping for image files
+function getCategoryNameForImage(categoryName) {
+    const nameMap = {
+        'Formal Languages and Automata Theory': 'FormalLanguagesandAutomataTheory',
+        'Graph Theory and Combinatorics': 'GraphTheoryandCombinatorics',
+        'Software Applications Design': 'SoftwareApplicationsDesign',
+        'C Language': 'CLanguage',
+        'C++ Language': 'CPPLanguage',
+        'Java Language': 'JavaLanguage',
+        'Python Language': 'PythonLanguage',
+        'Databases': 'Databases',
+        'Computational Logic': 'ComputationalLogic'
+    };
+    
+    return nameMap[categoryName] || categoryName.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '');
+}
+
 async function loadTestData() {
    document.getElementById('dashboardLoading').style.display = 'block';
    try {
@@ -220,6 +237,23 @@ function startTest(subtopicIndexOrNull) {
         });
     }
 
+    // Initialize navigation button event listeners
+    const nextButton = document.getElementById('nextButton');
+    const prevButton = document.getElementById('prevButton');
+    
+    if (nextButton) {
+        // Remove any existing event listeners and add new one
+        nextButton.replaceWith(nextButton.cloneNode(true));
+        const newNextButton = document.getElementById('nextButton');
+        newNextButton.addEventListener('click', function() {
+            if (currentQuestionIndex === totalQuestions - 1) {
+                handleFinishClick();
+            } else {
+                handleNextClick();
+            }
+        });
+    }
+
     document.getElementById('dashboardScreen').style.display = 'none';
     document.getElementById('categoryScreen').style.display = 'none';
     document.getElementById('testScreen').style.display = 'block';
@@ -277,8 +311,7 @@ function displayQuestion() {
     const imageContainer = document.getElementById('questionImageContainer');
     imageContainer.innerHTML = ''; // Clear previous image
 
-    let categoryNameForImage = currentCategory.subtopic_name || currentCategory.name || "DefaultCategory";
-    categoryNameForImage = categoryNameForImage.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+    let categoryNameForImage = getCategoryNameForImage(currentCategory.subtopic_name || currentCategory.name || "DefaultCategory");
     
     // Ensure question_id is available, otherwise use a placeholder or skip
     const questionIdForImage = question.question_id ? String(question.question_id) : null;
@@ -402,7 +435,6 @@ function displayQuestion() {
         optionsContainer.appendChild(optionDiv);
     });
     
-    isFeedbackMode = false; 
     updateNavigationButtons();
 }
 

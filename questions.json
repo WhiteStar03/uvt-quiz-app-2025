@@ -671,7 +671,8 @@
                   {"id": "a", "text": "generates the language containing words composed of a,b,c, starting with either a or b or c followed by 0 or more occurrences of a, followed by 0 or more occurrences of b, followed by 0 or more occurrences of c"},
                   {"id": "b", "text": "L = {a^n b^m c^p | n ≥ 1, m ≥ 0, p ≥ 0} ∪ {a^n b^m c^p | n ≥ 0, m ≥ 1, p ≥ 0} ∪ {a^n b^m c^p | n ≥ 0, m ≥ 0, p ≥ 1}"},
                   {"id": "c", "text": "can be rewritten as the regular expression a+b+c+"},
-                  {"id": "d", "text": "generates the language which is recognized by the automaton with states q0, q1, q2, q3"}
+                  {"id": "d", "text": "generates the language which is recognized by the automaton:"},
+                  {"id": "e", "text": "generates the language which is recognized by the automaton:"}
                 ],
                 "correct_answers": ["a", "d"]
               },
