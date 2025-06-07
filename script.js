@@ -34,12 +34,14 @@ function getCookie(name) {
     const ca = document.cookie.split(';');
     for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
-        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        while (c.charAt(0) === ' ') {
+            c = c.substring(1, c.length);
+        }
         if (c.indexOf(nameEQ) === 0) {
             try {
                 return JSON.parse(decodeURIComponent(c.substring(nameEQ.length, c.length)));
             } catch (e) {
-                console.warn('Failed to parse cookie data:', e);
+                console.error("Error parsing cookie:", name, e);
                 return null;
             }
         }
@@ -382,6 +384,11 @@ function showCategorySelectionScreen() {
     document.getElementById('customTestScreen').style.display = 'none';
     document.getElementById('testScreen').style.display = 'none';
     document.getElementById('resultsScreen').style.display = 'none';
+    
+    // Display categories if data is loaded
+    if (displayableCategories && displayableCategories.length > 0) {
+        displayCategories(displayableCategories);
+    }
 }
 
 function showCustomTestSelection() {
@@ -929,6 +936,9 @@ function openImageModal(src) {
 
 // Initialize image zoom when DOM is ready
 document.addEventListener('DOMContentLoaded', initializeImageZoom);
+
+// Initialize the application when DOM is ready
+document.addEventListener('DOMContentLoaded', loadTestData);
 // --- Image Zoom Functionality End ---
 
 function saveCurrentAnswer() {
