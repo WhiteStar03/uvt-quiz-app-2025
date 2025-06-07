@@ -364,11 +364,56 @@ h1 {
 
 .option input[type="checkbox"],
 .option input[type="radio"] {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     cursor: pointer;
     accent-color: #667eea;
     flex-shrink: 0; /* Prevent shrinking */
+    position: relative;
+    margin: 0;
+}
+
+/* Enhanced checkbox styling - always use checkbox appearance */
+.option input[type="checkbox"]:not(:disabled),
+.option input[type="radio"]:not(:disabled) {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 2px solid #d1d5db;
+    border-radius: 4px;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.option input[type="checkbox"]:checked:not(:disabled),
+.option input[type="radio"]:checked:not(:disabled) {
+    background: #667eea;
+    border-color: #667eea;
+    position: relative;
+}
+
+.option input[type="checkbox"]:checked:not(:disabled)::after,
+.option input[type="radio"]:checked:not(:disabled)::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.option input[type="checkbox"]:hover:not(:disabled):not(:checked),
+.option input[type="radio"]:hover:not(:disabled):not(:checked) {
+    border-color: #667eea;
+    background: #f8faff;
+}
+
+.option input[type="checkbox"]:focus:not(:disabled),
+.option input[type="radio"]:focus:not(:disabled) {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
 }
 
 .option input[type="checkbox"]:disabled,

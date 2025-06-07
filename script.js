@@ -480,21 +480,21 @@ function displayQuestion() {
         const optionDiv = document.createElement('div');
         optionDiv.classList.add('option');
 
-        const inputType = isMultipleChoice ? 'checkbox' : 'radio';
+        // Always use checkbox to hide whether it's single or multiple choice
         const input = document.createElement('input');
-        input.type = inputType;
+        input.type = 'checkbox';
         const qIdForInput = question.question_id || currentQuestionIndex;
         input.name = `question_${qIdForInput}`;
         input.id = `option_${qIdForInput}_${option.id}`;
         input.value = option.id;
 
         const userAnswer = userAnswers[question.question_id];
-        if (userAnswer) {
-            if (isMultipleChoice && userAnswer.includes(option.id)) {
-                input.checked = true;
-            } else if (!isMultipleChoice && userAnswer === option.id) {
+        if (userAnswer && Array.isArray(userAnswer)) {
+            if (userAnswer.includes(option.id)) {
                 input.checked = true;
             }
+        } else if (userAnswer === option.id) {
+            input.checked = true;
         }
 
         input.onchange = () => selectAnswer(option.id, isMultipleChoice);
@@ -692,11 +692,22 @@ function selectAnswer(optionId, isMultipleChoice) {
     const questionId = question.question_id;
 
     if (isMultipleChoice) {
+        // Multiple choice: toggle selection
         if (!userAnswers[questionId]) userAnswers[questionId] = [];
         const index = userAnswers[questionId].indexOf(optionId);
         if (index > -1) userAnswers[questionId].splice(index, 1);
         else userAnswers[questionId].push(optionId);
     } else {
+        // Single choice: uncheck all other options first, then check this one
+        const allInputs = document.querySelectorAll(`input[name="question_${questionId}"]`);
+        allInputs.forEach(input => {
+            input.checked = false;
+        });
+        // Check the selected option
+        const selectedInput = document.querySelector(`#option_${questionId}_${optionId}`);
+        if (selectedInput) {
+            selectedInput.checked = true;
+        }
         userAnswers[questionId] = [optionId];
     }
 
