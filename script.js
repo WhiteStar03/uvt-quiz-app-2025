@@ -104,6 +104,7 @@ function updateDashboardStats() {
 function showDashboard() {
     document.getElementById('dashboardScreen').style.display = 'block';
     document.getElementById('categoryScreen').style.display = 'none';
+    document.getElementById('customTestScreen').style.display = 'none';
     document.getElementById('testScreen').style.display = 'none';
     document.getElementById('resultsScreen').style.display = 'none';
     stopTimer(); // Ensure timer is stopped if returning to dashboard
@@ -112,8 +113,18 @@ function showDashboard() {
 function showCategorySelectionScreen() {
     document.getElementById('dashboardScreen').style.display = 'none';
     document.getElementById('categoryScreen').style.display = 'block';
+    document.getElementById('customTestScreen').style.display = 'none';
     document.getElementById('testScreen').style.display = 'none';
     document.getElementById('resultsScreen').style.display = 'none';
+}
+
+function showCustomTestSelection() {
+    document.getElementById('dashboardScreen').style.display = 'none';
+    document.getElementById('categoryScreen').style.display = 'none';
+    document.getElementById('customTestScreen').style.display = 'block';
+    document.getElementById('testScreen').style.display = 'none';
+    document.getElementById('resultsScreen').style.display = 'none';
+    displayCustomTestCategories();
 }
 
 function displayCategories(subtopicsToDisplay) {
@@ -168,6 +179,128 @@ function generateRandomTest() {
         name: "Randomly Generated Test" // For display
     };
     startTest(null); // Pass null index, as currentCategory is already set
+    startTimer(RANDOM_TEST_DURATION);
+}
+
+// Custom Test Selection Variables
+let selectedCustomCategories = [];
+
+function displayCustomTestCategories() {
+    const container = document.getElementById('customTestCategories');
+    container.innerHTML = '';
+
+    if (!displayableCategories || displayableCategories.length === 0) {
+        container.innerHTML = '<div class="loading">No categories available.</div>';
+        return;
+    }
+
+    displayableCategories.forEach((category, index) => {
+        const card = document.createElement('div');
+        card.className = 'custom-category-card';
+        card.dataset.categoryIndex = index;
+
+        const questionCount = category.questions.length;
+        card.innerHTML = `
+            <div class="check-mark">✓</div>
+            <h3>${category.subtopic_name}</h3>
+            ${category.parent_topic_name ? `<p style="font-size:0.8em; color:#555; margin-top: 5px;"><em>Topic: ${category.parent_topic_name}</em></p>` : ''}
+            <p style="margin-top: 10px;">${questionCount} question${questionCount !== 1 ? 's' : ''}</p>
+        `;
+
+        card.onclick = () => toggleCategorySelection(index, card);
+        container.appendChild(card);
+    });
+
+    updateCustomTestInfo();
+}
+
+function toggleCategorySelection(categoryIndex, cardElement) {
+    const index = selectedCustomCategories.indexOf(categoryIndex);
+    
+    if (index > -1) {
+        // Remove from selection
+        selectedCustomCategories.splice(index, 1);
+        cardElement.classList.remove('selected');
+    } else {
+        // Add to selection
+        selectedCustomCategories.push(categoryIndex);
+        cardElement.classList.add('selected');
+    }
+    
+    updateCustomTestInfo();
+}
+
+function updateCustomTestInfo() {
+    const selectedCount = selectedCustomCategories.length;
+    let totalQuestions = 0;
+    
+    selectedCustomCategories.forEach(categoryIndex => {
+        totalQuestions += displayableCategories[categoryIndex].questions.length;
+    });
+    
+    document.getElementById('selectedCount').textContent = selectedCount;
+    document.getElementById('selectedQuestionCount').textContent = totalQuestions;
+    
+    const generateBtn = document.getElementById('generateCustomTestBtn');
+    if (selectedCount > 0 && totalQuestions >= 30) {
+        generateBtn.disabled = false;
+        generateBtn.textContent = `Generate Custom Test (30 questions)`;
+    } else if (selectedCount > 0 && totalQuestions < 30) {
+        generateBtn.disabled = true;
+        generateBtn.textContent = `Need at least 30 questions (${totalQuestions} available)`;
+    } else {
+        generateBtn.disabled = true;
+        generateBtn.textContent = `Generate Custom Test (30 questions)`;
+    }
+}
+
+function generateCustomTest() {
+    if (selectedCustomCategories.length === 0) {
+        alert("Please select at least one category.");
+        return;
+    }
+    
+    // Collect all questions from selected categories
+    let allSelectedQuestions = [];
+    selectedCustomCategories.forEach(categoryIndex => {
+        const category = displayableCategories[categoryIndex];
+        category.questions.forEach(question => {
+            allSelectedQuestions.push({
+                ...question,
+                subtopic_name_origin: category.subtopic_name,
+                parent_topic_name_origin: category.parent_topic_name
+            });
+        });
+    });
+    
+    if (allSelectedQuestions.length < 30) {
+        alert(`Not enough questions available. Selected categories have ${allSelectedQuestions.length} questions, but 30 are needed.`);
+        return;
+    }
+    
+    // Shuffle and select 30 questions
+    const shuffledQuestions = shuffleArray([...allSelectedQuestions]);
+    const selectedQuestions = shuffledQuestions.slice(0, 30);
+    
+    // Create custom test category
+    isRandomTestActive = true;
+    const selectedCategoryNames = selectedCustomCategories.map(index => 
+        displayableCategories[index].subtopic_name
+    ).join(', ');
+    
+    currentCategory = {
+        subtopic_name: "Custom Test",
+        questions: selectedQuestions,
+        name: `Custom Test (${selectedCategoryNames})`
+    };
+    
+    // Reset selections for next time
+    selectedCustomCategories = [];
+    
+    // Hide custom test window before starting the test
+    document.getElementById('customTestScreen').style.display = 'none';
+    
+    startTest(null);
     startTimer(RANDOM_TEST_DURATION);
 }
 

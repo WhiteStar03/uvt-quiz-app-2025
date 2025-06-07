@@ -25,6 +25,7 @@
             <div class="dashboard-actions">
                 <button class="nav-button" onclick="showCategorySelectionScreen()">Select Subtopic Test</button>
                 <button class="nav-button secondary" onclick="generateRandomTest()">Generate Random 30-Question Test</button>
+                <button class="nav-button" onclick="showCustomTestSelection()">Create Custom 30-Question Test</button>
             </div>
             <div id="dashboardLoading" class="loading" style="display:none;">Loading data...</div>
         </div>
@@ -35,6 +36,27 @@
                 <div class="loading">Loading categories...</div>
             </div>
             <button class="nav-button secondary" style="display: block; margin: 20px auto 0;" onclick="showDashboard()">Back to Dashboard</button>
+        </div>
+
+        <div class="custom-test-selection" id="customTestScreen">
+            <h2 style="text-align: center; color: #666; margin-bottom: 20px;">Create Custom 30-Question Test</h2>
+            <p style="text-align: center; color: #777; margin-bottom: 20px;">Select categories to include in your custom test:</p>
+            
+            <div class="custom-test-categories" id="customTestCategories">
+                <div class="loading">Loading categories...</div>
+            </div>
+            
+            <div class="custom-test-actions">
+                <div class="selected-info" id="selectedCategoriesInfo">
+                    Selected: <span id="selectedCount">0</span> categories, <span id="selectedQuestionCount">0</span> questions available
+                </div>
+                <div class="button-group">
+                    <button class="nav-button" id="generateCustomTestBtn" onclick="generateCustomTest()" disabled>
+                        Generate Custom Test (30 questions)
+                    </button>
+                    <button class="nav-button secondary" onclick="showDashboard()">Back to Dashboard</button>
+                </div>
+            </div>
         </div>
 
         
@@ -84,8 +106,10 @@
                 <div class="score-text" id="scoreText">0%</div>
             </div>
             <div class="results-summary" id="resultsSummary"></div>
-            <button class="nav-button" onclick="showReview()">Review Answers</button>
-            <button class="nav-button secondary" onclick="resetTest()">Back to Dashboard</button>
+            <div class="results-actions">
+                <button class="nav-button" onclick="showReview()">Review Answers</button>
+                <button class="nav-button secondary" onclick="resetTest()">Back to Dashboard</button>
+            </div>
             <div class="answer-review" id="answerReview" style="display: none;"></div>
         </div>
 

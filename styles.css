@@ -69,8 +69,25 @@ h1 {
     color: #555;
     font-size: 0.9em;
 }
+
+.dashboard-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    margin-top: 30px;
+    padding: 0 20px;
+}
+
 .dashboard-actions button {
-    margin: 10px;
+    width: 100%;
+    max-width: 450px;
+    margin: 0;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 /* Category Selection Screen */
@@ -116,6 +133,120 @@ h1 {
 .category-card p {
     color: #666;
     font-size: 0.85em;
+}
+
+/* Custom Test Selection */
+.custom-test-selection {
+    display: none;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.custom-test-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.custom-category-card {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    position: relative;
+}
+
+.custom-category-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.custom-category-card.selected {
+    border-color: #667eea;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.custom-category-card.selected h3,
+.custom-category-card.selected p {
+    color: white;
+}
+
+.custom-category-card h3 {
+    color: #333;
+    margin-bottom: 8px;
+    font-size: 1.1em;
+}
+
+.custom-category-card p {
+    color: #666;
+    font-size: 0.85em;
+    margin: 5px 0;
+}
+
+.custom-category-card .check-mark {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    background: #4CAF50;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.custom-category-card.selected .check-mark {
+    display: flex;
+}
+
+.custom-test-actions {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.custom-test-actions .selected-info {
+    font-size: 1.1em;
+    font-weight: 500;
+    text-align: center;
+    padding: 15px 25px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 10px;
+    border-left: 4px solid #667eea;
+    color: #495057;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.custom-test-actions .button-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.custom-test-actions .button-group button {
+    min-width: 220px;
+    min-height: 56px;
+    flex: 1;
+    max-width: 300px;
 }
 
 /* Test Screen */
@@ -290,7 +421,12 @@ h1 {
     justify-content: space-between;
     align-items: center;
     width: 100%; /* Controls block takes full width */
-    gap: 15px;   /* Space between prev, status, next */
+    gap: 20px;   /* Space between prev, status, next */
+}
+
+.navigation-controls button {
+    min-width: 120px;
+    flex-shrink: 0;
 }
 
 #questionStatus {
@@ -336,34 +472,69 @@ h1 {
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
     border: none;
-    border-radius: 10px;
-    padding: 12px 30px;
+    border-radius: 12px;
+    padding: 14px 32px;
     font-size: 1em;
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.nav-button:hover:not(:disabled)::before {
+    left: 100%;
 }
 
 .nav-button:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    background: linear-gradient(135deg, #5a67d8, #6b46c1);
+}
+
+.nav-button:active:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
 .nav-button:disabled {
-    background: #ccc;
+    background: linear-gradient(135deg, #cbd5e0, #a0aec0);
     cursor: not-allowed;
     transform: none;
-    box-shadow: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0.6;
 }
 
 .nav-button.secondary {
     background: white;
     color: #667eea;
     border: 2px solid #667eea;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+}
+
+.nav-button.secondary::before {
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
 }
 
 .nav-button.secondary:hover:not(:disabled) {
-    background: #f0f4ff;
+    background: linear-gradient(135deg, #f0f4ff, #e6f3ff);
+    border-color: #5a67d8;
+    color: #5a67d8;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
 }
 
 /* Results Screen */
@@ -371,6 +542,21 @@ h1 {
     display: none;
     text-align: center;
     animation: fadeIn 0.5s ease;
+}
+
+.results-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.results-actions .nav-button {
+    min-width: 180px;
+    flex: 1;
+    max-width: 250px;
 }
 
 .score-circle {
@@ -510,6 +696,22 @@ h1 {
 
     .nav-button {
         width: 100%;
+    }
+    .custom-test-actions .button-group {
+        flex-direction: column;
+        width: 100%;
+    }
+    .custom-test-actions .button-group button {
+        width: 100%;
+        max-width: none;
+    }
+    .results-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+    .results-actions .nav-button {
+        width: 100%;
+        max-width: none;
     }
     .question-header {
         gap: 10px; /* Space between items if they wrap */
