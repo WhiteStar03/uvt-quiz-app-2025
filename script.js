@@ -948,6 +948,8 @@ function initializeImageZoom() {
     zoomedImage = document.getElementById('zoomedImage');
     closeBtn = document.getElementById('closeZoomBtn');
 
+    modal.style.display = 'none'; // Ensure modal is hidden initially
+
     if (closeBtn) {
         closeBtn.onclick = function() {
             if (modal) modal.style.display = 'none';
