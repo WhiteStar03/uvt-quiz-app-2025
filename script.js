@@ -763,7 +763,8 @@ function prepareReview() {
 
 function showReview() {
     const review = document.getElementById('answerReview');
-    review.style.display = review.style.display === 'none' ? 'block' : 'none';
+    const currentDisplay = window.getComputedStyle(review).display;
+    review.style.display = currentDisplay === 'none' ? 'block' : 'none';
 }
 
 function resetTest() {
