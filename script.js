@@ -21,16 +21,19 @@ const RANDOM_TEST_QUESTION_COUNT = 30;
 // Category name mapping for image files
 function getCategoryNameForImage(categoryName) {
     const nameMap = {
-        'Formal Languages and Automata Theory': 'FormalLanguagesandAutomataTheory',
+        'Algorithms and Data Structures': 'AlgorithmsandDataStructures',
         'Graph Theory and Combinatorics': 'GraphTheoryandCombinatorics',
-        'Software Applications Design': 'SoftwareApplicationsDesign',
-        'Computer Networks': 'ComputerNetworks',
+        'Computational Logic': 'ComputationalLogic',
+        'Formal Languages and Automata Theory': 'FormalLanguagesandAutomataTheory',
+        'Python Language': 'PythonLanguage',
         'C Language': 'CLanguage',
         'C++ Language': 'CPPLanguage',
         'Java Language': 'JavaLanguage',
-        'Python Language': 'PythonLanguage',
         'Databases': 'Databases',
-        'Computational Logic': 'ComputationalLogic'
+        'Software Applications Design': 'SoftwareApplicationsDesign',
+        'Computer Architecture': 'ComputerArchitecture',
+        'Operating Systems': 'OperatingSystems',
+        'Computer Networks': 'ComputerNetworks'
     };
     
     return nameMap[categoryName] || categoryName.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '');
