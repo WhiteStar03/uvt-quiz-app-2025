@@ -10,32 +10,90 @@
     <div class="container">
         <h1>Bachelor Thesis Questions for English Informatics</h1>
 
-        <div class="dashboard-screen" id="dashboardScreen">
-            <h2 style="text-align: center; color: #555; margin-bottom: 30px;">Platform Dashboard</h2>
-            <div class="dashboard-stats">
-                <div class="stat-item">
-                    <h3 id="totalQuestionsStat">0</h3>
-                    <p>Total Questions</p>
+        <div class="dashboard-screen" id="dashboardScreen">            
+            <!-- Stats Section Header -->
+            <div class="section-header">
+                <h3>📊 Your Progress Overview</h3>
+                <p>Track your learning journey and achievements</p>
+            </div>
+            
+            <!-- Stats Overview Cards -->
+            <div class="dashboard-stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <h3 id="totalQuestionsStat">0</h3>
+                        <p>Total Questions</p>
+                    </div>
                 </div>
-                <div class="stat-item">
-                    <h3 id="totalCategoriesStat">0</h3>
-                    <p>Total Subtopics</p>
+                <div class="stat-card">
+                    <div class="stat-icon">📑</div>
+                    <div class="stat-content">
+                        <h3 id="totalCategoriesStat">0</h3>
+                        <p>Study Topics</p>
+                    </div>
                 </div>
-                <div class="stat-item">
-                    <h3 id="testsCompletedStat">0</h3>
-                    <p>Tests Completed</p>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-content">
+                        <h3 id="testsCompletedStat">0</h3>
+                        <p>Tests Completed</p>
+                    </div>
                 </div>
-                <div class="stat-item">
-                    <h3 id="averageScoreStat">0%</h3>
-                    <p>Average Score</p>
+                <div class="stat-card">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-content">
+                        <h3 id="averageScoreStat">0%</h3>
+                        <p>Average Score</p>
+                    </div>
                 </div>
             </div>
-            <div class="dashboard-actions">
-                <button class="nav-button" onclick="showCategorySelectionScreen()">Select Subtopic Test</button>
-                <button class="nav-button secondary" onclick="generateRandomTest()">Generate Random 30-Question Test</button>
-                <button class="nav-button" onclick="showCustomTestSelection()">Create Custom 30-Question Test</button>
-                <button class="nav-button stats-button" onclick="showStatistics()">📊 View Statistics</button>
+
+            <!-- Actions Section Header -->
+            <div class="section-header">
+                <h3>🚀 Study Actions</h3>
+                <p>Choose how you want to practice and learn</p>
             </div>
+
+            <!-- Action Buttons -->
+            <div class="dashboard-actions-grid">
+                <div class="action-card primary" onclick="showCategorySelectionScreen()">
+                    <div class="action-icon">📝</div>
+                    <div class="action-content">
+                        <h3>Study by Topic</h3>
+                        <p>Choose a specific subject area to practice</p>
+                    </div>
+                    <div class="action-arrow">→</div>
+                </div>
+                
+                <div class="action-card secondary" onclick="generateRandomTest()">
+                    <div class="action-icon">🎲</div>
+                    <div class="action-content">
+                        <h3>Random Test</h3>
+                        <p>30 questions from all topics (90 min timer)</p>
+                    </div>
+                    <div class="action-arrow">→</div>
+                </div>
+                
+                <div class="action-card tertiary" onclick="showCustomTestSelection()">
+                    <div class="action-icon">⚙️</div>
+                    <div class="action-content">
+                        <h3>Custom Test</h3>
+                        <p>Create your own mix of topics</p>
+                    </div>
+                    <div class="action-arrow">→</div>
+                </div>
+                
+                <div class="action-card stats" onclick="showStatistics()">
+                    <div class="action-icon">📈</div>
+                    <div class="action-content">
+                        <h3>View Statistics</h3>
+                        <p>Track your progress and performance</p>
+                    </div>
+                    <div class="action-arrow">→</div>
+                </div>
+            </div>
+
             <div id="dashboardLoading" class="loading" style="display:none;">Loading data...</div>
         </div>
 
@@ -108,11 +166,6 @@
                     <h3>Questions You've Struggled With</h3>
                     <div class="weak-areas-container" id="weakAreasContainer">
                         <p>No weak areas identified yet.</p>
-                    </div>
-                    <div class="practice-section">
-                        <button class="nav-button" id="practiceWeakBtn" onclick="generateWeakAreasPractice()" disabled>
-                            📚 Practice Weak Areas (Generate Test)
-                        </button>
                     </div>
                 </div>
             </div>

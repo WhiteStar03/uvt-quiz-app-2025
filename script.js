@@ -22,38 +22,68 @@ let userStats = {
     lastTestDate: null
 };
 
-// Cookie Management Functions
-function setCookie(name, value, days = 365) {
-    const expires = new Date();
-    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-    document.cookie = `${name}=${encodeURIComponent(JSON.stringify(value))};expires=${expires.toUTCString()};path=/`;
+// Storage Management Functions (using localStorage with cookie fallback)
+function saveToStorage(name, value) {
+    try {
+        // Try localStorage first (works better for local development)
+        if (typeof(Storage) !== "undefined") {
+            localStorage.setItem(name, JSON.stringify(value));
+            console.log('User statistics saved to localStorage');
+            return;
+        }
+    } catch (e) {
+        console.warn('localStorage not available, falling back to cookies:', e);
+    }
+    
+    // Fallback to cookies
+    try {
+        const expires = new Date();
+        expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000));
+        document.cookie = `${name}=${encodeURIComponent(JSON.stringify(value))};expires=${expires.toUTCString()};path=/`;
+        console.log('User statistics saved to cookies');
+    } catch (e) {
+        console.error('Failed to save to cookies:', e);
+    }
 }
 
-function getCookie(name) {
-    const nameEQ = name + "=";
-    const ca = document.cookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) === ' ') {
-            c = c.substring(1, c.length);
-        }
-        if (c.indexOf(nameEQ) === 0) {
-            try {
-                return JSON.parse(decodeURIComponent(c.substring(nameEQ.length, c.length)));
-            } catch (e) {
-                console.error("Error parsing cookie:", name, e);
-                return null;
+function loadFromStorage(name) {
+    try {
+        // Try localStorage first
+        if (typeof(Storage) !== "undefined") {
+            const item = localStorage.getItem(name);
+            if (item) {
+                return JSON.parse(item);
             }
         }
+    } catch (e) {
+        console.warn('localStorage not available or corrupted, trying cookies:', e);
+    }
+    
+    // Fallback to cookies
+    try {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1, c.length);
+            }
+            if (c.indexOf(nameEQ) === 0) {
+                return JSON.parse(decodeURIComponent(c.substring(nameEQ.length, c.length)));
+            }
+        }
+    } catch (e) {
+        console.error("Error parsing cookie:", name, e);
     }
     return null;
 }
 
 function loadUserStats() {
-    const savedStats = getCookie(STATS_COOKIE_NAME);
+    const savedStats = loadFromStorage(STATS_COOKIE_NAME);
     if (savedStats && savedStats.version === STATS_VERSION) {
         userStats = { ...userStats, ...savedStats };
-        console.log('User statistics loaded from cookies');
+        console.log('User statistics loaded successfully');
+        console.log('Current stats:', userStats);
     } else {
         console.log('No valid statistics found, starting fresh');
         saveUserStats();
@@ -61,8 +91,8 @@ function loadUserStats() {
 }
 
 function saveUserStats() {
-    setCookie(STATS_COOKIE_NAME, userStats);
-    console.log('User statistics saved to cookies');
+    saveToStorage(STATS_COOKIE_NAME, userStats);
+    console.log('Current stats being saved:', userStats);
 }
 
 // Statistics Tracking Functions
@@ -378,6 +408,7 @@ function showDashboard() {
 }
 
 function showCategorySelectionScreen() {
+    scrollToTop();
     document.getElementById('dashboardScreen').style.display = 'none';
     document.getElementById('statisticsScreen').style.display = 'none';
     document.getElementById('categoryScreen').style.display = 'block';
@@ -392,6 +423,7 @@ function showCategorySelectionScreen() {
 }
 
 function showCustomTestSelection() {
+    scrollToTop();
     document.getElementById('dashboardScreen').style.display = 'none';
     document.getElementById('statisticsScreen').style.display = 'none';
     document.getElementById('categoryScreen').style.display = 'none';
@@ -434,6 +466,7 @@ function shuffleArray(array) {
 }
 
 function generateRandomTest() {
+    scrollToTop();
     if (allQuestionsFlat.length === 0) {
         alert("No questions available to generate a random test.");
         return;
@@ -802,6 +835,23 @@ function displayQuestion() {
         label.textContent = option.text || `Option ${option.id}`;
         label.classList.add('option-text');
 
+        // Add click handler to the entire option div for better click detection
+        optionDiv.addEventListener('click', function(e) {
+            // Don't trigger if clicking on an image (they have their own handlers)
+            if (e.target.tagName === 'IMG') {
+                return;
+            }
+            
+            // Don't trigger if in feedback mode
+            if (isFeedbackMode) {
+                return;
+            }
+            
+            // Toggle the checkbox and trigger selection
+            input.checked = !input.checked;
+            selectAnswer(option.id, isMultipleChoice);
+        });
+
         optionDiv.appendChild(input);
         optionDiv.appendChild(label);
 
@@ -940,6 +990,11 @@ document.addEventListener('DOMContentLoaded', initializeImageZoom);
 // Initialize the application when DOM is ready
 document.addEventListener('DOMContentLoaded', loadTestData);
 // --- Image Zoom Functionality End ---
+
+// Utility function to scroll to top
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
 function saveCurrentAnswer() {
     if (!currentQuestions || currentQuestionIndex < 0 || currentQuestionIndex >= currentQuestions.length) {
@@ -1294,6 +1349,7 @@ function resetTest() {
 
 // Statistics UI Functions
 function showStatistics() {
+    scrollToTop();
     updateStatisticsDisplay();
     document.getElementById('dashboardScreen').style.display = 'none';
     document.getElementById('categoryScreen').style.display = 'none';
@@ -1443,11 +1499,9 @@ function updateCategoryPerformanceDisplay() {
 
 function updateWeakAreasDisplay() {
     const container = document.getElementById('weakAreasContainer');
-    const practiceBtn = document.getElementById('practiceWeakBtn');
     
     if (userStats.weakQuestions.length === 0) {
         container.innerHTML = '<p>No weak areas identified yet. Great job!</p>';
-        practiceBtn.disabled = true;
         return;
     }
     
@@ -1468,7 +1522,6 @@ function updateWeakAreasDisplay() {
         `).join('');
     
     container.innerHTML = weakAreasHtml;
-    practiceBtn.disabled = false;
 }
 
 function calculateTrend(recentScores) {
@@ -1495,37 +1548,7 @@ function showStatsTab(tabName) {
     document.getElementById(tabName + 'Tab').classList.add('active');
 }
 
-function generateWeakAreasPractice() {
-    if (userStats.weakQuestions.length === 0) {
-        alert('No weak areas identified yet. Complete more tests first!');
-        return;
-    }
-    
-    // Get unique question IDs from weak questions (top 30 or all if less)
-    const weakQuestionIds = userStats.weakQuestions
-        .slice(0, 30)
-        .map(wq => wq.id);
-    
-    // Find actual question objects from allQuestionsFlat
-    const practiceQuestions = allQuestionsFlat.filter(q => 
-        weakQuestionIds.includes(q.question_id)
-    );
-    
-    if (practiceQuestions.length === 0) {
-        alert('Could not find questions for practice. Questions may have been updated.');
-        return;
-    }
-    
-    // Create a practice test category
-    isRandomTestActive = false;
-    currentCategory = {
-        subtopic_name: "Weak Areas Practice",
-        questions: shuffleArray([...practiceQuestions]).slice(0, Math.min(30, practiceQuestions.length)),
-        name: "Practice Test - Weak Areas"
-    };
-    
-    startTest(null);
-}
+
 
 function clearAllStatistics() {
     if (confirm('Are you sure you want to clear ALL statistics? This action cannot be undone.')) {
