@@ -461,6 +461,8 @@ function displayQuestion() {
         imgElement.style.maxWidth = '100%';
         imgElement.style.maxHeight = '300px';
         imgElement.style.display = 'none';
+        imgElement.style.cursor = 'zoom-in';
+        imgElement.style.transition = 'transform 0.2s ease-in-out';
 
         imgElement.onload = function() {
             imgElement.style.display = 'block';
@@ -469,6 +471,23 @@ function displayQuestion() {
             imgElement.style.display = 'none';
         };
         imgElement.src = imagePath;
+        
+        // Add click event to open modal for question image
+        imgElement.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Question image clicked, opening modal for:', imagePath);
+            openImageModal(imagePath);
+        });
+
+        // Add hover effect for question image
+        imgElement.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.05)';
+        });
+        imgElement.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+        
         imageContainer.appendChild(imgElement);
     }
     // --- Image Handling End ---
