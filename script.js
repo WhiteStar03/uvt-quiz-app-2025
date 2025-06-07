@@ -377,6 +377,7 @@ function showDashboard() {
 
 function showCategorySelectionScreen() {
     document.getElementById('dashboardScreen').style.display = 'none';
+    document.getElementById('statisticsScreen').style.display = 'none';
     document.getElementById('categoryScreen').style.display = 'block';
     document.getElementById('customTestScreen').style.display = 'none';
     document.getElementById('testScreen').style.display = 'none';
@@ -385,6 +386,7 @@ function showCategorySelectionScreen() {
 
 function showCustomTestSelection() {
     document.getElementById('dashboardScreen').style.display = 'none';
+    document.getElementById('statisticsScreen').style.display = 'none';
     document.getElementById('categoryScreen').style.display = 'none';
     document.getElementById('customTestScreen').style.display = 'block';
     document.getElementById('testScreen').style.display = 'none';
