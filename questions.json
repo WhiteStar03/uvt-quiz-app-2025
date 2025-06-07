@@ -1472,7 +1472,7 @@
               },
               {
                 "question_id": 4,
-                "question_text": "Which of the following sets of attributes is/are candidate keys in R?",
+                "question_text": "Considering the relation R(A, B, C, D, E, F) with attributes and functional dependencies from the previous question, which of the following sets of attributes is/are candidate keys in R?",
                 "options": [
                   {"id": "a", "text": "{B, F}"},
                   {"id": "b", "text": "{A, E}"},
@@ -1483,7 +1483,7 @@
               },
               {
                 "question_id": 5,
-                "question_text": "Which of the below statements are false?",
+                "question_text": "Given R defined in the previous question, which of the below statements are false?",
                 "options": [
                   {"id": "a", "text": "The relation R is in the first normal form"},
                   {"id": "b", "text": "The relation R is in the second normal form"},
