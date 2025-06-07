@@ -24,6 +24,7 @@ function getCategoryNameForImage(categoryName) {
         'Formal Languages and Automata Theory': 'FormalLanguagesandAutomataTheory',
         'Graph Theory and Combinatorics': 'GraphTheoryandCombinatorics',
         'Software Applications Design': 'SoftwareApplicationsDesign',
+        'Computer Networks': 'ComputerNetworks',
         'C Language': 'CLanguage',
         'C++ Language': 'CPPLanguage',
         'Java Language': 'JavaLanguage',
@@ -709,9 +710,22 @@ function finishTest() {
 function prepareReview() {
     const reviewContainer = document.getElementById('answerReview');
     reviewContainer.innerHTML = '<h3 style="margin-bottom: 20px;">Answer Review</h3>';
+    
+    console.log('prepareReview called for category:', currentCategory.subtopic_name);
+    console.log('userAnswers object:', userAnswers);
+    console.log('currentCategory.questions:', currentCategory.questions);
+    
     currentCategory.questions.forEach((question, index) => {
         const userAnswer = userAnswers[question.question_id] || [];
         const correctAnswer = question.correct_answers;
+        
+        console.log(`Question ${question.question_id}:`, {
+            questionText: question.question_text,
+            userAnswer: userAnswer,
+            correctAnswer: correctAnswer,
+            questionId: question.question_id
+        });
+        
         const sortedUserAnswer = [...userAnswer].sort();
         const sortedCorrectAnswer = [...correctAnswer].sort();
         const isCorrect = sortedUserAnswer.length === sortedCorrectAnswer.length &&
