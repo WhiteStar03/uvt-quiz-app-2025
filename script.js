@@ -691,24 +691,16 @@ function selectAnswer(optionId, isMultipleChoice) {
     const question = currentCategory.questions[currentQuestionIndex];
     const questionId = question.question_id;
 
-    if (isMultipleChoice) {
-        // Multiple choice: toggle selection
-        if (!userAnswers[questionId]) userAnswers[questionId] = [];
-        const index = userAnswers[questionId].indexOf(optionId);
-        if (index > -1) userAnswers[questionId].splice(index, 1);
-        else userAnswers[questionId].push(optionId);
+    // Always allow multiple selections to hide question type
+    // Initialize answer array if it doesn't exist
+    if (!userAnswers[questionId]) userAnswers[questionId] = [];
+    
+    // Toggle selection for all questions (behave like checkboxes)
+    const index = userAnswers[questionId].indexOf(optionId);
+    if (index > -1) {
+        userAnswers[questionId].splice(index, 1);
     } else {
-        // Single choice: uncheck all other options first, then check this one
-        const allInputs = document.querySelectorAll(`input[name="question_${questionId}"]`);
-        allInputs.forEach(input => {
-            input.checked = false;
-        });
-        // Check the selected option
-        const selectedInput = document.querySelector(`#option_${questionId}_${optionId}`);
-        if (selectedInput) {
-            selectedInput.checked = true;
-        }
-        userAnswers[questionId] = [optionId];
+        userAnswers[questionId].push(optionId);
     }
 
     document.querySelectorAll(`#optionsContainer .option`).forEach(optDiv => {
