@@ -809,7 +809,9 @@
             "questions": [
               {
                 "question_id": 1,
-                "question_text": "Analyze the following code:\nclass A:\n    def __init__(self, s):\n        self.s = s\n    def print(self):\n        print(s)\na = A(\"Welcome\")\na.print()",
+                "question_text": "Analyze the following code:",
+                "question_code": "class A:\n    def __init__(self, s):\n        self.s = s\n    def print(self):\n        print(s)\na = A(\"Welcome\")\na.print()",
+                "question_syntax": "python",
                 "options": [
                   {"id": "a", "text": "The program has an error because class A does not have a constructor"},
                   {"id": "b", "text": "The program has an error because class A should have a print method with signature print(self, s)"},
@@ -821,6 +823,8 @@
               {
                 "question_id": 2,
                 "question_text": "What is the result of the execution of the following code?\nx = 2\nfor i in range(x):\n    x += 1\nprint(x)",
+                "question_code": "x = 2\nfor i in range(x):\n    x += 1\n    print (x)",
+                "question_syntax": "python",
                 "options": [
                   {"id": "a", "text": "0 1 2 3 4 ..."},
                   {"id": "b", "text": "0 1"},
@@ -831,7 +835,9 @@
               },
               {
                 "question_id": 3,
-                "question_text": "Which is the output of the following code?\nnames1 = ['Amir', 'Barry', 'Charles', 'Dao']\nnames2 = names1\nnames3 = names1[:]\nnames2[0] = 'Alice'\nnames3[1] = 'Bob'\nsum = 0\nfor ls in (names1, names2, names3):\n    if ls[0] == 'Alice':\n        sum += 1\n    if ls[1] == 'Bob':\n        sum += 10\nprint(sum)",
+                "question_text": "Which is the output of the following code?",
+                "question_code": "names1 = ['Amir', 'Barry', 'Charles', 'Dao']\nnames2 = names1\nnames3 = names1[:]\nnames2[0] = 'Alice'\nnames3[1] = 'Bob'\nsum = 0\nfor ls in (names1, names2, names3):\n    if ls[0] == 'Alice':\n        sum += 1\n    if ls[1] == 'Bob':\n        sum += 10\nprint(sum)",
+                "question_syntax": "python",
                 "options": [
                   {"id": "a", "text": "11"},
                   {"id": "b", "text": "12"},
@@ -880,7 +886,9 @@
               },
               {
                 "question_id": 7,
-                "question_text": "Which is the output of the following code?\nclass A:\n    def __init__(self):\n        self.calcI(30)\n    def calcI(self, i):\n        self.i = 2 * i;\n\nclass B(A):\n    def __init__(self):\n        super().__init__()\n        print(\"i from B is\", self.i)\n    def calcI(self, i):\n        self.i = 3 * i;\n\nb = B()",
+                "question_text": "Which is the output of the following code?",
+                "question_code": "class A:\n    def __init__(self):\n        self.calcI(30)\n\n    def calcI(self, i):\n        self.i = 2 * i;\n\nclass B(A):\n    def __init__(self):\n        super().__init__()\n        print(\"i from B is\", self.i)\n    def calcI(self, i):\n        self.i = 3 * i;\n\nb = B()",
+                "question_syntax": "python",
                 "options": [
                   {"id": "a", "text": "Just the __init__ method of class B gets invoked"},
                   {"id": "b", "text": "The __init__ method of class A gets invoked and it displays \"i from B is 0\""},
@@ -903,7 +911,9 @@
               },
               {
                 "question_id": 9,
-                "question_text": "Which of the following statements are true about the following code?\ns=0\ntry:\n    f = open(\"test.txt\",encoding = 'utf-8')\n    for i in f:\n        s += len(i)\nfinally:\n    f.close()\nprint(s)",
+                "question_text": "Which of the following statements are true about the following code?",
+                "question_code": "s=0\ntry:\n    f = open(\"test.txt\",encoding = 'utf-8')\n    for i in f:\n        s += len(i)\nfinally:\n    f.close()\n\nprint(s)",
+                "question_syntax": "python",
                 "options": [
                   {"id": "a", "text": "the program will print the size of an existing \"test.txt\" file, in bytes"},
                   {"id": "b", "text": "the program will crash because i is an integer"},
@@ -919,7 +929,9 @@
             "questions": [
               {
                 "question_id": 1,
-                "question_text": "What's wrong with the sequence:\nint t[N], *low=t, *mid, *high=&t[N-1];\nmid = (low+high) / 2;",
+                "question_text": "What's wrong with the sequence:",
+                "question_code": "int t[N], *low=t, *mid, *high=&t[N-1];\nmid = (low+high) / 2;",
+                "question_syntax": "c",
                 "options": [
                   {"id": "a", "text": "addition of two pointers is an illegal operation"},
                   {"id": "b", "text": "a pointer can't be initialized with an array"},
@@ -931,6 +943,8 @@
               {
                 "question_id": 2,
                 "question_text": "Knowing that the . and the -> operator have equal precedence, higher than the precedence of the * operator and assuming the following declarations, which of the expressions below are correct?",
+                "question_code": "struct point {\n    int x, y;\n};\nstruct rectangle{\n    struct point p1, p2;\n} *r[N];",
+                "question_syntax": "c",
                 "options": [
                   {"id": "a", "text": "r[i].p1.x"},
                   {"id": "b", "text": "r[i]->p1.x"},
@@ -1005,7 +1019,9 @@
               },
               {
                 "question_id": 9,
-                "question_text": "What will be the value of variable a (before return) by running the following C code:\nint main(){\n    char a, a1=200, a2=110;\n    a = a1 + a2;\n    return 0;\n}",
+                "question_text": "What will be the value of variable a (before return) by running the following C code:",
+                "question_code": "int main(){\n    char a, a1=200, a2=110;\n    a = a1 + a2;\n    return 0;\n}",
+                "question_syntax": "c",
                 "options": [
                   {"id": "a", "text": "a = 54"},
                   {"id": "b", "text": "a = 310"},
@@ -1016,7 +1032,9 @@
               },
               {
                 "question_id": 10,
-                "question_text": "What will be the value of variable \"b\" after execution of the following code:\nunsigned char a; int b=0;\nfor (a=0; a<256; a++) { b++;}",
+                "question_text": "What will be the value of variable \"b\" after execution of the following code:",
+                "question_code": "unsigned char a; int b=0;\nfor (a=0; a<256; a++) { b++;}",
+                "question_syntax": "c",
                 "options": [
                   {"id": "a", "text": "there is an infinite loop"},
                   {"id": "b", "text": "0"},
@@ -1028,7 +1046,9 @@
               },
               {
                 "question_id": 11,
-                "question_text": "Select the correct statement(s) regarding the following lines:\nconst int a = 12;\n#define b 12",
+                "question_text": "Select the correct statement(s) regarding the following lines:",
+                "question_code": "const int a = 12;\n#define b 12",
+                "question_syntax": "c",
                 "options": [
                   {"id": "a", "text": "there is no difference between const and define"},
                   {"id": "b", "text": "the const definition will allocate space in memory"},
@@ -1062,7 +1082,9 @@
               },
               {
                 "question_id": 14,
-                "question_text": "What will be the output after running the following code:\nint compute(int x){\n    static int b=20;\n    b--;\n    return b+x;\n}\nint main (void){\n    int i;\n    for (i=3;i>=0;i--)\n        printf(\"%d \",compute(i));\n    return 0;\n}",
+                "question_text": "What will be the output after running the following code:",
+                "question_code": "int compute(int x){\n     static int b=20;\n    b--;\n    return b+x;\n}\n\nint main (void){\n    int i;\n    for (i=3;i>=0;i--)\n    printf(\"%d \",compute(i));\n    return 0;\n}",
+                "question_syntax": "c",
                 "options": [
                   {"id": "a", "text": "22 20 18 16"},
                   {"id": "b", "text": "23 22 21 20"},
@@ -1136,6 +1158,8 @@
               {
                 "question_id": 5,
                 "question_text": "How many times the constructors of class Date are invoked?",
+                "question_code": "class Date {\n public:\n  Date(int day=0, int month=0, int year=0);\n    Date(const Date& ref);\n};\n\nvoid g(Date d) { }\nvoid f() {\n Date d{7, 3, 2007};\n Date d1;\n Date d2 = d;\n d2 = d;\n g(d);\n}",
+                "question_syntax": "cpp",
                 "options": [
                   {"id": "a", "text": "2"},
                   {"id": "b", "text": "3"},
@@ -1146,7 +1170,9 @@
               },
               {
                 "question_id": 6,
-                "question_text": "Which of the following statements is true?",
+                "question_text": "Which of the following statements is true?",   
+                "question_code": "class Shape { virtual void draw() = 0; };\n\nstruct Rectangle : Shape {\n void addControlPoint(int x, int y);\n};\n\nint main() { Rectangle c; return 0; }",
+                "question_syntax": "cpp",
                 "options": [
                   {"id": "a", "text": "class Rectangle cannot be instantiated because of the method addControlPoint that is not implementated"},
                   {"id": "b", "text": "class Rectangle cannot be instantiated because it is an abstract class"},
@@ -1180,6 +1206,8 @@
               {
                 "question_id": 9,
                 "question_text": "Which condition needs to be satisfied so that the code below compiles and the execution of function min returns the minimum value of the arguments?",
+                "question_code": "template <class T> min(T x, T y) {\n    return x < y ? x : y;\n}",
+                "question_syntax": "cpp",
                 "options": [
                   {"id": "a", "text": "?: operator needs to be overloaded for type T"},
                   {"id": "b", "text": "< operator needs to be overloaded for type T"},
@@ -1190,6 +1218,8 @@
               {
                 "question_id": 10,
                 "question_text": "Running the C++ code below will print",
+                "question_syntax": "cpp",
+                "question_code": "#include <iostream>\nstruct C {\n    C() { std::cout << \"Red \"; }\n};\nclass B {\n    protected:\n    B() { std::cout << \"Vehicle \"; }\n};\nstruct A : B {\n    C c;\n    A() { std::cout << \"Car \"; }\n};\nint main(){\n    A a;\n}",
                 "options": [
                   {"id": "a", "text": "Red Vehicle Car"},
                   {"id": "b", "text": "Red Car Vehicle"},
@@ -1213,7 +1243,9 @@
               },
               {
                 "question_id": 12,
-                "question_text": "When an Overflow exception is thrown, then the code will print ...",
+                "question_text": "When an Overflow exception is thrown, then the code will print ...",      
+                "question_code": "try {\n    // calling math operations that may throw exceptions\n}\ncatch(MathException me) {\n    std::cerr << \"MathException \";\n}\ncatch(Overflow o) {\n    std::cerr << \"Overflow \";\n}",
+                "question_syntax": "cpp",
                 "options": [
                   {"id": "a", "text": "Overflow"},
                   {"id": "b", "text": "Overflow MathException"},
@@ -1226,6 +1258,8 @@
               {
                 "question_id": 13,
                 "question_text": "Fill in the space below the message that reflects the result",
+                "question_code": "void f(list<string>& lst) {\n    list<string>::const_iterator x = find(lst.begin(), lst.end(), \"Timisoara\");\n\n    if (x==lst.end()) std::cout << \"__________________\";\n}",
+                "question_syntax": "cpp",
                 "options": [
                   {"id": "a", "text": "Found Timisoara"},
                   {"id": "b", "text": "Did not find Timisoara"},
@@ -1247,6 +1281,8 @@
               {
                 "question_id": 15,
                 "question_text": "Which of the following declarations are correct",
+                "question_code": "class Int {\n  int x;\npublic:\n  Int(int i) : x{i} {}\n};\n\ntemplate<class T, int size> struct vec {\n};",
+                "question_syntax": "cpp",
                 "options": [
                   {"id": "a", "text": "vec<int, 10> v;"},
                   {"id": "b", "text": "vec<Int, 100-10/2> v;"},
@@ -1259,6 +1295,8 @@
               {
                 "question_id": 16,
                 "question_text": "Which declarations are not correct?",
+                "question_code": "class date{\npublic:\n explicit date(int day = 0, int month = 0, int year = 0);\n ~date();\n};",
+                "question_syntax": "cpp",
                 "options": [
                   {"id": "a", "text": "date d;"},
                   {"id": "b", "text": "date d = 1;"},
@@ -1282,6 +1320,8 @@
               {
                 "question_id": 18,
                 "question_text": "What do you need to do in order to successfully compile the code.",
+                "question_code": "class animal {\n  virtual void make_noise() = 0;\n  virtual void eat() = 0;\n};\n\nstruct cat : animal {\n  char* fur_color();\n};\n\nint main() {\n  cat tom;\n}",
+                "question_syntax": "cpp",
                 "options": [
                   {"id": "a", "text": "override the virtual method make_noise in class cat"},
                   {"id": "b", "text": "override the virtual method eat in class cat"},
@@ -1304,6 +1344,8 @@
               {
                 "question_id": 20,
                 "question_text": "Select all true statements",
+                "question_code": "std::ostream& operator<<(std::ostream& out, const complex& o){\n  std::cout << re << \"i\" << im;\n  return out;\n}",
+                "question_syntax": "cpp",
                 "options": [
                   {"id": "a", "text": "given the declaration complex c{1, 2}; will print 1i2"},
                   {"id": "b", "text": "compiling the code will produce an error because operator << doesn't have access to internal representation of a complex number (re and im)"},
@@ -1386,7 +1428,9 @@
               },
               {
                 "question_id": 7,
-                "question_text": "Which is the output of the following program?",
+                "question_text": "Which is the output of the following program?",              
+                "question_code": "public class MainClass {\n  void method(int ... a){\n    System.out.print(1 + \" \");\n  }\n  void method(int[] a){\n    System.out.print(2+ \" \");\n  }\n  public static void main(String args[]){\n    MainClass a = new MainClass();\n    a.method(new int[]{1,2,3,4});\n  }\n}",
+                "question_syntax": "java",
                 "options": [
                   {"id": "a", "text": "1"},
                   {"id": "b", "text": "2"},
@@ -1411,6 +1455,8 @@
               {
                 "question_id": 9,
                 "question_text": "Which of the following lines of code is suitable to start a thread?",
+                "question_code": "class X implements Runnable {\n public void run() {\n  System.out.println(\"Thread is in Running state\");\n }\n public static void main(String args[]) {\n  /* Missing code? */\n }\n}",
+                "question_syntax": "java",
                 "options": [
                   {"id": "a", "text": "X obj = new X(); Thread t=new Thread(obj); t.start();"},
                   {"id": "b", "text": "X obj = new X(); Thread t=new Thread(X);"},
@@ -1424,6 +1470,8 @@
               {
                 "question_id": 10,
                 "question_text": "What is the result of the following statements?",
+                "question_code": "List list = new ArrayList();\nlist.add(\"one\");\nlist.add(\"two\");\nlist.add(7);\n6: for (String s: list)\n7:     System.out.print(s);",
+                "question_syntax": "java",
                 "options": [
                   {"id": "a", "text": "onetwo"},
                   {"id": "b", "text": "onetwo followed by an exception"},

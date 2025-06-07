@@ -740,11 +740,23 @@ function displayQuestion() {
     }
 
     const questionText = document.getElementById('questionText');
+    const questionCode = document.getElementById('questionCode');
+    const questionCodeContainer = document.getElementById('questionCodeContainer');
     const optionsContainer = document.getElementById('optionsContainer');
     const questionStatus = document.getElementById('questionStatus');
     const progressFill = document.getElementById('progressFill');
 
     questionText.textContent = question.question_text;
+    if ('question_code' in question) {
+        questionCode.textContent = question.question_code || '';
+        questionCodeContainer.style.display = 'block';
+        if (question.question_syntax) questionCode.classList.add(`language-${question.question_syntax}`);
+    }
+    else { 
+        questionCodeContainer.style.display = 'none';
+        questionCode.textContent = '';
+    }
+
     questionStatus.textContent = `${currentQuestionIndex + 1} / ${totalQuestions}`;
 
     // Update progress bar
@@ -916,6 +928,10 @@ function displayQuestion() {
     });
     
     updateNavigationButtons();
+    if ('question_code' in question) { 
+        if (questionCode.hasAttribute('data-highlighted')) questionCode.removeAttribute('data-highlighted');
+        hljs.highlightElement(questionCode);
+    }
 }
 
 function updateNavigationButtons() {
