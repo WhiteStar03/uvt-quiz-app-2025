@@ -663,25 +663,17 @@ function saveCurrentAnswer() {
 
 function getSelectedOptionValue(questionName) {
     const inputs = document.getElementsByName(questionName);
-    const question = currentQuestions[currentQuestionIndex]; // Get current question to check if it's multiple choice
-    const isMultipleChoice = question && question.correct_answers && question.correct_answers.length > 1;
-
-    if (isMultipleChoice) {
-        const selectedValues = [];
-        inputs.forEach(input => {
-            if (input.checked) {
-                selectedValues.push(input.value);
-            }
-        });
-        return selectedValues.length > 0 ? selectedValues : undefined; // Return array or undefined if none selected
-    } else {
-        for (let i = 0; i < inputs.length; i++) {
-            if (inputs[i].checked) {
-                return [inputs[i].value]; // Return as array for consistency
-            }
+    
+    // Always collect ALL selected values regardless of question type
+    // This allows multiple selections even for single-choice questions
+    const selectedValues = [];
+    inputs.forEach(input => {
+        if (input.checked) {
+            selectedValues.push(input.value);
         }
-    }
-    return undefined; // Return undefined if no option is selected for single choice
+    });
+    
+    return selectedValues.length > 0 ? selectedValues : undefined;
 }
 
 
