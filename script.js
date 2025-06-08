@@ -750,13 +750,16 @@ function displayQuestion() {
     if ('question_code' in question) {
         questionCode.textContent = question.question_code || '';
         questionCodeContainer.style.display = 'block';
-        if (question.question_syntax) questionCode.classList.add(`language-${question.question_syntax}`);
-    }
-    else { 
+
+        const existingLangClass = Array.from(questionCode.classList).find(c => c.startsWith('language-'));
+        if (existingLangClass) { questionCode.classList.remove(existingLangClass); } // Remove already existing language class
+        if (question.question_syntax) { questionCode.classList.add(`language-${question.question_syntax}`); } 
+    } else {
         questionCodeContainer.style.display = 'none';
         questionCode.textContent = '';
+        const existingLangClass = Array.from(questionCode.classList).find(c => c.startsWith('language-'));
+        if (existingLangClass) { questionCode.classList.remove(existingLangClass); } // Remove already existing language class
     }
-
     questionStatus.textContent = `${currentQuestionIndex + 1} / ${totalQuestions}`;
 
     // Update progress bar
