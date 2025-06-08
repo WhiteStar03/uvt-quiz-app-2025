@@ -842,30 +842,48 @@ function displayQuestion() {
             optionDiv.classList.add('disabled-option');
         }
 
-        const label = document.createElement('label');
-        label.htmlFor = input.id;
-        label.textContent = option.text || `Option ${option.id}`;
-        label.classList.add('option-text');
+        if (option.is_code) {
+            const label = document.createElement('label');
+            const preElement = document.createElement('pre');
+            const codeElement = document.createElement('code');
 
-        // Add click handler to the entire option div for better click detection
-        optionDiv.addEventListener('click', function(e) {
-            // Don't trigger if clicking on an image (they have their own handlers)
-            if (e.target.tagName === 'IMG') {
-                return;
-            }
-            
-            // Don't trigger if in feedback mode
-            if (isFeedbackMode) {
-                return;
-            }
-            
-            // Toggle the checkbox and trigger selection
-            input.checked = !input.checked;
-            selectAnswer(option.id, isMultipleChoice);
-        });
+            label.htmlFor = input.id;
 
-        optionDiv.appendChild(input);
-        optionDiv.appendChild(label);
+            codeElement.textContent = option.text;
+            codeElement.classList.add('language-' + option.syntax);
+
+            preElement.appendChild(codeElement);
+            label.appendChild(preElement);
+            optionDiv.appendChild(input);
+            optionDiv.appendChild(label);
+
+            hljs.highlightElement(codeElement);
+        }
+        else {
+            const label = document.createElement('label');
+            label.htmlFor = input.id;
+            label.textContent = option.text || `Option ${option.id}`;
+            label.classList.add('option-text');
+
+            // Add click handler to the entire option div for better click detection
+            optionDiv.addEventListener('click', function(e) {
+                // Don't trigger if clicking on an image (they have their own handlers)
+                if (e.target.tagName === 'IMG') {
+                    return;
+                }
+                
+                // Don't trigger if in feedback mode
+                if (isFeedbackMode) {
+                    return;
+                }
+                
+                // Toggle the checkbox and trigger selection
+                input.checked = !input.checked;
+                selectAnswer(option.id, isMultipleChoice);
+            });
+            optionDiv.appendChild(input);
+            optionDiv.appendChild(label);
+        }   
 
         // --- Add image for the option ---
         if (option.id && questionIdForImage) {

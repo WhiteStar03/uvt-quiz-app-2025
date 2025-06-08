@@ -647,10 +647,10 @@
                 "question_id": 1,
                 "question_text": "For the mobile application you are implementing, you have to store in the database only the Romanian phone numbers (e.g. +40724370012 / 0040724370012) and email addresses with a Romanian domain (e.g. ion@domeniu.ro; popescu.maria@dom.ro). The phone numbers must have exactly 9 digits after the Romanian prefix 0040/+40. The name of the domain and the extension of the email are written in lowercase letters and are case sensitive. Which of the following regular expressions express your needs:",
                 "options": [
-                  {"id": "a", "text": "(+407|00407)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9); ((a|...|z|A|...|Z)+.(a|...|z|A|...|Z)+@(a|...|z)+.ro)|((a|...|z|A|...|Z)+@(a|...|z)*. ro)"},
-                  {"id": "b", "text": "(+407|00407)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9); ((a|...|z|A|...|Z)+.(a|...|z|A|...|Z)+@(a|...|z)+.ro)|((a|...|z|A|...|Z)+@(a|...|z)+.ro)"},
-                  {"id": "c", "text": "(+407|00407)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9); ((a|...|z|A|...|Z)+.(a|...|z|A|...|Z)+@(a|...|z)+.ro) ((a|...|z|A|...|Z)+@(a|...|z)+.ro)"},
-                  {"id": "d", "text": "(+407|00407)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9); ((a|...|z|A|...|Z)+.(a|...|z|A|...|Z)+@(a|...|z)+.ro)|((a|...|z|A|...|Z)+@(a|...|z)+.ro)"}
+                  {"id": "a", "text": "(+407|00407)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9);\n((a|...|z|A|...|Z)+.(a|...|z|A|...|Z)+@(a|...|z)+.ro)|((a|...|z|A|...|Z)+@(a|...|z)*. ro)"},
+                  {"id": "b", "text": "(+407|00407)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9);\n((a|...|z|A|...|Z)+.(a|...|z|A|...|Z)+@(a|...|z)+.ro)|((a|...|z|A|...|Z)+@(a|...|z)+.ro)"},
+                  {"id": "c", "text": "(+407|00407)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9);\n((a|...|z|A|...|Z)+.(a|...|z|A|...|Z)+@(a|...|z)+.ro) ((a|...|z|A|...|Z)+@(a|...|z)+.ro)"},
+                  {"id": "d", "text": "(+407|00407)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9)(0|...|9);\n((a|...|z|A|...|Z)+.(a|...|z|A|...|Z)+@(a|...|z)+.ro)|((a|...|z|A|...|Z)+@(a|...|z)+.ro)"}
                 ],
                 "correct_answers": ["b"]
               },
@@ -724,19 +724,49 @@
                 "question_id": 8,
                 "question_text": "Which of the following Java code snippets implements a GREP matcher for the C2H2-type zinc finger domain signature?",
                 "options": [
-                  {"id": "a", "text": "String re = \"C.{2,4}C...[LIVMFYWCX].{8}H.{3,5}H\";"},
-                  {"id": "b", "text": "String re = \"C.{2,4}C...[^LIVMFYWCX].{8}H.{3,5}H\";"},
-                  {"id": "c", "text": "String re = \"C.{2,4}C...{LIVMFYWCX}.{8}H.{3,5}H\";"}
+                  {
+                    "id": "a",
+                    "text": "String re = \"C.{2,4}C...[LIVMFYWCX].{8}H.{3,5}H\";",
+                    "syntax": "java",
+                    "is_code": true
+                  },
+                  {
+                    "id": "b", 
+                    "text": "String re = \"C.{2,4}C...[^LIVMFYWCX].{8}H.{3,5}H\";",
+                    "syntax": "java",
+                    "is_code": true
+                  },
+                  {
+                    "id": "c", 
+                    "text": "String re = \"C.{2,4}C...{LIVMFYWCX}.{8}H.{3,5}H\";",
+                    "syntax": "java",
+                    "is_code": true
+                  }
                 ],
                 "correct_answers": ["a"]
               },
               {
                 "question_id": 9,
-                "question_text": "Which of the following Java code snippets implements a GREP matcher for email addresses with the edu or com domains?",
+                "question_text": "Which of the following Java code snippets implements a Generalized Regular Expression Pattern (GREP) matcher for email addresses with the edu or com domains?",
                 "options": [
-                  {"id": "a", "text": "String re = \"[a-z]*@([a-z]+\\.)+( edu|com)\";"},
-                  {"id": "b", "text": "String re = \"[a-z]+@([a-z]+\\.)+( edu|com)\";"},
-                  {"id": "c", "text": "String re = \"[^a-z]+@([a-z]+\\.)+( edu|com)\";"}
+                  {
+                    "id": "a", 
+                    "text": "String re = \"[a-z]*@([a-z]+\\.)+(edu|com)\";\nString zincFinger = \"wayne@cs.princeton.edu\";\nboolean test = zincFinger.matches(re);",
+                    "syntax": "java",
+                    "is_code": true
+                  },
+                  {
+                    "id": "b", 
+                    "text": "String re = \"[a-z]+@([a-z]+\\.)+(edu|com)\";\nString zincFinger = \"wayne@cs.princeton.edu\";\nboolean test = zincFinger.matches(re);",
+                    "syntax": "java",
+                    "is_code": true
+                  },
+                  {
+                    "id": "c", 
+                    "text": "String re = \"[^a-z]+@([a-z]+\\.)+(edu|com)\";\nString zincFinger = \"wayne@cs.princeton.edu\";\nboolean test = zincFinger.matches(re);",
+                    "syntax": "java",
+                    "is_code": true
+                  }
                 ],
                 "correct_answers": ["b"]
               },
@@ -1008,7 +1038,9 @@
               },
               {
                 "question_id": 8,
-                "question_text": "What would the value of q-p be if:\nint t[20], *p=t, *q=&t[19];",
+                "question_text": "What would the value of q-p be if:",
+                "question_code": "int t[20], *p=t, *q=&t[19];",
+                "question_syntax": "c",
                 "options": [
                   {"id": "a", "text": "19"},
                   {"id": "b", "text": "20"},
@@ -1196,10 +1228,30 @@
                 "question_id": 8,
                 "question_text": "What is the minimal implementation of class INT so that the declarations INT i{10}, ii{i}; are correct.",
                 "options": [
-                  {"id": "a", "text": "struct INT { INT(int x); };"},
-                  {"id": "b", "text": "struct INT { INT(int x) {}; };"},
-                  {"id": "c", "text": "struct INT { INT(int x) {} INT(const INT& r) {} };"},
-                  {"id": "d", "text": "struct INT { INT(int x); INT(const INT& r); };"}
+                  {
+                    "id": "a", 
+                    "text": "struct INT\n{\n    INT(int x);\n};",
+                    "syntax": "cpp",
+                    "is_code": true
+                  },
+                  {
+                    "id": "b", 
+                    "text": "struct INT\n{\n    INT(int x) {};\n};",
+                    "syntax": "cpp",
+                    "is_code": true
+                  },
+                  {
+                    "id": "c", 
+                    "text": "struct INT\n{\n    INT(int x) {}\n    INT(const INT& r) {}\n};",
+                    "syntax": "cpp",
+                    "is_code": true
+                  },
+                  {
+                    "id": "d", 
+                    "text": "struct INT\n{\n    INT(int x);\n    INT(const INT& r);\n};",
+                    "syntax": "cpp",
+                    "is_code": true
+                  }
                 ],
                 "correct_answers": ["b"]
               },
@@ -1458,12 +1510,37 @@
                 "question_code": "class X implements Runnable {\n public void run() {\n  System.out.println(\"Thread is in Running state\");\n }\n public static void main(String args[]) {\n  /* Missing code? */\n }\n}",
                 "question_syntax": "java",
                 "options": [
-                  {"id": "a", "text": "X obj = new X(); Thread t=new Thread(obj); t.start();"},
-                  {"id": "b", "text": "X obj = new X(); Thread t=new Thread(X);"},
-                  {"id": "c", "text": "X x= new X(); Thread t=new Thread(); x.run();"},
-                  {"id": "d", "text": "Thread t=new Thread(X()); t.start();"},
+                  {
+                    "id": "a", 
+                    "text": "X obj = new X();\nThread t=new Thread(obj);\nt.start();",
+                    "syntax": "java",
+                    "is_code":true
+                  },
+                  {
+                    "id": "b", 
+                    "text": "X obj = new X();\nThread t=new Thread(X);",
+                    "syntax": "java",
+                    "is_code":true
+                  },
+                  {
+                    "id": "c", 
+                    "text": "X x= new X();\nThread t=new Thread();\nx.run();",
+                    "syntax": "java",
+                    "is_code":true
+                  },
+                  {
+                    "id": "d", 
+                    "text": "Thread t=new Thread(X());\nt.start();",
+                    "syntax": "java",
+                    "is_code":true
+                  },
                   {"id": "e", "text": "None of these"},
-                  {"id": "f", "text": "Thread t=new Thread(new X()); t.start();"}
+                  {
+                    "id": "f", 
+                    "text": "Thread t=new Thread(new X());\nt.start();",
+                    "syntax": "java",
+                    "is_code":true
+                  }
                 ],
                 "correct_answers": ["a", "f"]
               },
@@ -1488,6 +1565,8 @@
               {
                 "question_id": 1,
                 "question_text": "If T2 is executed under repeatable read isolation level, which statements are true?",
+                "question_code": "(T1) UPDATE R SET A = A*2\n(T2) SELECT AVG(A) FROM R; SELECT MAX(A) FROM R",
+                "question_syntax": "sql",
                 "options": [
                   {"id": "a", "text": "IF AVG(A) = 1.5 then MAX(A) equals to 2 or 4"},
                   {"id": "b", "text": "AVG(A) = 1.5 and MAX(A) = 2 , always"},
@@ -1555,7 +1634,9 @@
               },
               {
                 "question_id": 7,
-                "question_text": "How many rows will return the following query?",
+                "question_text": "How many rows will return the following query?",              
+                "question_code": "SELECT department_id, SUM(salary)\nFROM employees\nGROUP BY department_id\nHAVING SUM(NVL(salary,1000)) > 4000;",
+                "question_syntax": "sql",
                 "options": [
                   {"id": "a", "text": "No rows (empty)"},
                   {"id": "b", "text": "One row"},
@@ -1568,10 +1649,30 @@
                 "question_id": 8,
                 "question_text": "Which of the following queries returns the identifier (ID) and the name of all departments without any employee?",
                 "options": [
-                  {"id": "a", "text": "SELECT d.department_id, d.department_name FROM departments d WHERE NOT EXISTS (SELECT 1 FROM employees e WHERE e.department_id=d.department_id);"},
-                  {"id": "b", "text": "SELECT d.department_id, d.department_name FROM employees e LEFT OUTER JOIN departments d ON (d.department_id=e.department_id) WHERE e.department_id IS NULL;"},
-                  {"id": "c", "text": "SELECT d.department_id, d.department_name FROM employees e RIGHT OUTER JOIN departments d ON (d.department_id=e.department_id) WHERE e.department_id IS NULL;"},
-                  {"id": "d", "text": "SELECT department_id, department_name FROM departments MINUS SELECT d.department_id, d.department_name FROM employees e JOIN departments d ON e.department_id=d.department_id;"}
+                  {
+                    "id": "a",
+                    "text": "SELECT d.department_id, d.department_name\nFROM departments d\nWHERE NOT EXISTS (SELECT 1 FROM employees e WHERE e.department_id=d.department_id);",
+                    "syntax": "sql",
+                    "is_code": true
+                  },
+                  {
+                    "id": "b",   
+                    "text": "SELECT d.department_id, d.department_name\nFROM employees e LEFT OUTER JOIN departments d\nON (d.department_id=e.department_id) WHERE e.department_id IS NULL;",
+                    "syntax": "sql", 
+                    "is_code": true
+                  },
+                  {
+                    "id": "c",
+                    "text": "SELECT d.department_id, d.department_name\nFROM employees e RIGHT OUTER JOIN departments d\nON (d.department_id=e.department_id) WHERE e.department_id IS NULL;",
+                    "syntax": "sql", 
+                    "is_code": true
+                  },
+                  {
+                    "id": "d",   
+                    "text": "SELECT department_id, department_name\nFROM departments\nMINUS\nSELECT d.department_id, d.department_name\nFROM employees e JOIN departments d ON e.department_id=d.department_id;",
+                    "syntax": "sql", 
+                    "is_code": true
+                  }
                 ],
                 "correct_answers": ["a", "c", "d"]
               },
@@ -1599,7 +1700,9 @@
               },
               {
                 "question_id": 11,
-                "question_text": "Which statement is true regarding this SQL statement?",
+                "question_text": "Which statement is true regarding this SQL statement?",             
+                "question_code": "SELECT product_id, COUNT(order_id) total, unit_price\nFROM order_items\nWHERE unit_price>1000 AND COUNT(order_id)>5\nGROUP BY product_id, unit_price;",
+                "question_syntax": "sql",            
                 "options": [
                   {"id": "a", "text": "The statement would execute and give you the desired result"},
                   {"id": "b", "text": "The statement would not execute because the aggregate function is used in the WHERE clause"},
@@ -1612,17 +1715,44 @@
                 "question_id": 12,
                 "question_text": "Which of the following queries will return the specified columns?",
                 "options": [
-                  {"id": "a", "text": "Query A"},
-                  {"id": "b", "text": "Query B"},
-                  {"id": "c", "text": "Query C"},
-                  {"id": "d", "text": "Query D"},
-                  {"id": "e", "text": "Query E"}
+                  {
+                    "id": "a",   
+                    "text": "SELECT first_name, salary\nFROM employees\nWHERE (manager_id, salary) >= ALL (SELECT manager_id, salary\n                                   FROM employees WHERE employee_id = 101)\nAND employee_id <> 101;",
+                    "syntax": "sql", 
+                    "is_code": true
+                  },
+                  {
+                    "id": "b",   
+                    "text": "SELECT first_name, salary\nFROM employees\nWHERE (manager_id, salary) >= (SELECT manager_id, salary\n                               FROM employees\n                               WHERE employee_id = 101)\nAND employee_id <> 101;",
+                    "syntax": "sql", 
+                    "is_code": true
+                  },
+                  {
+                    "id": "c",   
+                    "text": "SELECT first_name, salary\nFROM employees\nWHERE (manager_id, salary) >= ANY (SELECT manager_id, salary\n                                   FROM employees\n                                   WHERE employee_id = 101 AND employee_id <> 101);",
+                    "syntax": "sql", 
+                    "is_code": true
+                  },
+                  {
+                    "id": "d",   
+                    "text": "SELECT first_name, salary\nFROM employees\nWHERE manager_id = (SELECT manager_id\n                      FROM employees\n                      WHERE employee_id = 101)\nAND salary >= (SELECT salary\n               FROM employees\n               WHERE employee_id = 101)\nAND employee_id <> 101;",
+                    "syntax": "sql", 
+                    "is_code": true
+                  },
+                  {
+                    "id": "e",   
+                    "text": "SELECT e.first_name, e.salary\nFROM employees e, employees m\nWHERE m.employee_id = 101 AND e.manager_id = m.manager_id\nAND e.salary >= m.salary AND e.employee_id <> m.employee_id;",
+                    "syntax": "sql", 
+                    "is_code": true
+                  }
                 ],
                 "correct_answers": ["d", "e"]
               },
               {
                 "question_id": 13,
                 "question_text": "Which statement is true regarding the PROD_ID_PK constraint?",
+                "question_code": "CREATE TABLE products\n(product_id NUMBER(6) CONSTRAINT prod_id_pk PRIMARY KEY,\n product_name VARCHAR2(15));",
+                "question_syntax": "sql",
                 "options": [
                   {"id": "a", "text": "It would be created only if a unique index is manually created first"},
                   {"id": "b", "text": "It would be created and would use an automatically created unique index"},
@@ -1634,6 +1764,8 @@
               {
                 "question_id": 14,
                 "question_text": "When does the WITH CHECK OPTION clause generate an exception?",
+                "question_code": "UPDATE V SET Curs = 'Databases II' WHERE ID=101;\nCREATE VIEW V(ID, Course, EDate) AS\n SELECT StudID, CourseTitle, EnrollmentDate\n FROM Enrollments\n WHERE CourseTitle='Algebra' AND Accepted=1\n WITH CHECK OPTION;",
+                "question_syntax": "sql",
                 "options": [
                   {"id": "a", "text": "always"},
                   {"id": "b", "text": "only if the student with ID = 101 applied and he/she is accepted in the Algebra course"},
@@ -1717,10 +1849,30 @@
                 "question_id": 6,
                 "question_text": "Which sequence of Java code correctly and completely describes the relations of class Project?",
                 "options": [
-                  {"id": "a", "text": "class Project extends Student { private Collection <UMLDiagram> diagrams = new LinkedList<>(); private SourceCode code; ...}"},
-                  {"id": "b", "text": "class Project { private Collection <Student> students; private Collection <UMLDiagram> diagrams = new LinkedList<>(); private SourceCode code; ...}"},
-                  {"id": "c", "text": "class Project { private Student student; private UMLDiagram diagram; private SourceCode code; ...}"},
-                  {"id": "d", "text": "class Project { private Collection <Student> students = new LinkedList<>(); private Collection <UMLDiagram> diagrams; private SourceCode code; ...}"}
+                  {
+                    "id": "a", 
+                    "text": "class Project extends Student {\n    private Collection<UMLDiagram> diagrams = new LinkedList<>();\n    private SourceCode code;\n    ...}",
+                    "syntax": "java",
+                    "is_code": true
+                  },
+                  {
+                    "id": "b", 
+                    "text": "class Project {\n    private Collection<Student> students;\n    private Collection<UMLDiagram> diagrams = new LinkedList<>();\n    private SourceCode code;\n    ...}",
+                    "syntax": "java",
+                    "is_code": true
+                  },
+                  {
+                    "id": "c", 
+                    "text": "class Project {\n    private Student student;\n    private UMLDiagram diagram;\n    private SourceCode code;\n    ...}",
+                    "syntax": "java",
+                    "is_code": true
+                  },
+                  {
+                    "id": "d", 
+                    "text": "class Project {\n    private Collection<Student> students = new LinkedList<>();\n    private Collection<UMLDiagram> diagrams;\n    private SourceCode code;\n    ...}",
+                    "syntax": "java",
+                    "is_code": true
+                  }
                 ],
                 "correct_answers": ["b"]
               },
@@ -1750,11 +1902,36 @@
                 "question_id": 9,
                 "question_text": "Which sequence of Java code correctly describes the relationship between classes Student and Project?",
                 "options": [
-                  {"id": "a", "text": "class Student extends Project{...} class Project{...}"},
-                  {"id": "b", "text": "class Project extends Student{...} class Student{...}"},
-                  {"id": "c", "text": "class Project { private Collection <Student> ...} class Student{...}"},
-                  {"id": "d", "text": "class Project { private Collection <Student> ...} class Student { private Project project; ...}"},
-                  {"id": "e", "text": "class Project { private Collection <Student> ...} class Student { private Collection<Project> projects; ...}"}
+                  {
+                    "id": "a", 
+                    "text": "class Student extends Project{...}\nclass Project{...}",
+                    "syntax": "java",
+                    "is_code": true
+                  },
+                  {
+                    "id": "b",                  
+                    "text": "class Project extends Student{...}\nclass Student{...}",
+                    "syntax": "java",
+                    "is_code": true
+                  },
+                  {
+                    "id": "c", 
+                    "text": "class Project {\n    private Collection<Student> ...}\nclass Student{...}",
+                    "syntax": "java",
+                    "is_code": true
+                  },
+                  {
+                    "id": "d", 
+                    "text": "class Project {\n    private Collection<Student> ...}\nclass Student {\n    private Project project;\n    ...}",
+                    "syntax": "java",
+                    "is_code": true
+                  },
+                  {
+                    "id": "e", 
+                    "text": "class Project {\n    private Collection<Student> ...}\nclass Student {\n    private Collection<Project> projects;\n    ...}",
+                    "syntax": "java",
+                    "is_code": true
+                  }
                 ],
                 "correct_answers": ["c"]
               },
@@ -2031,7 +2208,7 @@
             ]
           },
           {
-            "subtopic_name": "Operating Systems",
+          "subtopic_name": "Operating Systems",
           "questions": [
               {
                 "question_id": 1,
@@ -2252,7 +2429,9 @@
               },
               {
                 "question_id": 20,
-                "question_text": "Consider the following C code; how many child processes are created upon executing this program?\n\nvoid main() {\n  fork();\n  fork();\n  exit();\n  fork();\n}",
+                "question_text": "Consider the following C code; how many child processes are created upon executing this program?",
+                "question_code": "void main() {\n  fork();\n  fork();\n  exit();\n  fork();\n}",
+                "question_syntax": "c",
                 "options": [
                   { "id": "a", "text": "2" },
                   { "id": "b", "text": "3" },
@@ -2274,7 +2453,9 @@
               },
               {
                 "question_id": 22,
-                "question_text": "The application below reads from a file containing only one string, namely \"graduate\". What will be the message printed on the screen if the read is successful:\n\n#define SIZE 5\nwhile((n = read(fd, buffer, SIZE)) > 0)\n{\n  printf(\"%s\\n\",buffer);\n}",
+                "question_text": "The application below reads from a file containing only one string, namely \"graduate\". What will be the message printed on the screen if the read is successful:",
+                "question_code": "#define SIZE 5\nwhile((n = read(fd, buffer, SIZE)) > 0)\n{\n  printf(\"%s\\n\",buffer);\n}",
+                "question_syntax": "c",
                 "options": [
                   { "id": "a", "text": "graduate" },
                   { "id": "b", "text": "gradu" },
@@ -2285,7 +2466,9 @@
               },
               {
                 "question_id": 23,
-                "question_text": "The following code snippet should use pipes in order to communicate between the child and the parent process. Is there something wrong with the pipe mechanism from the code snippet below?\n\nint pipe_fd[2];\nchar buffer[512];\npid_t pid=fork();\nif(pid<0){\n  perror(\"error\");\n  exit(1);\n}\nif(pid==0){\n  write(pipe_fd[1],buffer,sizeof(buffer));\n}\nelse{\n  close(pipe_fd[0]);\n  read(pipe_fd[0],buffer,sizeof(buffer));\n  close(pipe_fd[1]);\n  printf(\"%s\\n\",buffer);\n  wait(NULL);\n}\n",
+                "question_text": "The following code snippet should use pipes in order to communicate between the child and the parent process. Is there something wrong with the pipe mechanism from the code snippet below?",
+                "question_code": "int pipe_fd[2];\nchar buffer[512];\npid_t pid=fork();\nif(pid<0){\n  perror(\"error\");\n  exit(1);\n}\nif(pid==0){\n  write(pipe_fd[1],buffer,sizeof(buffer));\n}\nelse{\n  close(pipe_fd[0]);\n  read(pipe_fd[0],buffer,sizeof(buffer));\n  close(pipe_fd[1]);\n  printf(\"%s\\n\",buffer);\n  wait(NULL);\n}",
+                "question_syntax": "c",
                 "options": [
                   { "id": "a", "text": "the pipe is not opened" },
                   { "id": "b", "text": "the pipe ends are not closed in the child" },

@@ -555,6 +555,19 @@ h1 {
     gap: 15px;
 }
 
+.option label {
+    flex: 1;
+    min-width: 0; /* Crucial flexbox fix to allow shrinking */
+    display: flex; /* Helps in containing the <pre> element */
+    flex-direction: column;
+}
+
+.option pre {
+    overflow-x: auto;   /* Add a horizontal scrollbar ONLY when needed */
+    white-space: pre;   /* Keep the original code formatting and prevent wrapping */
+    margin: 0;          /* Removes default margin from <pre> */
+}
+
 .option img { /* Style for images within options */
     max-width: 120px; /* Increased size for better visibility */
     max-height: 120px; /* Increased size for better visibility */
