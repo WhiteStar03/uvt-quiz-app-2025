@@ -1044,6 +1044,7 @@ function saveCurrentAnswer() {
         return;
     }
     
+    isFeedbackMode = false;
     const question = currentQuestions[currentQuestionIndex];
     if (!question) return;
     
