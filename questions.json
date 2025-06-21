@@ -852,7 +852,7 @@
               },
               {
                 "question_id": 2,
-                "question_text": "What is the result of the execution of the following code?\nx = 2\nfor i in range(x):\n    x += 1\nprint(x)",
+                "question_text": "What is the result of the execution of the following code?",
                 "question_code": "x = 2\nfor i in range(x):\n    x += 1\n    print (x)",
                 "question_syntax": "python",
                 "options": [
