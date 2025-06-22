@@ -23,7 +23,7 @@
               },
               {
                 "question_id": 2,
-                "question_text": "A recursive program satisfies equation T(n) = 9T(n/3) + Θ(n²). What can we say about T(n)? There may be several correct answers.",
+                "question_text": "A recursive program satisfies equation T(n) = 9T(n/3) + Θ(n²).What can we say about T(n)? There may be several correct answers.",
                 "options": [
                   {"id": "a", "text": "T(n) = O(n log n)"},
                   {"id": "b", "text": "T(n) = Ω(n²)"},
