@@ -1678,7 +1678,7 @@
               },
               {
                 "question_id": 9,
-                "question_text": "Which type of join between DEPARTMENTS and LOCATIONS tables would produce this information as part of its output?",
+                "question_text": "You want to display all the cities that have no departments and all the departments that have not been allocated to any city.\nWhich type of join between DEPARTMENTS and LOCATIONS tables would produce this information as part of its output?",
                 "options": [
                   {"id": "a", "text": "NATURAL JOIN"},
                   {"id": "b", "text": "FULL OUTER JOIN"},
@@ -1700,7 +1700,7 @@
               },
               {
                 "question_id": 11,
-                "question_text": "Which statement is true regarding this SQL statement?",             
+                "question_text": "The following SQL statement was written to retrieve the rows for the PRODUCT_ID that has a UNIT_PRICE greater than 1,000 and has been ordered more than five times\nWhich statement is true regarding this SQL statement?",             
                 "question_code": "SELECT product_id, COUNT(order_id) total, unit_price\nFROM order_items\nWHERE unit_price>1000 AND COUNT(order_id)>5\nGROUP BY product_id, unit_price;",
                 "question_syntax": "sql",            
                 "options": [
@@ -1750,7 +1750,7 @@
               },
               {
                 "question_id": 13,
-                "question_text": "Which statement is true regarding the PROD_ID_PK constraint?",
+                "question_text": "Evaluate the CREATE TABLE statement\nWhich statement is true regarding the PROD_ID_PK constraint?",
                 "question_code": "CREATE TABLE products\n(product_id NUMBER(6) CONSTRAINT prod_id_pk PRIMARY KEY,\n product_name VARCHAR2(15));",
                 "question_syntax": "sql",
                 "options": [
@@ -1763,7 +1763,7 @@
               },
               {
                 "question_id": 14,
-                "question_text": "When does the WITH CHECK OPTION clause generate an exception?",
+                "question_text": "Given the view V below, when the WITH CHECK OPTION clause generates an exception?",
                 "question_code": "UPDATE V SET Curs = 'Databases II' WHERE ID=101;\nCREATE VIEW V(ID, Course, EDate) AS\n SELECT StudID, CourseTitle, EnrollmentDate\n FROM Enrollments\n WHERE CourseTitle='Algebra' AND Accepted=1\n WITH CHECK OPTION;",
                 "question_syntax": "sql",
                 "options": [
