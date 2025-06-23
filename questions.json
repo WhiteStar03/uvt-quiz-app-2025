@@ -1647,7 +1647,7 @@
               },
               {
                 "question_id": 8,
-                "question_text": "The table EMPLOYEES contains 10 employees, each having the salary = 1000 euro, with one exception - an employee has the salary set to NULL. The first 5 employees work in department 1 and the other 5 in department 2. Which of the following queries returns the identifier (ID) and the name of all departments without any employee?",
+                "question_text": "The table EMPLOYEES contains 10 employees, each having the salary = 1000 euro, with one exception - an employee has the salary set to NULL. The first 5 employees work in department 1 and the other 5 in department 2.            Which of the following queries returns the identifier (ID) and the name of all departments without any employee?      Which of the following queries returns the identifier (ID) and the name of all departments without any employee? Assume that the column DEPARTMENT_ID exists in both EMPLOYEES and DEPARTMENTS tables.",
                 "options": [
                   {
                     "id": "a",
