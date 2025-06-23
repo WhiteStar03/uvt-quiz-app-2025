@@ -1713,7 +1713,7 @@
               },
               {
                 "question_id": 12,
-                "question_text": "Which of the following queries will return the specified columns?",
+                "question_text": "Which of the following queries will return the columns FIRST_NAME and SALARY of all employees who have the same manager (MANAGER_ID) as that of the employee with EMPLOYEE_ID = 101 and have a SALARY greater than or equal to the employee with EMPLOYEE_ID = 101?",
                 "options": [
                   {
                     "id": "a",   
