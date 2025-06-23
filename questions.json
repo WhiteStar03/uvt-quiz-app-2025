@@ -1634,7 +1634,7 @@
               },
               {
                 "question_id": 7,
-                "question_text": "How many rows will return the following query?",              
+                "question_text": "The table EMPLOYEES contains 10 employees, each having the salary = 1000 euro, with one exception - an employee has the salary set to NULL. The first 5 employees work in department 1 and the other 5 in department 2. How many rows will return the following query?",              
                 "question_code": "SELECT department_id, SUM(salary)\nFROM employees\nGROUP BY department_id\nHAVING SUM(NVL(salary,1000)) > 4000;",
                 "question_syntax": "sql",
                 "options": [
