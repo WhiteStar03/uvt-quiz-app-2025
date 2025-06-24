@@ -770,7 +770,13 @@ function displayQuestion() {
     const imageContainer = document.getElementById('questionImageContainer');
     imageContainer.innerHTML = ''; // Clear previous image
 
-    let categoryNameForImage = getCategoryNameForImage(currentCategory.subtopic_name || currentCategory.name || "DefaultCategory");
+    // Use the original category of the question for image loading, not the test name
+    let categoryNameForImage = getCategoryNameForImage(
+        question.subtopic_name_origin || 
+        currentCategory.subtopic_name || 
+        currentCategory.name || 
+        "DefaultCategory"
+    );
     
     // Ensure question_id is available, otherwise use a placeholder or skip
     const questionIdForImage = question.question_id ? String(question.question_id) : null;

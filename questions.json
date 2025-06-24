@@ -385,7 +385,7 @@
               },
               {
                 "question_id": 12,
-                "question_text": "How many different IPv4 addresses are available for the internet network connections?",
+                "question_text": "In the Internet, which is made up of interconnected physical networks of computers, each network connection of a computer is assigned an Internet address. In IPv4 Internet protocol, every Internet address is a 32-bit string, made of a network number (netid) followed by a host number (hostid). There are 3 types of Internet addresses: How many different IPv4 addresses are available for the internet network connections?",
                 "options": [
                   {"id": "a", "text": "2^29"},
                   {"id": "b", "text": "2^30 · 2^31"},
