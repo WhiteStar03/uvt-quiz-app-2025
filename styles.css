@@ -1279,46 +1279,55 @@ h1 {
 .weak-areas-container {
     max-height: 400px;
     overflow-y: auto;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .weak-question-item {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 15px;
-    margin-bottom: 10px;
+    padding: 12px;
+    margin-bottom: 8px;
     background: #ffeaa7;
-    border-radius: 10px;
-    border-left: 4px solid #fdcb6e;
+    border-radius: 8px;
+    border-left: 3px solid #fdcb6e;
 }
 
 .weak-question-info h4 {
     color: #333;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
+    font-size: 0.9em;
 }
 
 .weak-question-info p {
     color: #666;
-    margin-bottom: 5px;
-    line-height: 1.4;
+    margin-bottom: 4px;
+    line-height: 1.3;
+    font-size: 0.85em;
+    cursor: pointer;
+}
+
+.weak-question-info p:hover {
+    color: #333;
 }
 
 .weak-question-info small {
     color: #999;
-    font-size: 0.85em;
+    font-size: 0.75em;
 }
 
 .weak-question-stats {
     text-align: right;
-    min-width: 120px;
+    min-width: 100px;
+    flex-shrink: 0;
 }
 
 .incorrect-count {
     display: block;
     font-weight: bold;
     color: #d63031;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
+    font-size: 0.85em;
 }
 
 .practice-section {

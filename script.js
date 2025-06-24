@@ -204,14 +204,24 @@ function updateWeakQuestions(weakQuestions) {
     weakQuestions.forEach(question => {
         const existingIndex = userStats.weakQuestions.findIndex(w => w.id === question.question_id);
         
+        // Determine the correct category name
+        const categoryName = question.subtopic_name_origin || 
+                           question.subtopic_name || 
+                           question.parent_topic_name_origin ||
+                           currentCategory?.subtopic_name ||
+                           currentCategory?.name ||
+                           'Unknown Category';
+        
         if (existingIndex >= 0) {
             userStats.weakQuestions[existingIndex].incorrectCount++;
             userStats.weakQuestions[existingIndex].lastIncorrectDate = new Date().toISOString();
+            // Update category in case it was undefined before
+            userStats.weakQuestions[existingIndex].category = categoryName;
         } else {
             userStats.weakQuestions.push({
                 id: question.question_id,
                 questionText: question.question_text,
-                category: question.subtopic_name || question.parent_topic_name_origin,
+                category: categoryName,
                 incorrectCount: 1,
                 firstIncorrectDate: new Date().toISOString(),
                 lastIncorrectDate: new Date().toISOString()
@@ -1597,19 +1607,29 @@ function updateWeakAreasDisplay() {
     
     const weakAreasHtml = userStats.weakQuestions
         .slice(0, 15) // Show top 15 weak questions
-        .map((weakQuestion, index) => `
-            <div class="weak-question-item">
-                <div class="weak-question-info">
-                    <h4>Question ${index + 1}</h4>
-                    <p>${weakQuestion.questionText.substring(0, 100)}${weakQuestion.questionText.length > 100 ? '...' : ''}</p>
-                    <small>Category: ${weakQuestion.category}</small>
+        .map((weakQuestion, index) => {
+            // Clean up question text and show more
+            const questionText = weakQuestion.questionText
+                .replace(/\s+/g, ' ')
+                .trim();
+            const displayText = questionText.length > 150 
+                ? questionText.substring(0, 150) + '...' 
+                : questionText;
+                
+            return `
+                <div class="weak-question-item">
+                    <div class="weak-question-info">
+                        <h4>Question ${weakQuestion.id || (index + 1)}</h4>
+                        <p title="${questionText}">${displayText}</p>
+                        <small>Category: ${weakQuestion.category || 'Unknown'}</small>
+                    </div>
+                    <div class="weak-question-stats">
+                        <span class="incorrect-count">❌ ${weakQuestion.incorrectCount}</span>
+                        <small>Last missed: ${new Date(weakQuestion.lastIncorrectDate).toLocaleDateString()}</small>
+                    </div>
                 </div>
-                <div class="weak-question-stats">
-                    <span class="incorrect-count">❌ ${weakQuestion.incorrectCount}</span>
-                    <small>Last missed: ${new Date(weakQuestion.lastIncorrectDate).toLocaleDateString()}</small>
-                </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     
     container.innerHTML = weakAreasHtml;
 }
