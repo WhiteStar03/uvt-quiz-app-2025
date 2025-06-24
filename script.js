@@ -483,8 +483,8 @@ function displayCategories(subtopicsToDisplay) {
             statsHtml = `
                 <div class="category-stats-tracker">
                     <div class="stat-row">
-                        <span class="stat-label">📊 ${categoryStats.totalTests}</span>
-                        <span class="stat-value ${scoreClass}">${medianScore}%</span>
+                        <span class="stat-pill attempts">${categoryStats.totalTests}</span>
+                        <span class="stat-pill score ${scoreClass}">${medianScore}%</span>
                     </div>
                 </div>
             `;
@@ -492,7 +492,7 @@ function displayCategories(subtopicsToDisplay) {
             statsHtml = `
                 <div class="category-stats-tracker">
                     <div class="stat-row no-attempts">
-                        <span class="stat-label">📊 No attempts</span>
+                        <span>Not attempted</span>
                     </div>
                 </div>
             `;
@@ -757,6 +757,14 @@ function startTest(subtopicIndexOrNull) {
     document.getElementById('categoryScreen').style.display = 'none';
     document.getElementById('testScreen').style.display = 'block';
     document.getElementById('resultsScreen').style.display = 'none';
+
+    // Set up quit button event listener
+    const quitButton = document.getElementById('quitTestButton');
+    if (quitButton) {
+        quitButton.replaceWith(quitButton.cloneNode(true)); // Remove existing listeners
+        const newQuitButton = document.getElementById('quitTestButton');
+        newQuitButton.addEventListener('click', handleQuitTest);
+    }
 
     let categoryDisplayName = currentCategory.subtopic_name || currentCategory.name;
     document.getElementById('categoryName').textContent = `Test: ${categoryDisplayName}`;
@@ -1115,7 +1123,20 @@ function closeImageModal() {
 document.addEventListener('DOMContentLoaded', initializeImageZoom);
 
 // Initialize the application when DOM is ready
-document.addEventListener('DOMContentLoaded', loadTestData);
+document.addEventListener('DOMContentLoaded', function() {
+    loadTestData();
+    
+    // Initialize modal event listeners
+    const modal = document.getElementById('exit-confirmation-modal');
+    if (modal) {
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+});
 // --- Image Zoom Functionality End ---
 
 // Utility function to scroll to top
@@ -1282,12 +1303,64 @@ function previousQuestion() {
     }
 }
 
+// Exit test functionality
 function handleQuitTest() {
-    if (confirm("Are you sure you want to quit this test? Your progress will be lost.")) {
-        stopTimer();
-        isRandomTestActive = false;
-        resetTest();
+    console.log('handleQuitTest called'); // Debug log
+    const modal = document.getElementById('exit-confirmation-modal');
+    if (!modal) {
+        console.error('Exit modal not found! Using fallback.');
+        // Fallback - ask for confirmation and exit
+        if (window.confirm("Are you sure you want to quit this test? Your progress will be lost.")) {
+            exitTest();
+        }
+        return;
     }
+    
+    modal.style.display = 'flex';
+    
+    // Use addEventListener for more reliable event handling
+    const confirmBtn = document.getElementById('confirm-exit-btn');
+    const cancelBtn = document.getElementById('cancel-exit-btn');
+    
+    if (confirmBtn) {
+        // Remove existing listeners first
+        confirmBtn.replaceWith(confirmBtn.cloneNode(true));
+        const newConfirmBtn = document.getElementById('confirm-exit-btn');
+        newConfirmBtn.addEventListener('click', () => {
+            console.log('Exit confirmed'); // Debug log
+            exitTest();
+            modal.style.display = 'none';
+        });
+    }
+
+    if (cancelBtn) {
+        // Remove existing listeners first
+        cancelBtn.replaceWith(cancelBtn.cloneNode(true));
+        const newCancelBtn = document.getElementById('cancel-exit-btn');
+        newCancelBtn.addEventListener('click', () => {
+            console.log('Exit cancelled'); // Debug log
+            modal.style.display = 'none';
+        });
+    }
+    
+    // Also allow clicking outside to close
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+}
+
+// Make function available globally
+window.handleQuitTest = handleQuitTest;
+
+function exitTest() {
+    if (testTimerInterval) {
+        clearInterval(testTimerInterval);
+        testTimerInterval = null;
+    }
+    stopTimer(); // This will handle all timer cleanup
+    showDashboard();
 }
 
 function finishTest() {

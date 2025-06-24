@@ -224,7 +224,7 @@
                         <span style="color: #666; margin-left:10px;" id="categoryName"></span>
                     </div>
                     <span id="timerDisplay"></span>
-                    <button id="quitTestButton" class="quit-button" onclick="handleQuitTest()" title="Quit Test">×</button>
+                    <button id="quitTestButton" class="quit-button" title="Quit Test">×</button>
                 </div>
                 <div class="question-text" id="questionText"></div>
                 <div id="questionCodeContainer" style="margin-bottom:25px;"><pre><code id="questionCode"></code></pre></div>
@@ -273,9 +273,17 @@
 
     <script src="script.js"></script>
 
-    <div id="imageZoomModal" class="image-zoom-modal">
-        <span class="close-zoom-btn" id="closeZoomBtn">&times;</span>
-        <img class="image-zoom-modal-content" id="zoomedImage">
+    <!-- Exit Confirmation Modal -->
+    <div id="exit-confirmation-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h3 class="modal-title">Are you sure?</h3>
+            <p class="modal-text">Your current test progress will be lost if you exit now.</p>
+            <div class="modal-buttons">
+                <button id="cancel-exit-btn" class="modal-button secondary">Stay</button>
+                <button id="confirm-exit-btn" class="modal-button primary">Exit Test</button>
+            </div>
+        </div>
     </div>
+
 </body>
 </html>
