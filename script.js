@@ -920,8 +920,6 @@ function displayQuestion() {
             e.preventDefault();
             e.stopPropagation();
             
-            console.log('Option clicked:', option.id); // Debug log
-            
             // Call selectAnswer with a small delay to ensure proper state management
             setTimeout(() => {
                 selectAnswer(option.id, isMultipleChoice);
