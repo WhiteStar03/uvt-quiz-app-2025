@@ -145,7 +145,6 @@ function recordTestResult(testData) {
     checkAchievements(testData);
 
     saveUserStats();
-    console.log('Test result recorded:', testRecord);
 }
 
 function updateStreak(percentage) {
@@ -302,6 +301,7 @@ let currentQuestionIndex = 0;
 let userAnswers = {};
 let testStartTime = null;
 let isFeedbackMode = false;
+let currentTestInstanceId = null; // Unique identifier for each test instance
 
 // Quiz navigation variables
 let currentQuestions = [];
@@ -333,6 +333,13 @@ function getCategoryNameForImage(categoryName) {
     };
     
     return nameMap[categoryName] || categoryName.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '');
+}
+
+// Generate unique key for user answers that includes test instance
+function generateUniqueAnswerKey(question) {
+    // Use original category info if available (for random/custom tests), otherwise use current category
+    const categoryKey = question.subtopic_name_origin || currentCategory.subtopic_name;
+    return `${currentTestInstanceId}_${categoryKey}_${question.question_id}`;
 }
 
 async function loadTestData() {
@@ -698,11 +705,14 @@ function startTest(subtopicIndexOrNull) {
         return;
     }
     
+    // Generate unique test instance ID
+    currentTestInstanceId = `test_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
     // Set up quiz navigation variables
     currentQuestions = currentCategory.questions;
     totalQuestions = currentQuestions.length;
     currentQuestionIndex = 0;
-    userAnswers = {};
+    userAnswers = {}; // Reset answers for this test instance
     testStartTime = new Date();
     isFeedbackMode = false;
 
@@ -718,6 +728,7 @@ function startTest(subtopicIndexOrNull) {
             if (newIndex !== currentQuestionIndex && newIndex >= 0 && newIndex < totalQuestions) {
                 // Save current answer before switching questions
                 saveCurrentAnswer();
+                isFeedbackMode = false; // Reset feedback mode when switching questions
                 currentQuestionIndex = newIndex;
                 displayQuestion();
                 updateNextButtonState();
@@ -763,7 +774,8 @@ function updateNextButtonState() {
         return;
     }
     const question = currentCategory.questions[currentQuestionIndex];
-    const userSelection = userAnswers[question.question_id] || [];
+    const uniqueQuestionKey = generateUniqueAnswerKey(question);
+    const userSelection = userAnswers[uniqueQuestionKey] || [];
     nextButton.disabled = userSelection.length === 0;
 }
 
@@ -879,7 +891,11 @@ function displayQuestion() {
         input.id = `option_${qIdForInput}_${option.id}`;
         input.value = option.id;
 
-        const userAnswer = userAnswers[question.question_id];
+        // Create unique key combining test instance, category and question ID
+        const uniqueQuestionKey = generateUniqueAnswerKey(question);
+        const userAnswer = userAnswers[uniqueQuestionKey];
+        // ALWAYS set the checkbox state explicitly to prevent state pollution
+        input.checked = false; // Reset first
         if (userAnswer && Array.isArray(userAnswer)) {
             if (userAnswer.includes(option.id)) {
                 input.checked = true;
@@ -888,7 +904,24 @@ function displayQuestion() {
             input.checked = true;
         }
 
-        input.onchange = () => selectAnswer(option.id, isMultipleChoice);
+        // Single event handler to avoid double-triggering
+        const handleOptionSelect = (e) => {
+            // Don't trigger if clicking on an image (they have their own handlers)
+            if (e.target.tagName === 'IMG') {
+                return;
+            }
+            
+            // Don't trigger if in feedback mode
+            if (isFeedbackMode) {
+                return;
+            }
+            
+            // Prevent event bubbling to avoid double triggers
+            e.stopPropagation();
+            
+            // Don't manually toggle - let selectAnswer handle it
+            selectAnswer(option.id, isMultipleChoice);
+        };
 
         if (isFeedbackMode) {
             input.disabled = true;
@@ -918,24 +951,13 @@ function displayQuestion() {
             label.textContent = option.text || `Option ${option.id}`;
             label.classList.add('option-text');
 
-            // Add click handler to the entire option div for better click detection
-            optionDiv.addEventListener('click', function(e) {
-                // Don't trigger if clicking on an image (they have their own handlers)
-                if (e.target.tagName === 'IMG') {
-                    return;
-                }
-                
-                // Don't trigger if in feedback mode
-                if (isFeedbackMode) {
-                    return;
-                }
-                
-                // Toggle the checkbox and trigger selection
-                input.checked = !input.checked;
-                selectAnswer(option.id, isMultipleChoice);
-            });
             optionDiv.appendChild(input);
             optionDiv.appendChild(label);
+        }
+
+        // Add single click handler to the entire option div
+        if (!isFeedbackMode) {
+            optionDiv.addEventListener('click', handleOptionSelect);
         }   
 
         // --- Add image for the option ---
@@ -1090,20 +1112,10 @@ function scrollToTop() {
 }
 
 function saveCurrentAnswer() {
-    if (!currentQuestions || currentQuestionIndex < 0 || currentQuestionIndex >= currentQuestions.length) {
-        return;
-    }
-    
-    isFeedbackMode = false;
-    const question = currentQuestions[currentQuestionIndex];
-    if (!question) return;
-    
-    const questionName = `question_${question.question_id || currentQuestionIndex}`;
-    const selectedOption = getSelectedOptionValue(questionName);
-    
-    if (selectedOption !== undefined) {
-        userAnswers[question.question_id] = selectedOption;
-    }
+    // This function is now mainly for compatibility
+    // The answers are already being saved directly in selectAnswer()
+    // We don't need to override the stored state since it's more reliable
+    return;
 }
 
 function getSelectedOptionValue(questionName) {
@@ -1126,31 +1138,45 @@ function selectAnswer(optionId, isMultipleChoice) {
     if (isFeedbackMode) return; 
 
     const question = currentCategory.questions[currentQuestionIndex];
-    const questionId = question.question_id;
+    // Create unique key combining test instance, category and question ID
+    const uniqueQuestionKey = generateUniqueAnswerKey(question);
 
     // Always allow multiple selections to hide question type
     // Initialize answer array if it doesn't exist
-    if (!userAnswers[questionId]) userAnswers[questionId] = [];
+    if (!userAnswers[uniqueQuestionKey]) userAnswers[uniqueQuestionKey] = [];
     
     // Toggle selection for all questions (behave like checkboxes)
-    const index = userAnswers[questionId].indexOf(optionId);
+    const index = userAnswers[uniqueQuestionKey].indexOf(optionId);
     if (index > -1) {
-        userAnswers[questionId].splice(index, 1);
+        userAnswers[uniqueQuestionKey].splice(index, 1);
     } else {
-        userAnswers[questionId].push(optionId);
+        userAnswers[uniqueQuestionKey].push(optionId);
     }
 
+    // Update the visual state of all options to match the stored answers
     document.querySelectorAll(`#optionsContainer .option`).forEach(optDiv => {
         const input = optDiv.querySelector('input');
-        if (input.checked) optDiv.classList.add('selected');
-        else optDiv.classList.remove('selected');
+        const inputOptionId = input.value;
+        
+        // Set checkbox state based on stored answers
+        const isSelected = userAnswers[uniqueQuestionKey].includes(inputOptionId);
+        input.checked = isSelected;
+        
+        // Update visual styling
+        if (isSelected) {
+            optDiv.classList.add('selected');
+        } else {
+            optDiv.classList.remove('selected');
+        }
     });
+    
     updateNextButtonState(); // Update button state after selection
 }
 
 function showAnswerFeedback() {
     const question = currentCategory.questions[currentQuestionIndex];
-    const userSelection = userAnswers[question.question_id] || [];
+    const uniqueQuestionKey = generateUniqueAnswerKey(question);
+    const userSelection = userAnswers[uniqueQuestionKey] || [];
     const correctAnswers = question.correct_answers;
 
     document.querySelectorAll('#optionsContainer .option').forEach(optDiv => {
@@ -1261,7 +1287,8 @@ function finishTest() {
     const questionDetails = [];
 
     currentCategory.questions.forEach(question => {
-        const userAnswer = userAnswers[question.question_id] || [];
+        const uniqueQuestionKey = generateUniqueAnswerKey(question);
+        const userAnswer = userAnswers[uniqueQuestionKey] || [];
         const correctAnswer = question.correct_answers;
         const sortedUserAnswer = [...userAnswer].sort();
         const sortedCorrectAnswer = [...correctAnswer].sort();
@@ -1343,27 +1370,18 @@ function prepareReview() {
     const reviewContainer = document.getElementById('answerReview');
     reviewContainer.innerHTML = '<h3 style="margin-bottom: 20px;">Answer Review</h3>';
     
-    console.log('=== PREPARE REVIEW DEBUG ===');
-    console.log('Category:', currentCategory.subtopic_name);
-    console.log('Total questions in category:', currentCategory.questions.length);
-    console.log('userAnswers object keys:', Object.keys(userAnswers));
-    console.log('userAnswers object:', userAnswers);
+
     
     let displayedQuestions = 0;
     let questionsWithAnswers = 0;
     let questionsWithoutAnswers = 0;
     
     currentCategory.questions.forEach((question, index) => {
-        const userAnswer = userAnswers[question.question_id] || [];
+        const uniqueQuestionKey = generateUniqueAnswerKey(question);
+        const userAnswer = userAnswers[uniqueQuestionKey] || [];
         const correctAnswer = question.correct_answers;
         
-        console.log(`Question ${index + 1} (ID: ${question.question_id}):`, {
-            questionText: question.question_text.substring(0, 50) + '...',
-            userAnswer: userAnswer,
-            correctAnswer: correctAnswer,
-            userAnswerLength: userAnswer.length,
-            hasUserAnswer: userAnswer.length > 0
-        });
+
         
         if (userAnswer.length > 0) {
             questionsWithAnswers++;
@@ -1419,11 +1437,7 @@ function prepareReview() {
         displayedQuestions++;
     });
     
-    console.log('=== REVIEW SUMMARY ===');
-    console.log('Questions displayed:', displayedQuestions);
-    console.log('Questions with answers:', questionsWithAnswers);
-    console.log('Questions without answers:', questionsWithoutAnswers);
-    console.log('=== END DEBUG ===');
+
 }
 
 function showReview() {
