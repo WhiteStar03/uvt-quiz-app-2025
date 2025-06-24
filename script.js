@@ -917,10 +917,15 @@ function displayQuestion() {
             }
             
             // Prevent event bubbling to avoid double triggers
+            e.preventDefault();
             e.stopPropagation();
             
-            // Don't manually toggle - let selectAnswer handle it
-            selectAnswer(option.id, isMultipleChoice);
+            console.log('Option clicked:', option.id); // Debug log
+            
+            // Call selectAnswer with a small delay to ensure proper state management
+            setTimeout(() => {
+                selectAnswer(option.id, isMultipleChoice);
+            }, 0);
         };
 
         if (isFeedbackMode) {
@@ -957,7 +962,16 @@ function displayQuestion() {
 
         // Add single click handler to the entire option div
         if (!isFeedbackMode) {
-            optionDiv.addEventListener('click', handleOptionSelect);
+            // Remove any existing handlers first
+            optionDiv.removeEventListener('click', handleOptionSelect);
+            optionDiv.addEventListener('click', handleOptionSelect, { passive: false });
+            
+            // Also add click handler to label for better accessibility
+            const label = optionDiv.querySelector('label');
+            if (label) {
+                label.removeEventListener('click', handleOptionSelect);
+                label.addEventListener('click', handleOptionSelect, { passive: false });
+            }
         }   
 
         // --- Add image for the option ---
@@ -1153,24 +1167,34 @@ function selectAnswer(optionId, isMultipleChoice) {
         userAnswers[uniqueQuestionKey].push(optionId);
     }
 
-    // Update the visual state of all options to match the stored answers
-    document.querySelectorAll(`#optionsContainer .option`).forEach(optDiv => {
-        const input = optDiv.querySelector('input');
-        const inputOptionId = input.value;
+    // Force update the visual state of all options to match the stored answers
+    // Use requestAnimationFrame to ensure DOM is ready
+    requestAnimationFrame(() => {
+        document.querySelectorAll(`#optionsContainer .option`).forEach(optDiv => {
+            const input = optDiv.querySelector('input');
+            if (!input) return;
+            
+            const inputOptionId = input.value;
+            
+            // Set checkbox state based on stored answers
+            const isSelected = userAnswers[uniqueQuestionKey].includes(inputOptionId);
+            
+            // Force the visual state to match our data
+            if (input.checked !== isSelected) {
+                input.checked = isSelected;
+            }
+            
+            // Update visual styling
+            if (isSelected) {
+                optDiv.classList.add('selected');
+            } else {
+                optDiv.classList.remove('selected');
+            }
+        });
         
-        // Set checkbox state based on stored answers
-        const isSelected = userAnswers[uniqueQuestionKey].includes(inputOptionId);
-        input.checked = isSelected;
-        
-        // Update visual styling
-        if (isSelected) {
-            optDiv.classList.add('selected');
-        } else {
-            optDiv.classList.remove('selected');
-        }
+        // Update button state after visual update
+        updateNextButtonState();
     });
-    
-    updateNextButtonState(); // Update button state after selection
 }
 
 function showAnswerFeedback() {
