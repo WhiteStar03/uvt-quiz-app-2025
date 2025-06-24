@@ -466,11 +466,7 @@ function displayCategories(subtopicsToDisplay) {
             statsHtml = `
                 <div class="category-stats-tracker">
                     <div class="stat-row">
-                        <span class="stat-label">📊 Attempts:</span>
-                        <span class="stat-value">${categoryStats.totalTests}</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">🎯 Avg Score:</span>
+                        <span class="stat-label">📊 ${categoryStats.totalTests}</span>
                         <span class="stat-value ${scoreClass}">${medianScore}%</span>
                     </div>
                 </div>
@@ -479,7 +475,7 @@ function displayCategories(subtopicsToDisplay) {
             statsHtml = `
                 <div class="category-stats-tracker">
                     <div class="stat-row no-attempts">
-                        <span class="stat-label">📊 No attempts yet</span>
+                        <span class="stat-label">📊 No attempts</span>
                     </div>
                 </div>
             `;
