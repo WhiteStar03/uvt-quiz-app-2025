@@ -1,5 +1,5 @@
 // Statistics Tracking System
-const STATS_COOKIE_NAME = 'uvt_quiz_stats';
+const STATS_COOKIE_NAME = 'ls';
 const STATS_VERSION = '1.0';
 
 // Statistics data structure
@@ -22,25 +22,34 @@ let userStats = {
     lastTestDate: null
 };
 
-// Storage Management Functions (using localStorage with cookie fallback)
+// Storage Management Functions (using localStorage with LZ-String compression and cookie fallback)
 function saveToStorage(name, value) {
     try {
         // Try localStorage first (works better for local development)
-        if (typeof(Storage) !== "undefined") {
+        if (typeof(Storage) !== "undefined" && typeof(LZString) !== "undefined") {
+            const compressed = LZString.compress(JSON.stringify(value));
+            localStorage.setItem(name, compressed);
+            console.log('User statistics saved to localStorage with compression');
+            return;
+        } else if (typeof(Storage) !== "undefined") {
+            // Fallback to uncompressed localStorage if LZString is not available
             localStorage.setItem(name, JSON.stringify(value));
-            console.log('User statistics saved to localStorage');
+            console.log('User statistics saved to localStorage without compression');
             return;
         }
     } catch (e) {
         console.warn('localStorage not available, falling back to cookies:', e);
     }
     
-    // Fallback to cookies
+    // Fallback to cookies (compressed if LZString is available)
     try {
         const expires = new Date();
         expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000));
-        document.cookie = `${name}=${encodeURIComponent(JSON.stringify(value))};expires=${expires.toUTCString()};path=/`;
-        console.log('User statistics saved to cookies');
+        const dataToStore = typeof(LZString) !== "undefined" 
+            ? LZString.compress(JSON.stringify(value))
+            : JSON.stringify(value);
+        document.cookie = `${name}=${encodeURIComponent(dataToStore)};expires=${expires.toUTCString()};path=/`;
+        console.log('User statistics saved to cookies with' + (typeof(LZString) !== "undefined" ? '' : 'out') + ' compression');
     } catch (e) {
         console.error('Failed to save to cookies:', e);
     }
@@ -52,7 +61,20 @@ function loadFromStorage(name) {
         if (typeof(Storage) !== "undefined") {
             const item = localStorage.getItem(name);
             if (item) {
-                return JSON.parse(item);
+                // Try to decompress first, fallback to regular JSON.parse
+                try {
+                    if (typeof(LZString) !== "undefined") {
+                        const decompressed = LZString.decompress(item);
+                        if (decompressed) {
+                            return JSON.parse(decompressed);
+                        }
+                    }
+                    // Fallback to uncompressed data
+                    return JSON.parse(item);
+                } catch (e) {
+                    console.warn('Failed to decompress/parse localStorage data, trying uncompressed:', e);
+                    return JSON.parse(item);
+                }
             }
         }
     } catch (e) {
@@ -69,7 +91,21 @@ function loadFromStorage(name) {
                 c = c.substring(1, c.length);
             }
             if (c.indexOf(nameEQ) === 0) {
-                return JSON.parse(decodeURIComponent(c.substring(nameEQ.length, c.length)));
+                const cookieData = decodeURIComponent(c.substring(nameEQ.length, c.length));
+                // Try to decompress first, fallback to regular JSON.parse
+                try {
+                    if (typeof(LZString) !== "undefined") {
+                        const decompressed = LZString.decompress(cookieData);
+                        if (decompressed) {
+                            return JSON.parse(decompressed);
+                        }
+                    }
+                    // Fallback to uncompressed data
+                    return JSON.parse(cookieData);
+                } catch (e) {
+                    console.warn('Failed to decompress/parse cookie data, trying uncompressed:', e);
+                    return JSON.parse(cookieData);
+                }
             }
         }
     } catch (e) {
@@ -203,18 +239,37 @@ function updateWeakQuestions(weakQuestions) {
     weakQuestions.forEach(question => {
         const existingIndex = userStats.weakQuestions.findIndex(w => w.id === question.question_id);
         
-        // Determine the correct category name
-        const categoryName = question.subtopic_name_origin || 
-                           question.subtopic_name || 
-                           question.parent_topic_name_origin ||
-                           currentCategory?.subtopic_name ||
-                           currentCategory?.name ||
-                           'Unknown Category';
+        // Determine the correct category name with better fallback logic
+        let categoryName = 'Unknown Category';
+        
+        // First try to get the original category name from the question
+        if (question.subtopic_name_origin) {
+            categoryName = question.subtopic_name_origin;
+        } else if (question.subtopic_name) {
+            categoryName = question.subtopic_name;
+        } else if (question.parent_topic_name_origin) {
+            categoryName = question.parent_topic_name_origin;
+        } else if (currentCategory) {
+            // For regular category tests, use the current category
+            if (currentCategory.subtopic_name && !isRandomTestActive) {
+                categoryName = currentCategory.subtopic_name;
+            } else if (currentCategory.name && !isRandomTestActive) {
+                categoryName = currentCategory.name;
+            } else {
+                // For random/custom tests, try to find the category from the displayableCategories
+                const foundCategory = displayableCategories.find(cat => 
+                    cat.questions.some(q => q.question_id === question.question_id)
+                );
+                if (foundCategory) {
+                    categoryName = foundCategory.subtopic_name;
+                }
+            }
+        }
         
         if (existingIndex >= 0) {
             userStats.weakQuestions[existingIndex].incorrectCount++;
             userStats.weakQuestions[existingIndex].lastIncorrectDate = new Date().toISOString();
-            // Update category in case it was undefined before
+            // Always update category to ensure it's current
             userStats.weakQuestions[existingIndex].category = categoryName;
         } else {
             userStats.weakQuestions.push({
@@ -1714,6 +1769,19 @@ function updateWeakAreasDisplay() {
         return;
     }
     
+    // Clean up and refresh category information for existing weak questions
+    userStats.weakQuestions.forEach(weakQuestion => {
+        if (!weakQuestion.category || weakQuestion.category === 'Unknown Category') {
+            // Try to find the correct category for this question
+            const foundCategory = displayableCategories.find(cat => 
+                cat.questions.some(q => q.question_id === weakQuestion.id)
+            );
+            if (foundCategory) {
+                weakQuestion.category = foundCategory.subtopic_name;
+            }
+        }
+    });
+    
     const weakAreasHtml = userStats.weakQuestions
         .slice(0, 15) // Show top 15 weak questions
         .map((weakQuestion, index) => {
@@ -1741,6 +1809,9 @@ function updateWeakAreasDisplay() {
         }).join('');
     
     container.innerHTML = weakAreasHtml;
+    
+    // Save the updated stats after cleaning up categories
+    saveUserStats();
 }
 
 function calculateTrend(recentScores) {
