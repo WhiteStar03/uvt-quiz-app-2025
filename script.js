@@ -448,10 +448,48 @@ function displayCategories(subtopicsToDisplay) {
         card.onclick = () => startTest(index); // Pass index for regular category test
 
         const questionCount = subtopic.questions.length;
+        
+        // Get performance stats for this category
+        const categoryStats = userStats.categoryPerformance[subtopic.subtopic_name];
+        let statsHtml = '';
+        
+        if (categoryStats && categoryStats.totalTests > 0) {
+            // Calculate median score from recent scores
+            const scores = [...categoryStats.recentScores].sort((a, b) => a - b);
+            const medianScore = scores.length > 0 ? 
+                (scores.length % 2 === 0 ? 
+                    Math.round((scores[Math.floor(scores.length / 2) - 1] + scores[Math.floor(scores.length / 2)]) / 2) :
+                    scores[Math.floor(scores.length / 2)]) : 
+                categoryStats.averageScore;
+            
+            const scoreClass = medianScore >= 80 ? 'excellent' : medianScore >= 60 ? 'good' : 'needs-improvement';
+            statsHtml = `
+                <div class="category-stats-tracker">
+                    <div class="stat-row">
+                        <span class="stat-label">📊 Attempts:</span>
+                        <span class="stat-value">${categoryStats.totalTests}</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">🎯 Avg Score:</span>
+                        <span class="stat-value ${scoreClass}">${medianScore}%</span>
+                    </div>
+                </div>
+            `;
+        } else {
+            statsHtml = `
+                <div class="category-stats-tracker">
+                    <div class="stat-row no-attempts">
+                        <span class="stat-label">📊 No attempts yet</span>
+                    </div>
+                </div>
+            `;
+        }
+
         card.innerHTML = `
         <h3>${subtopic.subtopic_name}</h3>
         ${subtopic.parent_topic_name ? `<p style="font-size:0.8em; color:#555; margin-top: 5px;"><em>Topic: ${subtopic.parent_topic_name}</em></p>` : ''}
         <p style="margin-top: 10px;">${questionCount} question${questionCount !== 1 ? 's' : ''}</p>
+        ${statsHtml}
         `;
         grid.appendChild(card);
     });
