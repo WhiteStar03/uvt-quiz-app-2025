@@ -115,15 +115,106 @@ function loadFromStorage(name) {
 }
 
 function loadUserStats() {
+    // First try to load from new compressed storage
     const savedStats = loadFromStorage(STATS_COOKIE_NAME);
+    
     if (savedStats && savedStats.version === STATS_VERSION) {
         userStats = { ...userStats, ...savedStats };
-        console.log('User statistics loaded successfully');
+        console.log('User statistics loaded successfully from new storage format');
         console.log('Current stats:', userStats);
+        return;
+    }
+    
+    // If no new data found, try to migrate from old storage key
+    console.log('No new format data found, checking for legacy data to migrate...');
+    const legacyStats = loadFromStorage('uvt_quiz_stats');
+    
+    if (legacyStats) {
+        console.log('Found legacy statistics, migrating to new format...');
+        
+        // Migrate legacy data structure to new format
+        const migratedStats = migrateLegacyStats(legacyStats);
+        userStats = { ...userStats, ...migratedStats };
+        
+        // Save migrated data in new format
+        saveUserStats();
+        
+        // Optionally remove old data to save space (commented out for safety)
+        // try {
+        //     if (typeof(Storage) !== "undefined") {
+        //         localStorage.removeItem('uvt_quiz_stats');
+        //     }
+        // } catch (e) {
+        //     console.warn('Could not remove legacy storage:', e);
+        // }
+        
+        console.log('Legacy data migration completed successfully');
+        console.log('Migrated stats:', userStats);
     } else {
-        console.log('No valid statistics found, starting fresh');
+        console.log('No legacy statistics found, starting fresh');
         saveUserStats();
     }
+}
+
+function migrateLegacyStats(legacyStats) {
+    console.log('Migrating legacy stats:', legacyStats);
+    
+    // Create base migrated structure with current version
+    const migrated = {
+        version: STATS_VERSION,
+        totalTests: 0,
+        totalQuestionsAnswered: 0,
+        totalCorrectAnswers: 0,
+        totalTimeSpent: 0,
+        testHistory: [],
+        categoryPerformance: {},
+        weakQuestions: [],
+        streakData: {
+            current: 0,
+            best: 0,
+            lastTestDate: null
+        },
+        achievements: [],
+        firstTestDate: null,
+        lastTestDate: null
+    };
+    
+    // Migrate existing fields that match
+    if (legacyStats.totalTests !== undefined) migrated.totalTests = legacyStats.totalTests;
+    if (legacyStats.totalQuestionsAnswered !== undefined) migrated.totalQuestionsAnswered = legacyStats.totalQuestionsAnswered;
+    if (legacyStats.totalCorrectAnswers !== undefined) migrated.totalCorrectAnswers = legacyStats.totalCorrectAnswers;
+    if (legacyStats.totalTimeSpent !== undefined) migrated.totalTimeSpent = legacyStats.totalTimeSpent;
+    if (legacyStats.firstTestDate !== undefined) migrated.firstTestDate = legacyStats.firstTestDate;
+    if (legacyStats.lastTestDate !== undefined) migrated.lastTestDate = legacyStats.lastTestDate;
+    
+    // Migrate arrays and objects with validation
+    if (Array.isArray(legacyStats.testHistory)) {
+        migrated.testHistory = legacyStats.testHistory.slice(0, 50); // Keep only last 50
+    }
+    
+    if (legacyStats.categoryPerformance && typeof legacyStats.categoryPerformance === 'object') {
+        migrated.categoryPerformance = { ...legacyStats.categoryPerformance };
+    }
+    
+    if (Array.isArray(legacyStats.weakQuestions)) {
+        migrated.weakQuestions = legacyStats.weakQuestions.slice(0, 100); // Keep only top 100
+    }
+    
+    if (Array.isArray(legacyStats.achievements)) {
+        migrated.achievements = [...legacyStats.achievements];
+    }
+    
+    // Migrate streak data
+    if (legacyStats.streakData && typeof legacyStats.streakData === 'object') {
+        migrated.streakData = {
+            current: legacyStats.streakData.current || 0,
+            best: legacyStats.streakData.best || 0,
+            lastTestDate: legacyStats.streakData.lastTestDate || null
+        };
+    }
+    
+    console.log('Migration completed, result:', migrated);
+    return migrated;
 }
 
 function saveUserStats() {
