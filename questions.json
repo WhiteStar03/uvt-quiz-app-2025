@@ -1976,7 +1976,7 @@
               },
               {
                 "question_id": 13,
-                "question_text": "Select the pair of terms to be filled in the spaces of the next statement:",
+                "question_text": "Select the pair of terms to be filled in the spaces of the next statement:\n “In Essence ‘Checkpoint construction’ game, a checkpoint is a set of ____ to be achieved at a specific point in time in a software engineering endeavor AND is expressed in terms of ____ .”",
                 "options": [
                   {"id": "a", "text": "criteria / activities"},
                   {"id": "b", "text": "components / roles"},
