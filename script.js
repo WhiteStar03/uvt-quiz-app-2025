@@ -1866,10 +1866,6 @@ function showAnswerFeedback() {
     const userSelection = userAnswers[uniqueQuestionKey] || [];
     const correctAnswers = question.correct_answers;
 
-    // Check if user got any correct answers (for partial credit feedback)
-    const userCorrectSelections = userSelection.filter(id => correctAnswers.includes(id));
-    const hasPartialCredit = userCorrectSelections.length > 0;
-
     document.querySelectorAll('#optionsContainer .option').forEach(optDiv => {
         const input = optDiv.querySelector('input');
         input.disabled = true;
@@ -1879,18 +1875,15 @@ function showAnswerFeedback() {
         const isCorrect = correctAnswers.includes(optionId);
         const isSelected = userSelection.includes(optionId);
 
-        // Show all correct answers as green if user got at least one correct
         if (isCorrect) { 
             optDiv.classList.add('reveal-correct');
-            // Show green background for ALL correct answers when user has partial credit
-            if (hasPartialCredit) {
-                optDiv.classList.add('correct-selection');
-            }
         }
-        
-        // Show incorrect selections in red
-        if (isSelected && !isCorrect) { 
-            optDiv.classList.add('incorrect-selection');
+        if (isSelected) { 
+            if (isCorrect) {
+                optDiv.classList.add('correct-selection');
+            } else {
+                optDiv.classList.add('incorrect-selection');
+            }
         }
     });
     isFeedbackMode = true;

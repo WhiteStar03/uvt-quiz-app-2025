@@ -279,17 +279,6 @@
     </div>
 
     <script src="script.js"></script>
-    
-    <!-- Test script for partial feedback functionality (only in development) -->
-    <script>
-        // Only load test if we're running locally
-        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-            console.log('🧪 Loading partial feedback test...');
-            const testScript = document.createElement('script');
-            testScript.src = 'test_partial_feedback.js';
-            document.head.appendChild(testScript);
-        }
-    </script>
 
     <!-- Exit Confirmation Modal -->
     <div id="exit-confirmation-modal" class="modal-overlay" style="display: none;">
