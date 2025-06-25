@@ -1,3 +1,66 @@
+// Dark Mode Functionality
+function initializeDarkMode() {
+    // Check for saved theme preference or default to light mode
+    const savedTheme = localStorage.getItem('darkMode') || 'light';
+    
+    // Apply the theme
+    if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        updateToggleIcon('☀️'); // Sun icon for dark mode (to switch to light)
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        updateToggleIcon('🌙'); // Moon icon for light mode (to switch to dark)
+    }
+    
+    // Update SVG gradient to match theme
+    setTimeout(updateSVGGradient, 100); // Small delay to ensure CSS variables are loaded
+}
+
+function toggleDarkMode() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    // Apply the new theme
+    document.documentElement.setAttribute('data-theme', newTheme);
+    
+    // Save preference
+    localStorage.setItem('darkMode', newTheme);
+    
+    // Update toggle icon
+    updateToggleIcon(newTheme === 'dark' ? '☀️' : '🌙');
+    
+    // Update SVG gradient to match new theme
+    setTimeout(updateSVGGradient, 100);
+    
+    // Add a subtle animation effect
+    const toggle = document.getElementById('darkModeToggle');
+    if (toggle) {
+        toggle.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+            toggle.style.transform = 'scale(1)';
+        }, 150);
+    }
+}
+
+function updateToggleIcon(icon) {
+    const toggleIcon = document.querySelector('.toggle-icon');
+    if (toggleIcon) {
+        toggleIcon.textContent = icon;
+    }
+}
+
+function updateSVGGradient() {
+    const gradientStops = document.querySelectorAll('#gradient stop');
+    if (gradientStops.length >= 2) {
+        const computedStyle = getComputedStyle(document.documentElement);
+        const startColor = computedStyle.getPropertyValue('--gradient-start').trim();
+        const endColor = computedStyle.getPropertyValue('--gradient-end').trim();
+        
+        gradientStops[0].setAttribute('stop-color', startColor);
+        gradientStops[1].setAttribute('stop-color', endColor);
+    }
+}
+
 // Statistics Tracking System
 const STATS_COOKIE_NAME = 'ls';
 const STATS_VERSION = '1.0';
@@ -115,49 +178,147 @@ function loadFromStorage(name) {
 }
 
 function loadUserStats() {
+    console.log('=== Loading User Statistics ===');
+    
     // First try to load from new compressed storage
     const savedStats = loadFromStorage(STATS_COOKIE_NAME);
+    let currentData = null;
     
     if (savedStats && savedStats.version === STATS_VERSION) {
-        userStats = { ...userStats, ...savedStats };
-        console.log('User statistics loaded successfully from new storage format');
-        console.log('Current stats:', userStats);
-        return;
+        currentData = savedStats;
+        console.log('Found data in new storage format');
+        console.log('Current data:', currentData);
     }
     
-    // If no new data found, try to migrate from old storage key
-    console.log('No new format data found, checking for legacy data to migrate...');
-    const legacyStats = loadFromStorage('uvt_quiz_stats');
+    // Always check for legacy data to compare with current data
+    console.log('Checking for legacy data to compare...');
     
-    if (legacyStats) {
-        console.log('Found legacy statistics, migrating to new format...');
+    // Try multiple possible legacy keys and patterns
+    const legacyKeys = [
+        'uvt_quiz_stats', 
+        'uvt_quiz_stats_old', 
+        'quiz_stats', 
+        'userStats',
+        'quizStats'
+    ];
+    
+    let legacyStats = null;
+    let usedLegacyKey = null;
+    
+    // Check localStorage directly for legacy keys
+    for (const key of legacyKeys) {
+        legacyStats = loadFromStorage(key);
+        if (legacyStats) {
+            usedLegacyKey = key;
+            console.log(`Found legacy statistics in key '${key}'`);
+            console.log('Legacy data structure:', legacyStats);
+            break;
+        }
+    }
+    
+    // If still no legacy data found, try a more aggressive search
+    if (!legacyStats) {
+        console.log('No standard legacy keys found, performing comprehensive search...');
+        const searchResult = performComprehensiveLegacySearch();
+        if (searchResult && searchResult.key) {
+            usedLegacyKey = searchResult.key;
+            legacyStats = searchResult.data;
+            console.log(`Found legacy data in unexpected key '${usedLegacyKey}'`);
+        }
+    }
+    
+    // Compare current data vs legacy data and use the more complete one
+    let finalData = null;
+    let shouldMigrate = false;
+    
+    if (currentData && legacyStats) {
+        // Both exist - compare to see which is more complete
+        const currentTests = currentData.totalTests || 0;
+        const legacyTests = legacyStats.totalTests || 0;
         
-        // Migrate legacy data structure to new format
-        const migratedStats = migrateLegacyStats(legacyStats);
-        userStats = { ...userStats, ...migratedStats };
+        console.log(`Comparing datasets: current (${currentTests} tests) vs legacy (${legacyTests} tests)`);
         
-        // Save migrated data in new format
-        saveUserStats();
-        
-        // Optionally remove old data to save space (commented out for safety)
-        // try {
-        //     if (typeof(Storage) !== "undefined") {
-        //         localStorage.removeItem('uvt_quiz_stats');
-        //     }
-        // } catch (e) {
-        //     console.warn('Could not remove legacy storage:', e);
-        // }
-        
-        console.log('Legacy data migration completed successfully');
-        console.log('Migrated stats:', userStats);
+        if (legacyTests > currentTests) {
+            console.log('Legacy data appears more complete, will migrate it');
+            finalData = legacyStats;
+            shouldMigrate = true;
+        } else {
+            console.log('Current data is more complete, keeping it');
+            finalData = currentData;
+        }
+    } else if (legacyStats) {
+        // Only legacy data exists
+        console.log('Only legacy data found, will migrate it');
+        finalData = legacyStats;
+        shouldMigrate = true;
+    } else if (currentData) {
+        // Only current data exists
+        console.log('Only current data found, using it');
+        finalData = currentData;
     } else {
-        console.log('No legacy statistics found, starting fresh');
+        // No data found anywhere
+        console.log('No data found anywhere, starting with fresh data');
+        finalData = null;
+    }
+    
+    if (shouldMigrate && legacyStats) {
+        // Migrate legacy data structure to new format
+        console.log('Starting migration process...');
+        const migratedStats = migrateLegacyStats(legacyStats);
+        
+        if (migratedStats && Object.keys(migratedStats).length > 0) {
+            userStats = { ...userStats, ...migratedStats };
+            
+            // Save migrated data in new format
+            saveUserStats();
+            
+            // Remove old data to save space and prevent confusion
+            cleanupLegacyData(usedLegacyKey);
+            
+            console.log('✅ Legacy data migration completed successfully');
+            console.log('Final migrated stats:', userStats);
+            
+            // Update dashboard immediately after migration
+            setTimeout(() => {
+                if (typeof updateDashboardStats === 'function') {
+                    updateDashboardStats();
+                }
+            }, 100);
+        } else {
+            console.warn('Migration produced empty result, using current data or defaults');
+            if (currentData) {
+                userStats = { ...userStats, ...currentData };
+            }
+            saveUserStats();
+        }
+    } else if (finalData) {
+        // Use existing data (no migration needed)
+        userStats = { ...userStats, ...finalData };
+        console.log('✅ User statistics loaded successfully');
+        console.log('Final stats:', userStats);
+        
+        // Clean up any legacy data since we have good current data
+        if (usedLegacyKey) {
+            cleanupLegacyData(usedLegacyKey);
+        } else {
+            cleanupLegacyData(); // General cleanup
+        }
+    } else {
+        // No data found anywhere, start fresh
+        console.log('No statistics found anywhere, starting with fresh data');
         saveUserStats();
     }
 }
 
 function migrateLegacyStats(legacyStats) {
-    console.log('Migrating legacy stats:', legacyStats);
+    console.log('🔄 Starting migration process...');
+    console.log('Legacy stats input:', legacyStats);
+    
+    // Handle case where legacyStats might be null, undefined, or not an object
+    if (!legacyStats || typeof legacyStats !== 'object') {
+        console.warn('❌ Legacy stats is not a valid object, returning empty stats');
+        return {};
+    }
     
     // Create base migrated structure with current version
     const migrated = {
@@ -179,42 +340,243 @@ function migrateLegacyStats(legacyStats) {
         lastTestDate: null
     };
     
-    // Migrate existing fields that match
-    if (legacyStats.totalTests !== undefined) migrated.totalTests = legacyStats.totalTests;
-    if (legacyStats.totalQuestionsAnswered !== undefined) migrated.totalQuestionsAnswered = legacyStats.totalQuestionsAnswered;
-    if (legacyStats.totalCorrectAnswers !== undefined) migrated.totalCorrectAnswers = legacyStats.totalCorrectAnswers;
-    if (legacyStats.totalTimeSpent !== undefined) migrated.totalTimeSpent = legacyStats.totalTimeSpent;
-    if (legacyStats.firstTestDate !== undefined) migrated.firstTestDate = legacyStats.firstTestDate;
-    if (legacyStats.lastTestDate !== undefined) migrated.lastTestDate = legacyStats.lastTestDate;
+    // Track what we successfully migrate
+    const migrationLog = [];
     
-    // Migrate arrays and objects with validation
+    // Migrate basic numeric fields with validation
+    const numericFields = [
+        'totalTests', 'totalQuestionsAnswered', 'totalCorrectAnswers', 'totalTimeSpent'
+    ];
+    
+    numericFields.forEach(field => {
+        if (typeof legacyStats[field] === 'number' && !isNaN(legacyStats[field])) {
+            migrated[field] = Math.max(0, Math.floor(legacyStats[field])); // Ensure positive integers
+            migrationLog.push(`✅ ${field}: ${migrated[field]}`);
+        }
+    });
+    
+    // Migrate date fields
+    const dateFields = ['firstTestDate', 'lastTestDate'];
+    dateFields.forEach(field => {
+        if (typeof legacyStats[field] === 'string' && legacyStats[field]) {
+            // Validate date format
+            const date = new Date(legacyStats[field]);
+            if (!isNaN(date.getTime())) {
+                migrated[field] = legacyStats[field];
+                migrationLog.push(`✅ ${field}: ${migrated[field]}`);
+            }
+        }
+    });
+    
+    // Migrate test history with validation and cleanup
     if (Array.isArray(legacyStats.testHistory)) {
-        migrated.testHistory = legacyStats.testHistory.slice(0, 50); // Keep only last 50
+        migrated.testHistory = legacyStats.testHistory
+            .filter(test => test && typeof test === 'object' && test.date) // Valid test objects
+            .slice(-50) // Keep only last 50 tests
+            .map(test => {
+                // Ensure required fields exist
+                return {
+                    id: test.id || Date.now() + Math.random(),
+                    date: test.date,
+                    categoryName: test.categoryName || 'Unknown',
+                    isRandomTest: Boolean(test.isRandomTest),
+                    isCustomTest: Boolean(test.isCustomTest),
+                    totalQuestions: Math.max(0, parseInt(test.totalQuestions) || 0),
+                    correctAnswers: Math.max(0, parseInt(test.correctAnswers) || 0),
+                    wrongAnswers: Math.max(0, parseInt(test.wrongAnswers) || 0),
+                    unansweredQuestions: Math.max(0, parseInt(test.unansweredQuestions) || 0),
+                    timeSpent: Math.max(0, parseInt(test.timeSpent) || 0),
+                    percentage: Math.max(0, Math.min(100, parseFloat(test.percentage) || 0)),
+                    questions: Array.isArray(test.questions) ? test.questions : [],
+                    weakQuestions: Array.isArray(test.weakQuestions) ? test.weakQuestions : []
+                };
+            });
+        migrationLog.push(`✅ testHistory: ${migrated.testHistory.length} records`);
     }
     
+    // Migrate category performance
     if (legacyStats.categoryPerformance && typeof legacyStats.categoryPerformance === 'object') {
-        migrated.categoryPerformance = { ...legacyStats.categoryPerformance };
+        const cleanedPerformance = {};
+        Object.keys(legacyStats.categoryPerformance).forEach(category => {
+            const perf = legacyStats.categoryPerformance[category];
+            if (perf && typeof perf === 'object') {
+                cleanedPerformance[category] = {
+                    totalTests: Math.max(0, parseInt(perf.totalTests) || 0),
+                    totalQuestions: Math.max(0, parseInt(perf.totalQuestions) || 0),
+                    totalCorrect: Math.max(0, parseInt(perf.correctAnswers || perf.totalCorrect) || 0),
+                    correctAnswers: Math.max(0, parseInt(perf.correctAnswers) || 0),
+                    averageScore: Math.max(0, Math.min(100, parseFloat(perf.averageScore) || 0)),
+                    bestScore: Math.max(0, Math.min(100, parseFloat(perf.bestScore) || 0)),
+                    recentScores: Array.isArray(perf.recentScores) ? perf.recentScores.slice(0, 10) : [],
+                    weakTopics: Array.isArray(perf.weakTopics) ? perf.weakTopics : [],
+                    lastTestDate: perf.lastTestDate || null
+                };
+            }
+        });
+        migrated.categoryPerformance = cleanedPerformance;
+        migrationLog.push(`✅ categoryPerformance: ${Object.keys(cleanedPerformance).length} categories`);
     }
     
+    // Migrate weak questions
     if (Array.isArray(legacyStats.weakQuestions)) {
-        migrated.weakQuestions = legacyStats.weakQuestions.slice(0, 100); // Keep only top 100
+        migrated.weakQuestions = legacyStats.weakQuestions
+            .filter(q => q && typeof q === 'object' && q.question) // Valid question objects
+            .slice(0, 100) // Keep only top 100
+            .map(q => ({
+                question: q.question,
+                category: q.category || 'Unknown',
+                wrongCount: Math.max(0, parseInt(q.wrongCount) || 0),
+                lastWrongDate: q.lastWrongDate || null
+            }));
+        migrationLog.push(`✅ weakQuestions: ${migrated.weakQuestions.length} records`);
     }
     
+    // Migrate achievements
     if (Array.isArray(legacyStats.achievements)) {
-        migrated.achievements = [...legacyStats.achievements];
+        migrated.achievements = legacyStats.achievements
+            .filter(a => a && (typeof a === 'string' || (typeof a === 'object' && a.name)))
+            .slice(0, 50); // Reasonable limit
+        migrationLog.push(`✅ achievements: ${migrated.achievements.length} records`);
     }
     
     // Migrate streak data
     if (legacyStats.streakData && typeof legacyStats.streakData === 'object') {
         migrated.streakData = {
-            current: legacyStats.streakData.current || 0,
-            best: legacyStats.streakData.best || 0,
+            current: Math.max(0, parseInt(legacyStats.streakData.current) || 0),
+            best: Math.max(0, parseInt(legacyStats.streakData.best) || 0),
             lastTestDate: legacyStats.streakData.lastTestDate || null
         };
+        migrationLog.push(`✅ streakData: current ${migrated.streakData.current}, best ${migrated.streakData.best}`);
     }
     
-    console.log('Migration completed, result:', migrated);
+    console.log('📋 Migration Summary:');
+    migrationLog.forEach(log => console.log('  ' + log));
+    console.log('✅ Migration completed successfully');
+    console.log('Final migrated data:', migrated);
+    
     return migrated;
+}
+
+// Helper function to perform comprehensive search for legacy data
+function performComprehensiveLegacySearch() {
+    console.log('🔍 Performing comprehensive legacy data search...');
+    
+    if (typeof(Storage) === "undefined") {
+        console.log('localStorage not available');
+        return null;
+    }
+    
+    // Check all localStorage keys for potential quiz data
+    const allKeys = Object.keys(localStorage);
+    console.log('All localStorage keys:', allKeys);
+    
+    for (const key of allKeys) {
+        try {
+            // Skip keys we know are not relevant
+            if (key === 'ls' || key === 'darkMode' || key.startsWith('_')) {
+                continue;
+            }
+            
+            const rawData = localStorage.getItem(key);
+            if (!rawData) continue;
+            
+            // Try to parse the data
+            let parsedData;
+            try {
+                // Try decompression first if LZ-String is available
+                if (typeof LZString !== 'undefined') {
+                    const decompressed = LZString.decompress(rawData);
+                    parsedData = JSON.parse(decompressed || rawData);
+                } else {
+                    parsedData = JSON.parse(rawData);
+                }
+            } catch (e) {
+                // If decompression fails, try direct parsing
+                parsedData = JSON.parse(rawData);
+            }
+            
+            // Check if this looks like quiz statistics data
+            if (isLikelyQuizData(parsedData)) {
+                console.log(`🎯 Found potential quiz data in key '${key}'`);
+                return { key: key, data: parsedData };
+            }
+            
+        } catch (e) {
+            // Skip invalid JSON or other errors
+            continue;
+        }
+    }
+    
+    console.log('❌ No potential quiz data found in comprehensive search');
+    return null;
+}
+
+// Helper function to identify if data looks like quiz statistics
+function isLikelyQuizData(data) {
+    if (!data || typeof data !== 'object') return false;
+    
+    // Check for typical quiz data patterns
+    const quizDataIndicators = [
+        'totalTests',
+        'totalQuestionsAnswered', 
+        'totalCorrectAnswers',
+        'testHistory',
+        'categoryPerformance',
+        'weakQuestions',
+        'streakData'
+    ];
+    
+    let indicatorCount = 0;
+    quizDataIndicators.forEach(indicator => {
+        if (data.hasOwnProperty(indicator)) {
+            indicatorCount++;
+        }
+    });
+    
+    // If we find at least 3 indicators, it's likely quiz data
+    return indicatorCount >= 3;
+}
+
+// Helper function to clean up legacy data
+function cleanupLegacyData(specificKey = null) {
+    console.log('🧹 Cleaning up legacy data...');
+    
+    if (typeof(Storage) === "undefined") {
+        console.log('localStorage not available');
+        return;
+    }
+    
+    const legacyKeys = [
+        'uvt_quiz_stats', 
+        'uvt_quiz_stats_old', 
+        'quiz_stats', 
+        'userStats',
+        'quizStats'
+    ];
+    
+    // If a specific key was provided, add it to the cleanup list
+    if (specificKey && !legacyKeys.includes(specificKey)) {
+        legacyKeys.push(specificKey);
+    }
+    
+    let cleanedCount = 0;
+    legacyKeys.forEach(key => {
+        try {
+            if (localStorage.getItem(key)) {
+                localStorage.removeItem(key);
+                console.log(`🗑️  Removed legacy data from key '${key}'`);
+                cleanedCount++;
+            }
+        } catch (e) {
+            console.warn(`Failed to remove legacy key '${key}':`, e);
+        }
+    });
+    
+    if (cleanedCount > 0) {
+        console.log(`✅ Cleaned up ${cleanedCount} legacy storage entries`);
+    } else {
+        console.log('No legacy data found to clean up');
+    }
 }
 
 function saveUserStats() {
@@ -310,6 +672,12 @@ function updateCategoryPerformance(testData) {
     }
 
     const categoryStats = userStats.categoryPerformance[categoryName];
+    
+    // Ensure backwards compatibility - add recentScores if it doesn't exist
+    if (!categoryStats.recentScores) {
+        categoryStats.recentScores = [];
+    }
+    
     categoryStats.totalTests++;
     categoryStats.totalQuestions += testData.totalQuestions;
     categoryStats.totalCorrect += testData.correctAnswers;
@@ -617,13 +985,14 @@ function displayCategories(subtopicsToDisplay) {
         let statsHtml = '';
         
         if (categoryStats && categoryStats.totalTests > 0) {
-            // Calculate median score from recent scores
-            const scores = [...categoryStats.recentScores].sort((a, b) => a - b);
+            // Calculate median score from recent scores with safety check
+            const recentScores = categoryStats.recentScores || [];
+            const scores = [...recentScores].sort((a, b) => a - b);
             const medianScore = scores.length > 0 ? 
                 (scores.length % 2 === 0 ? 
                     Math.round((scores[Math.floor(scores.length / 2) - 1] + scores[Math.floor(scores.length / 2)]) / 2) :
                     scores[Math.floor(scores.length / 2)]) : 
-                categoryStats.averageScore;
+                (categoryStats.averageScore || 0);
             
             const scoreClass = medianScore >= 80 ? 'excellent' : medianScore >= 60 ? 'good' : 'needs-improvement';
             statsHtml = `
@@ -646,7 +1015,7 @@ function displayCategories(subtopicsToDisplay) {
 
         card.innerHTML = `
         <h3>${subtopic.subtopic_name}</h3>
-        ${subtopic.parent_topic_name ? `<p style="font-size:0.8em; color:#555; margin-top: 5px;"><em>Topic: ${subtopic.parent_topic_name}</em></p>` : ''}
+        ${subtopic.parent_topic_name ? `<p style="font-size:0.8em; color:var(--text-muted); margin-top: 5px;"><em>Topic: ${subtopic.parent_topic_name}</em></p>` : ''}
         <p style="margin-top: 10px;">${questionCount} question${questionCount !== 1 ? 's' : ''}</p>
         ${statsHtml}
         `;
@@ -707,7 +1076,7 @@ function displayCustomTestCategories() {
         card.innerHTML = `
             <div class="check-mark">✓</div>
             <h3>${category.subtopic_name}</h3>
-            ${category.parent_topic_name ? `<p style="font-size:0.8em; color:#555; margin-top: 5px;"><em>Topic: ${category.parent_topic_name}</em></p>` : ''}
+            ${category.parent_topic_name ? `<p style="font-size:0.8em; color:var(--text-muted); margin-top: 5px;"><em>Topic: ${category.parent_topic_name}</em></p>` : ''}
             <p style="margin-top: 10px;">${questionCount} question${questionCount !== 1 ? 's' : ''}</p>
         `;
 
@@ -1137,7 +1506,7 @@ function displayQuestion() {
             optionImgElement.style.maxHeight = '120px';
             optionImgElement.style.display = 'none';   
             optionImgElement.style.cursor = 'zoom-in';
-            optionImgElement.style.border = '1px solid #ddd';
+            optionImgElement.style.border = '1px solid var(--border-color)';
             optionImgElement.style.borderRadius = '5px';
 
             optionImgElement.onload = function() {
@@ -1269,7 +1638,25 @@ function closeImageModal() {
 document.addEventListener('DOMContentLoaded', initializeImageZoom);
 
 // Initialize the application when DOM is ready
+// DOM Content Loaded Event Listener
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 UVT Quiz App Loading...');
+    
+    // Initialize dark mode first
+    initializeDarkMode();
+    
+    // Load and migrate user statistics
+    loadUserStats();
+    
+    // Perform aggressive migration check (runs after initial load)
+    setTimeout(performAggressiveMigrationCheck, 1000);
+    
+    // Add dark mode toggle event listener
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+    }
+    
     loadTestData();
     
     // Initialize modal event listeners
@@ -1282,8 +1669,119 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    
+    console.log('✅ App initialization complete');
 });
-// --- Image Zoom Functionality End ---
+
+// Add keyboard shortcut for dark mode toggle
+document.addEventListener('keydown', function(e) {
+    // Ctrl+Shift+D to toggle dark mode
+    if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+        e.preventDefault();
+        toggleDarkMode();
+    }
+});
+
+// Aggressive migration check - runs after page load to ensure no legacy data is missed
+function performAggressiveMigrationCheck() {
+    console.log('🔍 Performing aggressive migration check...');
+    
+    // Check if we have current data
+    const currentStats = loadFromStorage(STATS_COOKIE_NAME);
+    const hasValidCurrentData = currentStats && currentStats.version === STATS_VERSION;
+    
+    // Always check for legacy data, even if we have current data
+    const legacySearch = performComprehensiveLegacySearch();
+    
+    if (legacySearch && legacySearch.data) {
+        console.log('🎯 Found legacy data in aggressive check!');
+        
+        if (hasValidCurrentData) {
+            console.log('⚠️  Current data exists, but found legacy data too');
+            console.log('Checking if legacy data has more recent or additional information...');
+            
+            // Compare data to see if legacy has newer information
+            const legacyData = legacySearch.data;
+            const shouldMigrate = shouldMigrateLegacyData(currentStats, legacyData);
+            
+            if (shouldMigrate) {
+                console.log('🔄 Legacy data appears to have newer information, migrating...');
+                performLegacyMigration(legacySearch.key, legacyData);
+            } else {
+                console.log('✅ Current data is newer, just cleaning up legacy data');
+                cleanupLegacyData(legacySearch.key);
+            }
+        } else {
+            console.log('📦 No current data, migrating legacy data');
+            performLegacyMigration(legacySearch.key, legacySearch.data);
+        }
+    } else {
+        console.log('✅ No legacy data found in aggressive check');
+        
+        // Still try to clean up any known legacy keys
+        cleanupLegacyData();
+    }
+}
+
+// Helper function to determine if legacy data should be migrated
+function shouldMigrateLegacyData(currentData, legacyData) {
+    if (!currentData || !legacyData) return !!legacyData;
+    
+    // Compare test counts
+    const currentTests = currentData.totalTests || 0;
+    const legacyTests = legacyData.totalTests || 0;
+    
+    // Compare last test dates
+    const currentLastTest = currentData.lastTestDate ? new Date(currentData.lastTestDate) : new Date(0);
+    const legacyLastTest = legacyData.lastTestDate ? new Date(legacyData.lastTestDate) : new Date(0);
+    
+    // Migrate if legacy has more tests or newer last test date
+    return legacyTests > currentTests || legacyLastTest > currentLastTest;
+}
+
+// Helper function to perform the actual migration
+function performLegacyMigration(legacyKey, legacyData) {
+    console.log(`🔄 Migrating from '${legacyKey}'...`);
+    
+    try {
+        const migrated = migrateLegacyStats(legacyData);
+        
+        if (migrated && Object.keys(migrated).length > 0) {
+            // Merge with existing userStats (legacy data takes precedence)
+            userStats = { ...userStats, ...migrated };
+            
+            // Save to new format
+            saveUserStats();
+            
+            // Clean up legacy data
+            cleanupLegacyData(legacyKey);
+            
+            // Update UI
+            if (typeof updateDashboardStats === 'function') {
+                updateDashboardStats();
+            }
+            
+            console.log('✅ Aggressive migration completed successfully');
+            return true;
+        }
+    } catch (e) {
+        console.error('❌ Aggressive migration failed:', e);
+    }
+    
+    return false;
+}
+
+// Console help message for debugging
+console.log('%c=== UVT Quiz App Debug Help ===', 'color: #667eea; font-weight: bold; font-size: 16px;');
+console.log('%c🔧 Statistics Migration & Debug Commands:', 'color: #4a5568; font-weight: bold;');
+console.log('%c1. debugStorageAndMigration() - Comprehensive storage analysis', 'color: #22c55e;');
+console.log('%c2. manualMigration() - Force migration from legacy data', 'color: #3b82f6;');
+console.log('%c3. performComprehensiveLegacySearch() - Search all keys for quiz data', 'color: #8b5cf6;');
+console.log('%c4. cleanupLegacyData() - Remove old storage entries', 'color: #f59e0b;');
+console.log('%c5. resetAllStats() - Reset all statistics (⚠️  DANGER: Loses all progress)', 'color: #ef4444;');
+console.log('%c6. localStorage.clear() - Clear all localStorage (⚠️  DANGER: Loses everything)', 'color: #dc2626;');
+console.log('%c', ''); // Empty line
+console.log('%c💡 Tip: Run debugStorageAndMigration() first to see current storage state', 'color: #6b7280; font-style: italic;');
 
 // Utility function to scroll to top
 function scrollToTop() {
@@ -1368,6 +1866,10 @@ function showAnswerFeedback() {
     const userSelection = userAnswers[uniqueQuestionKey] || [];
     const correctAnswers = question.correct_answers;
 
+    // Check if user got any correct answers (for partial credit feedback)
+    const userCorrectSelections = userSelection.filter(id => correctAnswers.includes(id));
+    const hasPartialCredit = userCorrectSelections.length > 0;
+
     document.querySelectorAll('#optionsContainer .option').forEach(optDiv => {
         const input = optDiv.querySelector('input');
         input.disabled = true;
@@ -1377,15 +1879,18 @@ function showAnswerFeedback() {
         const isCorrect = correctAnswers.includes(optionId);
         const isSelected = userSelection.includes(optionId);
 
+        // Show all correct answers as green if user got at least one correct
         if (isCorrect) { 
             optDiv.classList.add('reveal-correct');
-        }
-        if (isSelected) { 
-            if (isCorrect) {
+            // Show green background for ALL correct answers when user has partial credit
+            if (hasPartialCredit) {
                 optDiv.classList.add('correct-selection');
-            } else {
-                optDiv.classList.add('incorrect-selection');
             }
+        }
+        
+        // Show incorrect selections in red
+        if (isSelected && !isCorrect) { 
+            optDiv.classList.add('incorrect-selection');
         }
     });
     isFeedbackMode = true;
@@ -1598,9 +2103,9 @@ function finishTest() {
     
     // Add streak information
     if (score >= 70) {
-        summaryHTML += `<p style="color: #28a745;">🔥 Current Streak: <strong>${userStats.streakData.current}</strong> passed tests</p>`;
+        summaryHTML += `<p style="color: var(--text-accent);">🔥 Current Streak: <strong>${userStats.streakData.current}</strong> passed tests</p>`;
     } else {
-        summaryHTML += `<p style="color: #dc3545;">Streak reset. Keep practicing!</p>`;
+        summaryHTML += `<p style="color: var(--action-secondary);">Streak reset. Keep practicing!</p>`;
     }
     
     document.getElementById('resultsSummary').innerHTML = summaryHTML;
@@ -1663,7 +2168,7 @@ function prepareReview() {
         
         let originInfo = '';
         if (question.subtopic_name_origin) { 
-            originInfo = `<p style="font-size:0.8em; color:#777;"><em>Origin: ${question.parent_topic_name_origin} > ${question.subtopic_name_origin}</em></p>`;
+            originInfo = `<p style="font-size:0.8em; color:var(--text-muted);"><em>Origin: ${question.parent_topic_name_origin} > ${question.subtopic_name_origin}</em></p>`;
         }
 
         reviewDiv.innerHTML = `
@@ -1819,6 +2324,10 @@ function updateCategoryPerformanceDisplay() {
     const performanceHtml = Object.entries(userStats.categoryPerformance)
         .sort(([,a], [,b]) => b.totalTests - a.totalTests)
         .map(([categoryName, stats]) => {
+            // Ensure recentScores exists for backwards compatibility
+            if (!stats.recentScores) {
+                stats.recentScores = [];
+            }
             const trend = calculateTrend(stats.recentScores);
             const trendIcon = trend > 0 ? '📈' : trend < 0 ? '📉' : '➡️';
             const bestScoreClass = stats.bestScore >= 90 ? 'excellent' : stats.bestScore >= 70 ? 'good' : 'needs-work';
@@ -1906,7 +2415,8 @@ function updateWeakAreasDisplay() {
 }
 
 function calculateTrend(recentScores) {
-    if (recentScores.length < 2) return 0;
+    // Safety check for undefined or null recentScores
+    if (!recentScores || !Array.isArray(recentScores) || recentScores.length < 2) return 0;
     
     const recent = recentScores.slice(0, Math.min(3, recentScores.length));
     const older = recentScores.slice(Math.min(3, recentScores.length), Math.min(6, recentScores.length));
@@ -1959,3 +2469,283 @@ function clearAllStatistics() {
         alert('All statistics have been cleared.');
     }
 }
+
+// Debug function to check localStorage and manually trigger migration
+function debugStorageAndMigration() {
+    console.log('=== 📊 COMPREHENSIVE STORAGE DEBUG ===');
+    
+    // Check what's in localStorage
+    const allKeys = Object.keys(localStorage);
+    console.log('📁 All localStorage keys:', allKeys);
+    
+    // Check for legacy data with multiple possible keys
+    const legacyKeys = ['uvt_quiz_stats', 'uvt_quiz_stats_old', 'quiz_stats', 'userStats', 'quizStats'];
+    let foundLegacy = [];
+    
+    legacyKeys.forEach(key => {
+        const legacyData = localStorage.getItem(key);
+        if (legacyData) {
+            console.log(`📦 Legacy data found in '${key}' (${legacyData.length} chars)`);
+            foundLegacy.push(key);
+            try {
+                // Try multiple parsing methods
+                let parsed = null;
+                
+                // Method 1: Try LZ-String decompression first
+                if (typeof LZString !== 'undefined') {
+                    try {
+                        const decompressed = LZString.decompress(legacyData);
+                        if (decompressed) {
+                            parsed = JSON.parse(decompressed);
+                            console.log(`  ✅ Parsed via LZ-String decompression`);
+                        }
+                    } catch (e) {
+                        // Continue to next method
+                    }
+                }
+                
+                // Method 2: Direct JSON parsing
+                if (!parsed) {
+                    parsed = JSON.parse(legacyData);
+                    console.log(`  ✅ Parsed via direct JSON`);
+                }
+                
+                console.log(`  📋 Data structure:`, {
+                    type: typeof parsed,
+                    keys: parsed && typeof parsed === 'object' ? Object.keys(parsed) : 'N/A',
+                    totalTests: parsed?.totalTests,
+                    testHistoryLength: Array.isArray(parsed?.testHistory) ? parsed.testHistory.length : 0,
+                    hasCategories: !!(parsed?.categoryPerformance)
+                });
+                
+                // Check if it's recognizable quiz data
+                if (isLikelyQuizData(parsed)) {
+                    console.log(`  🎯 Confirmed as quiz data`);
+                } else {
+                    console.log(`  ❓ Not recognized as quiz data`);
+                }
+                
+            } catch (e) {
+                console.log(`  ❌ Failed to parse legacy data from '${key}':`, e.message);
+            }
+        }
+    });
+    
+    if (foundLegacy.length === 0) {
+        console.log('❌ No legacy data found in standard keys');
+        
+        // Check all keys for potential quiz data
+        console.log('🔍 Checking all localStorage keys for potential quiz data...');
+        allKeys.forEach(key => {
+            if (!['ls', 'darkMode'].includes(key) && !key.startsWith('_')) {
+                try {
+                    const data = localStorage.getItem(key);
+                    const parsed = JSON.parse(data);
+                    if (isLikelyQuizData(parsed)) {
+                        console.log(`🎯 Potential quiz data found in unexpected key '${key}'`);
+                    }
+                } catch (e) {
+                    // Skip invalid data
+                }
+            }
+        });
+    }
+    
+    // Check for current data
+    const currentData = localStorage.getItem('ls');
+    if (currentData) {
+        console.log(`📊 Current 'ls' data found (${currentData.length} chars)`);
+        try {
+            // Try to decompress if using LZ-String
+            let parsed = null;
+            if (typeof LZString !== 'undefined') {
+                try {
+                    const decompressed = LZString.decompress(currentData);
+                    if (decompressed) {
+                        parsed = JSON.parse(decompressed);
+                        console.log('  ✅ Parsed current data via LZ-String decompression');
+                    }
+                } catch (e) {
+                    // Continue to fallback
+                }
+            }
+            
+            if (!parsed) {
+                parsed = JSON.parse(currentData);
+                console.log('  ✅ Parsed current data via direct JSON');
+            }
+            
+            console.log('  📋 Current data structure:', {
+                version: parsed?.version,
+                totalTests: parsed?.totalTests,
+                testHistoryLength: Array.isArray(parsed?.testHistory) ? parsed.testHistory.length : 0,
+                categories: parsed?.categoryPerformance ? Object.keys(parsed.categoryPerformance).length : 0
+            });
+            
+        } catch (e) {
+            console.log('  ❌ Failed to parse current data:', e.message);
+        }
+    } else {
+        console.log('❌ No current "ls" data found');
+    }
+    
+    // Check userStats object
+    console.log('💾 Current userStats object:', {
+        version: userStats?.version,
+        totalTests: userStats?.totalTests,
+        testHistoryLength: Array.isArray(userStats?.testHistory) ? userStats.testHistory.length : 0,
+        categories: userStats?.categoryPerformance ? Object.keys(userStats.categoryPerformance).length : 0
+    });
+    
+    return {
+        allKeys: allKeys,
+        foundLegacyKeys: foundLegacy,
+        hasCurrentData: !!currentData,
+        userStatsValid: !!(userStats && typeof userStats === 'object')
+    };
+}
+
+// Enhanced manual migration function
+function manualMigration() {
+    console.log('🔧 MANUAL MIGRATION PROCESS STARTED');
+    
+    // First, let's see what we have
+    const debugInfo = debugStorageAndMigration();
+    
+    if (debugInfo.foundLegacyKeys.length === 0) {
+        console.log('❌ No legacy data found to migrate');
+        return false;
+    }
+    
+    console.log(`🎯 Found ${debugInfo.foundLegacyKeys.length} legacy keys to migrate`);
+    
+    let migrationSuccess = false;
+    
+    // Try to migrate from each found legacy key
+    for (const key of debugInfo.foundLegacyKeys) {
+        console.log(`🔄 Attempting migration from '${key}'...`);
+        
+        try {
+            const legacyData = localStorage.getItem(key);
+            let parsed = null;
+            
+            // Try multiple parsing methods
+            if (typeof LZString !== 'undefined') {
+                try {
+                    const decompressed = LZString.decompress(legacyData);
+                    if (decompressed) {
+                        parsed = JSON.parse(decompressed);
+                    }
+                } catch (e) {
+                    // Continue to direct parsing
+                }
+            }
+            
+            if (!parsed) {
+                parsed = JSON.parse(legacyData);
+            }
+            
+            console.log(`✅ Successfully parsed data from '${key}'`);
+            console.log('Data to migrate:', parsed);
+            
+            // Perform migration
+            const migrated = migrateLegacyStats(parsed);
+            
+            if (migrated && Object.keys(migrated).length > 0) {
+                // Merge with existing userStats
+                userStats = { ...userStats, ...migrated };
+                
+                // Save to new format
+                saveUserStats();
+                
+                // Remove the legacy data
+                localStorage.removeItem(key);
+                console.log(`🗑️  Removed legacy data from '${key}'`);
+                
+                migrationSuccess = true;
+                console.log('✅ Manual migration completed successfully!');
+                
+                // Update UI
+                if (typeof updateDashboardStats === 'function') {
+                    updateDashboardStats();
+                    console.log('🔄 Dashboard updated');
+                }
+                
+                break; // Stop after first successful migration
+                
+            } else {
+                console.warn(`❌ Migration from '${key}' produced empty result`);
+            }
+            
+        } catch (e) {
+            console.error(`❌ Failed to migrate from '${key}':`, e);
+            continue;
+        }
+    }
+    
+    if (migrationSuccess) {
+        console.log('🎉 MIGRATION COMPLETED SUCCESSFULLY');
+        console.log('Final userStats:', userStats);
+    } else {
+        console.log('❌ MIGRATION FAILED - No valid data could be migrated');
+    }
+    
+    return migrationSuccess;
+}
+
+// Function to completely reset statistics (emergency use)
+function resetAllStats() {
+    console.log('🚨 RESETTING ALL STATISTICS');
+    
+    // Clear localStorage
+    const allKeys = Object.keys(localStorage);
+    const quizKeys = allKeys.filter(key => 
+        key.includes('quiz') || 
+        key.includes('stats') || 
+        key === 'ls' ||
+        key === 'userStats'
+    );
+    
+    quizKeys.forEach(key => {
+        localStorage.removeItem(key);
+        console.log(`🗑️  Removed '${key}'`);
+    });
+    
+    // Reset userStats object
+    userStats = {
+        version: STATS_VERSION,
+        totalTests: 0,
+        totalQuestionsAnswered: 0,
+        totalCorrectAnswers: 0,
+        totalTimeSpent: 0,
+        testHistory: [],
+        categoryPerformance: {},
+        weakQuestions: [],
+        streakData: {
+            current: 0,
+            best: 0,
+            lastTestDate: null
+        },
+        achievements: [],
+        firstTestDate: null,
+        lastTestDate: null
+    };
+    
+    // Save fresh stats
+    saveUserStats();
+    
+    // Update UI
+    if (typeof updateDashboardStats === 'function') {
+        updateDashboardStats();
+    }
+    
+    console.log('✅ All statistics have been reset');
+    return true;
+}
+
+// Make debug functions available globally for console access
+window.debugStorageAndMigration = debugStorageAndMigration;
+window.manualMigration = manualMigration;
+window.resetAllStats = resetAllStats;
+window.performComprehensiveLegacySearch = performComprehensiveLegacySearch;
+window.cleanupLegacyData = cleanupLegacyData;

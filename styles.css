@@ -1,45 +1,59 @@
 :root {
-    /* Light mode colors */
-    --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --bg-container: rgba(255, 255, 255, 0.95);
-    --text-primary: #333;
-    --text-secondary: #4a5568;
-    --text-muted: #718096;
-    --text-accent: #667eea;
-    --surface-card: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 100%);
-    --surface-hover: rgba(255, 255, 255, 0.9);
-    --border-color: rgba(255, 255, 255, 0.2);
-    --shadow-primary: rgba(0, 0, 0, 0.1);
-    --shadow-secondary: rgba(0, 0, 0, 0.05);
-    --action-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --action-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    --action-tertiary: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    --action-stats: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    /* Light mode colors - refined neutral palette with soft, less strident tones */
+    --bg-primary: linear-gradient(135deg, #ffffff 0%, #f3f5f7 100%);
+    --bg-container: rgba(255, 255, 255, 0.55);
+    --text-primary: #2c3e50;
+    --text-secondary: #34495e;
+    --text-muted: #7f8c8d;
+    --text-accent: #5dade2;
+    --surface-card: linear-gradient(135deg, #ffffff 20%, #cadcee 100%);
+    --surface-hover: rgba(248, 249, 250, 0.9);
+    --border-color: rgba(206, 212, 218, 0.5);
+    --shadow-primary: rgba(0, 0, 0, 0.04);
+    --shadow-secondary: rgba(0, 0, 0, 0.02);
+    --action-primary: linear-gradient(135deg, #5dade2 0%, #3498db 100%);
+    --action-secondary: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    --action-tertiary: linear-gradient(135deg, #52c4b8 0%, #16a085 100%);
+    --action-stats: linear-gradient(135deg, #3da14e 0%, #34495e 100%); /* Changed from purple */
+    --gradient-start: #5dade2;
+    --gradient-end: #3498db;
+    --feedback-correct: #27ae60; /* A pleasant, modern green */
+    --feedback-incorrect: #e74c3c; /* A clear but not overly harsh red */
+    --feedback-correct-bg: rgba(83, 207, 135, 0.712);
+    --feedback-incorrect-bg: rgba(231, 76, 60, 0.1);
 }
 
 [data-theme="dark"] {
-    /* Dark mode colors */
-    --bg-primary: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-    --bg-container: rgba(26, 32, 44, 0.95);
-    --text-primary: #f7fafc;
-    --text-secondary: #e2e8f0;
-    --text-muted: #a0aec0;
-    --text-accent: #90cdf4;
-    --surface-card: linear-gradient(145deg, #2d3748 0%, #4a5568 100%);
-    --surface-hover: rgba(45, 55, 72, 0.9);
-    --border-color: rgba(255, 255, 255, 0.1);
-    --shadow-primary: rgba(0, 0, 0, 0.3);
-    --shadow-secondary: rgba(0, 0, 0, 0.2);
-    --action-primary: linear-gradient(135deg, #4c51bf 0%, #667eea 100%);
-    --action-secondary: linear-gradient(135deg, #ed64a6 0%, #f56565 100%);
-    --action-tertiary: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
-    --action-stats: linear-gradient(135deg, #38b2ac 0%, #4fd1c7 100%);
+    /* Dark mode colors - muted, sophisticated palette */
+    --bg-primary: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+    --bg-container: rgba(52, 73, 94, 0.9);
+    --text-primary: #ecf0f1;
+    --text-secondary: #bdc3c7;
+    --text-muted: #95a5a6;
+    --text-accent: #74b9ff;
+    --surface-card: linear-gradient(145deg, #425a6b 0%, #4f7168 100%);
+    --surface-hover: rgba(58, 80, 107, 0.85);
+    --border-color: rgba(255, 255, 255, 0.12);
+    --shadow-primary: rgba(0, 0, 0, 0.2);
+    --shadow-secondary: rgba(0, 0, 0, 0.1);
+    --action-primary: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+    --action-secondary: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+    --action-tertiary: linear-gradient(135deg, #55efc4 0%, #00b894 100%);
+    --action-stats: linear-gradient(135deg, #879e85 0%, #5d6d7e 100%); /* Changed from purple */
+    --gradient-start: #74b9ff;
+    --gradient-end: #0984e3;
+    /* Softer, more pleasant feedback colors for dark mode */
+    --feedback-correct: #2ecc71; /* A brighter green for dark backgrounds */
+    --feedback-incorrect: #ff7675; /* A softer red for dark backgrounds */
+    --feedback-correct-bg: rgba(46, 204, 113, 0.15);
+    --feedback-incorrect-bg: rgba(255, 118, 117, 0.15);
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 body {
@@ -86,6 +100,22 @@ body {
     box-shadow: 0 4px 15px var(--shadow-secondary);
     position: relative;
     overflow: hidden;
+}
+
+.dark-mode-toggle::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--text-accent);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+[data-theme="dark"] .dark-mode-toggle::after {
+    transform: scaleX(1);
 }
 
 .dark-mode-toggle:hover {
@@ -635,7 +665,7 @@ h1 {
 }
 
 .custom-test-actions {
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid var(--border-color);
     padding-top: 25px;
     display: flex;
     flex-direction: column;
@@ -679,11 +709,12 @@ h1 {
 }
 
 .progress-bar {
-    background: #e0e0e0;
+    background: linear-gradient(135deg, #e2e8f0, #cbd5e0);
     height: 8px;
     border-radius: 4px;
     margin-bottom: 30px;
     overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .progress-fill {
@@ -750,8 +781,8 @@ h1 {
 }
 
 .option {
-    background: white;
-    border: 2px solid #e0e0e0;
+    background: var(--surface-card);
+    border: 2px solid var(--border-color);
     border-radius: 10px;
     padding: 15px 20px;
     cursor: pointer;
@@ -759,6 +790,7 @@ h1 {
     display: flex;
     align-items: center; /* Vertically align items in the option div */
     gap: 15px;
+    box-shadow: 0 2px 8px var(--shadow-secondary);
 }
 
 .option label {
@@ -781,7 +813,7 @@ h1 {
     object-fit: contain; /* Ensures the image is scaled correctly within its bounds */
     cursor: zoom-in; /* Indicate that the image is zoomable */
     transition: transform 0.2s ease-in-out; /* Smooth transition for hover effect */
-    border: 1px solid #ddd; /* Add subtle border for better definition */
+    border: 1px solid var(--border-color); /* Add subtle border for better definition */
 }
 
 .option img:hover {
@@ -789,13 +821,20 @@ h1 {
 }
 
 .option:hover:not(.disabled-option) {
-    border-color: #667eea;
+    border-color: var(--text-accent);
     transform: translateX(5px);
 }
 
 .option.selected:not(.correct-selection):not(.incorrect-selection):not(.reveal-correct) {
-    border-color: #667eea;
-    background: #f0f4ff;
+    border-color: var(--text-accent);
+    background: linear-gradient(135deg, var(--text-accent), rgba(102, 126, 234, 0.8));
+    color: white;
+    transform: translateX(3px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.option.selected:not(.correct-selection):not(.incorrect-selection):not(.reveal-correct) .option-text {
+    color: white !important;
 }
 
 .option input[type="checkbox"],
@@ -803,7 +842,7 @@ h1 {
     width: 22px;
     height: 22px;
     cursor: pointer;
-    accent-color: #667eea;
+    accent-color: var(--text-accent);
     flex-shrink: 0; /* Prevent shrinking */
     position: relative;
     margin: 0;
@@ -815,16 +854,16 @@ h1 {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    border: 2px solid #d1d5db;
+    border: 2px solid var(--text-muted);
     border-radius: 4px;
-    background: white;
+    background: var(--bg-container);
     transition: all 0.2s ease;
 }
 
 .option input[type="checkbox"]:checked:not(:disabled),
 .option input[type="radio"]:checked:not(:disabled) {
-    background: #667eea;
-    border-color: #667eea;
+    background: var(--text-accent);
+    border-color: var(--text-accent);
     position: relative;
 }
 
@@ -842,8 +881,9 @@ h1 {
 
 .option input[type="checkbox"]:hover:not(:disabled):not(:checked),
 .option input[type="radio"]:hover:not(:disabled):not(:checked) {
-    border-color: #667eea;
-    background: #f8faff;
+    border-color: var(--text-accent);
+    background: var(--text-accent);
+    opacity: 0.3;
 }
 
 .option input[type="checkbox"]:focus:not(:disabled),
@@ -870,23 +910,43 @@ h1 {
 
 .option-text {
     flex: 1;
-    color: #333;
+    color: var(--text-primary);
     word-break: break-word; /* Ensure long option text wraps */
 }
 
 .option.correct-selection {
-    background-color: #e6ffed !important;
-    border-color: #5cb85c !important;
+    background: var(--action-stats) !important;
+    border-color: var(--feedback-correct) !important;
+    color: white !important;
 }
 .option.incorrect-selection {
-    background-color: #ffe6e6 !important;
-    border-color: #d9534f !important;
+    background: var(--action-secondary) !important;
+    border-color: var(--feedback-incorrect) !important;
+    color: white !important;
 }
 .option.reveal-correct {
-    border-color: #28a745 !important;
+    border-color: var(--feedback-correct) !important;
 }
 .option.reveal-correct:not(.correct-selection) {
-     background-color: #f0fff0 !important;
+    background-color: var(--feedback-correct-bg) !important;
+    border-color: var(--feedback-correct) !important;
+    color: var(--feedback-correct) !important;
+    font-weight: 600;
+}
+
+.option.correct-selection .option-text,
+.option.incorrect-selection .option-text {
+    color: white !important;
+}
+
+.option.reveal-correct:not(.correct-selection) .option-text {
+    color: var(--feedback-correct) !important;
+    font-weight: 600;
+}
+
+/* Enhanced feedback mode styling for better visibility in both modes */
+.option.disabled-option .option-text {
+    color: var(--text-primary);
 }
 
 .navigation {
@@ -913,18 +973,19 @@ h1 {
 #questionStatus {
     flex-grow: 1; /* Allows status to take up remaining space */
     text-align: center;
-    color: #666; /* Explicitly set from original inline style */
+    color: var(--text-muted); /* Use CSS variable instead of explicit color */
 }
 
 .question-slider {
     width: 100%; /* Slider takes full width of its parent (.navigation) */
     cursor: pointer;
-    accent-color: #667eea; /* Match theme color */
+    accent-color: var(--text-accent); /* Use CSS variable for theming */
     height: 8px;
-    background: #e0e0e0;
+    background: linear-gradient(135deg, #e2e8f0, #cbd5e0);
     border-radius: 4px;
     -webkit-appearance: none; /* Override default appearance */
     appearance: none;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .question-slider::-webkit-slider-thumb {
@@ -932,18 +993,21 @@ h1 {
     appearance: none;
     width: 20px;
     height: 20px;
-    background: #667eea;
+    background: var(--text-accent);
     border-radius: 50%;
     cursor: grab;
+    box-shadow: 0 2px 6px rgba(102, 126, 234, 0.4);
+    border: 2px solid white;
 }
 
 .question-slider::-moz-range-thumb {
     width: 20px;
     height: 20px;
-    background: #667eea;
+    background: var(--text-accent);
     border-radius: 50%;
     cursor: grab;
-    border: none;
+    border: 2px solid white;
+    box-shadow: 0 2px 6px rgba(102, 126, 234, 0.4);
 }
 
 /* Desktop ordering is now primarily by HTML structure within .navigation-controls */
@@ -1001,7 +1065,7 @@ h1 {
 }
 
 .nav-button.secondary {
-    background: white;
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
     color: #667eea;
     border: 2px solid #667eea;
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
@@ -1087,11 +1151,11 @@ h1 {
 }
 
 .review-question {
-    background: #f8f9fa;
+    background: var(--bg-container);
     border-radius: 10px;
     padding: 20px;
     margin-bottom: 20px;
-    border-left: 4px solid #667eea;
+    border-left: 4px solid var(--text-accent);
 }
 
 .review-question.incorrect {
@@ -1114,7 +1178,7 @@ h1 {
 
 .loading {
     text-align: center;
-    color: #666;
+    color: var(--text-muted);
     font-size: 1.2em;
     padding: 40px;
 }
@@ -1132,7 +1196,7 @@ h1 {
     text-align: center;
     margin-top: 35px;
     padding-top: 15px;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid var(--border-color);
     font-size: 0.9em;
     color: #777;
 }
@@ -1151,15 +1215,15 @@ h1 {
 }
 
 .stats-card {
-    background: #f8f9fa;
+    background: var(--bg-container);
     border-radius: 15px;
     padding: 25px;
-    border-left: 4px solid #667eea;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid var(--text-accent);
+    box-shadow: 0 4px 6px var(--shadow-primary);
 }
 
 .stats-card h3 {
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 20px;
     font-size: 1.3em;
 }
@@ -1178,13 +1242,13 @@ h1 {
     display: block;
     font-size: 2.5em;
     font-weight: bold;
-    color: #667eea;
+    color: var(--text-accent);
     margin-bottom: 5px;
 }
 
 .stat-label {
     font-size: 0.9em;
-    color: #666;
+    color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -1200,7 +1264,7 @@ h1 {
     text-align: center;
     padding: 15px;
     border-radius: 10px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: var(--action-primary);
     color: white;
 }
 
@@ -1227,9 +1291,9 @@ h1 {
     gap: 15px;
     padding: 12px;
     margin-bottom: 10px;
-    background: white;
+    background: var(--bg-container);
     border-radius: 8px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--border-color);
 }
 
 .achievement-icon {
@@ -1267,18 +1331,19 @@ h1 {
     border: none;
     cursor: pointer;
     font-size: 1em;
-    color: #666;
+    color: var(--text-muted);
     border-bottom: 3px solid transparent;
     transition: all 0.3s ease;
 }
 
 .tab-button.active {
-    color: #667eea;
-    border-bottom-color: #667eea;
+    color: var(--text-accent);
+    border-bottom-color: var(--text-accent);
 }
 
 .tab-button:hover {
-    background: #f8f9fa;
+    background: linear-gradient(135deg, var(--surface-card), var(--surface-hover));
+    color: var(--text-primary);
 }
 
 .stats-content {
@@ -1305,18 +1370,18 @@ h1 {
     align-items: center;
     padding: 15px;
     margin-bottom: 10px;
-    background: #f8f9fa;
+    background: var(--bg-container);
     border-radius: 10px;
-    border-left: 4px solid #667eea;
+    border-left: 4px solid var(--text-accent);
 }
 
 .test-info h4 {
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 5px;
 }
 
 .test-info p {
-    color: #666;
+    color: var(--text-muted);
     font-size: 0.9em;
     margin-bottom: 8px;
 }
@@ -1325,11 +1390,11 @@ h1 {
     display: flex;
     gap: 15px;
     font-size: 0.85em;
-    color: #777;
+    color: var(--text-muted);
 }
 
 .test-type {
-    background: #667eea;
+    background: var(--text-accent);
     color: white;
     padding: 2px 6px;
     border-radius: 4px;
@@ -1346,12 +1411,12 @@ h1 {
 }
 
 .score-pass {
-    background: #28a745;
+    background: var(--action-stats);
     color: white;
 }
 
 .score-fail {
-    background: #dc3545;
+    background: var(--action-secondary);
     color: white;
 }
 
@@ -1366,13 +1431,13 @@ h1 {
     align-items: center;
     padding: 20px;
     margin-bottom: 15px;
-    background: #f8f9fa;
+    background: var(--bg-container);
     border-radius: 10px;
-    border-left: 4px solid #667eea;
+    border-left: 4px solid var(--text-accent);
 }
 
 .category-info h4 {
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 8px;
 }
 
@@ -1380,7 +1445,7 @@ h1 {
     display: flex;
     gap: 15px;
     font-size: 0.9em;
-    color: #666;
+    color: var(--text-muted);
 }
 
 .category-scores {
@@ -1396,14 +1461,14 @@ h1 {
 .score-label {
     display: block;
     font-size: 0.8em;
-    color: #666;
+    color: var(--text-muted);
     margin-bottom: 3px;
 }
 
 .score-value {
     font-size: 1.3em;
     font-weight: bold;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .score-value.excellent {
@@ -1578,77 +1643,6 @@ h1 {
     }
 }
 
-/* Responsive Design Improvements */
-@media (max-width: 768px) {
-    .container {
-        padding: 20px;
-        margin: 10px;
-    }
-    
-    h1 {
-        font-size: 1.8em;
-        margin-bottom: 20px;
-    }
-    
-    .dashboard-stats-grid {
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 16px;
-        margin-bottom: 40px;
-        padding: 0 10px;
-    }
-    
-    .stat-card {
-        padding: 20px 16px;
-    }
-    
-    .stat-icon {
-        font-size: 1.8em;
-        margin-bottom: 8px;
-    }
-    
-    .stat-content h3 {
-        font-size: 2.2em;
-    }
-    
-    .stat-content p {
-        font-size: 0.8em;
-    }
-    
-    .dashboard-actions-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-        padding: 0 10px;
-    }
-    
-    .action-card {
-        padding: 24px 20px;
-        gap: 16px;
-    }
-    
-    .action-icon {
-        font-size: 2.8em;
-        width: 64px;
-        height: 64px;
-        padding: 12px;
-    }
-    
-    .action-content h3 {
-        font-size: 1.3em;
-    }
-    
-    .action-content p {
-        font-size: 0.9em;
-    }
-    
-    .section-header h3 {
-        font-size: 1.2em;
-    }
-    
-    .section-header p {
-        font-size: 0.9em;
-    }
-}
-
 @media (max-width: 480px) {
     .container {
         padding: 15px;
@@ -1761,10 +1755,10 @@ h1 {
 }
 
 .modal-content {
-    background: #fff;
+    background: var(--bg-container);
     padding: 30px 40px;
     border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px var(--shadow-primary);
     text-align: center;
     max-width: 400px;
     width: 90%;
@@ -1778,12 +1772,12 @@ h1 {
 
 .modal-title {
     font-size: 1.6em;
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 10px;
 }
 
 .modal-text {
-    color: #666;
+    color: var(--text-secondary);
     margin-bottom: 25px;
     font-size: 1.1em;
 }
@@ -1826,4 +1820,106 @@ h1 {
 
 .final-score.excellent {
     color: #22c55e;
+}
+
+/* Dark mode enhancements for syntax highlighting */
+[data-theme="dark"] .hljs {
+    background: rgba(45, 55, 72, 0.8) !important;
+    color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .hljs-keyword,
+[data-theme="dark"] .hljs-selector-tag,
+[data-theme="dark"] .hljs-title,
+[data-theme="dark"] .hljs-built_in {
+    color: #90cdf4 !important;
+}
+
+[data-theme="dark"] .hljs-string,
+[data-theme="dark"] .hljs-literal {
+    color: #68d391 !important;
+}
+
+[data-theme="dark"] .hljs-comment {
+    color: #a0aec0 !important;
+}
+
+[data-theme="dark"] .hljs-number {
+    color: #f6ad55 !important;
+}
+
+/* Improved weak question styling for dark mode */
+[data-theme="dark"] .weak-question-item {
+    background: rgba(245, 158, 11, 0.2);
+    border-left-color: #f59e0b;
+}
+
+[data-theme="dark"] .weak-question-info h4 {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .weak-question-info p {
+    color: var(--text-secondary);
+}
+
+/* Enhanced achievement styling for dark mode */
+[data-theme="dark"] .achievement-info strong {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .achievement-info p {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .achievement-info small {
+    color: var(--text-muted);
+}
+
+/* Better modal styling for dark mode */
+[data-theme="dark"] .modal-overlay {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+[data-theme="dark"] .modal-content {
+    background: var(--bg-container);
+    border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .modal-title {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .modal-text {
+    color: var(--text-secondary);
+}
+
+/* Enhanced slider styling for dark mode */
+[data-theme="dark"] .question-slider {
+    background: linear-gradient(135deg, #4a5568, #2d3748);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Enhanced option styling for dark mode */
+[data-theme="dark"] .option {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .option input[type="checkbox"]:not(:disabled),
+[data-theme="dark"] .option input[type="radio"]:not(:disabled) {
+    border-color: #a0aec0;
+    background: rgba(26, 32, 44, 0.8);
+}
+
+/* Enhanced progress bar styling for dark mode */
+[data-theme="dark"] .progress-bar {
+    background: linear-gradient(135deg, #4a5568, #2d3748);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Enhanced navigation button styling for dark mode */
+[data-theme="dark"] .nav-button.secondary {
+    background: linear-gradient(135deg, #4a5568, #2d3748);
+    color: #90cdf4;
+    border-color: #90cdf4;
 }
