@@ -1170,6 +1170,23 @@ h1 {
     font-weight: 600;
 }
 
+/* Answer review content styling */
+.answer-review h3 {
+    color: var(--text-primary);
+}
+
+.answer-review h4 {
+    color: var(--text-primary);
+}
+
+.answer-review p {
+    color: var(--text-secondary);
+}
+
+.answer-review strong {
+    color: var(--text-primary);
+}
+
 .loading {
     text-align: center;
     color: var(--text-muted);
@@ -1854,6 +1871,28 @@ h1 {
 
 [data-theme="dark"] .weak-question-info p {
     color: var(--text-secondary);
+}
+
+/* Enhanced answer review styling for dark mode */
+[data-theme="dark"] .answer-review h3 {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .answer-review h4 {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .answer-review p {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .answer-review strong {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .review-question {
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
 }
 
 /* Enhanced achievement styling for dark mode */
