@@ -1,51 +1,51 @@
 :root {
-    /* Light mode colors - softer palette with improved text contrast */
-    --bg-primary: linear-gradient(135deg, #7193db 0%, #5b49b6 100%);
-    --bg-container: rgba(255, 255, 255, 0.95);
-    --text-primary: #1a202c;
-    --text-secondary: #2d3748;
-    --text-muted: #4a5568;
-    --text-accent: #515ed6;
-    --surface-card: linear-gradient(145deg, #fafbfc 0%, #f1f5f9 100%);
-    --surface-hover: rgba(255, 255, 255, 0.9);
-    --border-color: rgba(255, 255, 255, 0.3);
-    --shadow-primary: rgba(0, 0, 0, 0.08);
-    --shadow-secondary: rgba(0, 0, 0, 0.04);
-    --action-primary: linear-gradient(135deg, #8fa4d3 0%, #9d8df1 100%);
-    --action-secondary: linear-gradient(135deg, #e5a7ca 0%, #d19ba8 100%);
-    --action-tertiary: linear-gradient(135deg, #7db3e8 0%, #5fb3d4 100%);
-    --action-stats: linear-gradient(135deg, #7ed5a3 0%, #6bc7c7 100%);
-    --gradient-start: #8fa4d3;
-    --gradient-end: #9d8df1;
-    --feedback-correct: #48bb78;
-    --feedback-incorrect: #e53e3e;
-    --feedback-correct-bg: rgba(72, 187, 120, 0.1);
-    --feedback-incorrect-bg: rgba(229, 62, 62, 0.1);
+    /* Light mode colors - vibrant and colorful palette */
+    --bg-primary: linear-gradient(135deg, #4c63d2 0%, #8e44ad 100%);
+    --bg-container: rgba(255, 255, 255, 0.98);
+    --text-primary: #1a1f36;
+    --text-secondary: #2d3561;
+    --text-muted: #5a6a85;
+    --text-accent: #5b4ff5;
+    --surface-card: rgba(255, 255, 255, 0.85);
+    --surface-hover: rgba(255, 255, 255, 0.95);
+    --border-color: rgba(91, 79, 245, 0.3);
+    --shadow-primary: rgba(91, 79, 245, 0.25);
+    --shadow-secondary: rgba(91, 79, 245, 0.15);
+    --action-primary: linear-gradient(135deg, #5b4ff5 0%, #8e44ad 100%);
+    --action-secondary: linear-gradient(135deg, #ff4757 0%, #ffa502 100%);
+    --action-tertiary: linear-gradient(135deg, #00d2d3 0%, #01a3a4 100%);
+    --action-stats: linear-gradient(135deg, #2ed573 0%, #17d963 100%);
+    --gradient-start: #5b4ff5;
+    --gradient-end: #8e44ad;
+    --feedback-correct: #00b894;
+    --feedback-incorrect: #e84393;
+    --feedback-correct-bg: rgba(0, 184, 148, 0.2);
+    --feedback-incorrect-bg: rgba(232, 67, 147, 0.2);
 }
 
 [data-theme="dark"] {
-    /* Dark mode colors - softer palette with improved text contrast */
-    --bg-primary: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-    --bg-container: rgba(44, 62, 80, 0.95);
-    --text-primary: #f7fafc;
-    --text-secondary: #e2e8f0;
-    --text-muted: #cbd5e0;
-    --text-accent: #90cdf4;
-    --surface-card: linear-gradient(145deg, #3c5470 0%, #485a6b 100%);
-    --surface-hover: rgba(52, 73, 94, 0.9);
-    --border-color: rgba(255, 255, 255, 0.15);
-    --shadow-primary: rgba(0, 0, 0, 0.25);
-    --shadow-secondary: rgba(0, 0, 0, 0.15);
-    --action-primary: linear-gradient(135deg, #6c7ce7 0%, #81ecec 100%);
-    --action-secondary: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%);
-    --action-tertiary: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
-    --action-stats: linear-gradient(135deg, #55a3ff 0%, #6c5ce7 100%);
-    --gradient-start: #6c7ce7;
-    --gradient-end: #81ecec;
-    --feedback-correct: #31a614;
-    --feedback-incorrect: #fd79a8;
-    --feedback-correct-bg: rgba(59, 150, 47, 0.2);
-    --feedback-incorrect-bg: rgba(253, 121, 168, 0.2);
+    /* Dark mode colors - more muted palette */
+    --bg-primary: linear-gradient(135deg, #2d1b69 0%, #1a1a2e 100%);
+    --bg-container: rgba(15, 23, 42, 0.95);
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --text-accent: #a78bfa;
+    --surface-card: rgba(30, 41, 59, 0.6);
+    --surface-hover: rgba(30, 41, 59, 0.9);
+    --border-color: rgba(167, 139, 250, 0.3);
+    --shadow-primary: rgba(167, 139, 250, 0.25);
+    --shadow-secondary: rgba(167, 139, 250, 0.15);
+    --action-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --action-secondary: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+    --action-tertiary: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+    --action-stats: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --gradient-start: #6366f1;
+    --gradient-end: #8b5cf6;
+    --feedback-correct: #48bb78;
+    --feedback-incorrect: #f56565;
+    --feedback-correct-bg: rgba(72, 187, 120, 0.25);
+    --feedback-incorrect-bg: rgba(245, 101, 101, 0.25);
 }
 
 * {
@@ -205,18 +205,17 @@ h1 {
     transition: all 0.2s ease;
     text-align: center;
     box-shadow: 
-        inset 2px 2px 5px var(--surface-hover),
-        inset -2px -2px 5px var(--shadow-secondary),
-        0 4px 15px var(--shadow-secondary);
+        0 2px 8px rgba(0, 0, 0, 0.06),
+        0 1px 3px rgba(0, 0, 0, 0.08);
     min-height: 100px;
+    backdrop-filter: blur(10px);
 }
 
 .stat-card:hover {
     transform: translateY(-2px);
     box-shadow: 
-        inset 2px 2px 8px var(--surface-hover),
-        inset -2px -2px 8px var(--shadow-primary),
-        0 8px 25px var(--shadow-primary);
+        0 4px 12px rgba(0, 0, 0, 0.1),
+        0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .stat-icon {
@@ -234,14 +233,10 @@ h1 {
 
 .stat-content h3 {
     font-size: 2.2em;
-    color: var(--text-secondary);
+    color: var(--text-primary);
     margin: 0;
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: -0.02em;
-    background: linear-gradient(135deg, var(--text-secondary) 0%, var(--text-primary) 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     line-height: 1.1;
 }
 
@@ -315,7 +310,7 @@ h1 {
 
 .action-card:hover {
     transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 12px 30px rgba(102, 126, 234, 0.35);
+    box-shadow: 0 12px 30px rgba(91, 79, 245, 0.45);
 }
 
 .action-card:hover::before {
@@ -566,25 +561,25 @@ h1 {
     font-weight: 600;
     padding: 1px 4px;
     border-radius: 2px;
-    background: #f0f4ff;
-    color: #667eea;
+    background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+    color: var(--text-accent);
     min-width: 30px;
     text-align: center;
 }
 
 .stat-value.excellent {
-    background: #e8f5e8;
-    color: #28a745;
+    background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+    color: #059669;
 }
 
 .stat-value.good {
-    background: #fff3cd;
-    color: #e67e22;
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+    color: #1d4ed8;
 }
 
 .stat-value.needs-improvement {
-    background: #f8d7da;
-    color: #dc3545;
+    background: linear-gradient(135deg, #fed7d7, #fbb6ce);
+    color: #dc2626;
 }
 
 /* Custom Test Selection */
@@ -623,7 +618,7 @@ h1 {
     background: var(--action-primary);
     color: white;
     transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 10px 25px rgba(91, 79, 245, 0.4);
 }
 
 .custom-category-card.selected h3,
@@ -678,11 +673,11 @@ h1 {
     font-weight: 500;
     text-align: center;
     padding: 15px 25px;
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
     border-radius: 10px;
-    border-left: 4px solid #667eea;
-    color: #495057;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid var(--text-accent);
+    color: var(--text-primary);
+    box-shadow: 0 2px 8px var(--shadow-primary);
 }
 
 .custom-test-actions .button-group {
@@ -718,7 +713,7 @@ h1 {
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, var(--text-accent), #a855f7);
     transition: width 0.3s ease;
     border-radius: 4px;
 }
@@ -747,7 +742,7 @@ h1 {
 
 #timerDisplay {
     font-weight: bold;
-    color: #d9534f;
+    color: #ef4444;
     font-size: 1.1em;
     margin: 5px 10px; /* Spacing for timer */
 }
@@ -826,10 +821,10 @@ h1 {
 
 .option.selected:not(.correct-selection):not(.incorrect-selection):not(.reveal-correct) {
     border-color: var(--text-accent);
-    background: linear-gradient(135deg, var(--text-accent), rgba(102, 126, 234, 0.8));
+    background: linear-gradient(135deg, var(--text-accent), #a855f7);
     color: white;
     transform: translateX(3px);
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 15px rgba(91, 79, 245, 0.4);
 }
 
 .option.selected:not(.correct-selection):not(.incorrect-selection):not(.reveal-correct) .option-text {
@@ -995,7 +990,7 @@ h1 {
     background: var(--text-accent);
     border-radius: 50%;
     cursor: grab;
-    box-shadow: 0 2px 6px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 2px 6px rgba(91, 79, 245, 0.5);
     border: 2px solid white;
 }
 
@@ -1024,7 +1019,7 @@ h1 {
     font-weight: 600;
     text-transform: none;
     letter-spacing: 0.5px;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    box-shadow: 0 4px 15px rgba(91, 79, 245, 0.3);
     position: relative;
     overflow: hidden;
 }
@@ -1046,13 +1041,13 @@ h1 {
 
 .nav-button:hover:not(:disabled) {
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-    background: linear-gradient(135deg, #5a67d8, #6b46c1);
+    box-shadow: 0 8px 25px rgba(91, 79, 245, 0.5);
+    background: linear-gradient(135deg, #4c3fe0, #8e44ad);
 }
 
 .nav-button:active:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 15px rgba(91, 79, 245, 0.4);
 }
 
 .nav-button:disabled {
@@ -1135,7 +1130,7 @@ h1 {
     transform: translate(-50%, -50%);
     font-size: 3em;
     font-weight: bold;
-    color: #667eea;
+    color: var(--text-accent);
 }
 
 .results-summary {
@@ -1570,7 +1565,7 @@ h1 {
 
 .stats-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 8px 15px rgba(91, 79, 245, 0.4);
 }
 
 .danger {
@@ -1927,4 +1922,25 @@ h1 {
     border-color: #63b3ed;
     color: #63b3ed;
     box-shadow: 0 8px 25px rgba(99, 179, 237, 0.2);
+}
+
+/* Enhanced stat card styling for dark mode */
+[data-theme="dark"] .stat-card {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(71, 85, 105, 0.4);
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.3),
+        0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .stat-card:hover {
+    background: rgba(30, 41, 59, 0.8);
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.4),
+        0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Fix white text issue in dark mode stat cards */
+[data-theme="dark"] .stat-content h3 {
+    color: var(--text-primary);
 }
