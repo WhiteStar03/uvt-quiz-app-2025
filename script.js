@@ -1400,9 +1400,27 @@ function displayQuestion() {
     // --- Image Handling End ---
 
     optionsContainer.innerHTML = '';
-    const isMultipleChoice = question.correct_answers.length > 1;
 
-    question.options.forEach(option => {
+    function shuffle(array) {
+        let currentIndex = array.length;
+
+        // While there remain elements to shuffle...
+        while (currentIndex != 0) {
+
+            // Pick a remaining element...
+            let randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            // And swap it with the current element.
+            [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    }
+
+    const shuffledQuestions = shuffle(question.options);
+
+    shuffledQuestions.forEach(option => {
         const optionDiv = document.createElement('div');
         optionDiv.classList.add('option');
 
@@ -1445,7 +1463,7 @@ function displayQuestion() {
             
             // Call selectAnswer with a small delay to ensure proper state management
             setTimeout(() => {
-                selectAnswer(option.id, isMultipleChoice);
+                selectAnswer(option.id);
             }, 0);
         };
 
@@ -1556,6 +1574,7 @@ function displayQuestion() {
     });
     
     updateNavigationButtons();
+
     if ('question_code' in question) { 
         if (questionCode.hasAttribute('data-highlighted')) questionCode.removeAttribute('data-highlighted');
         hljs.highlightElement(questionCode);
@@ -1795,23 +1814,7 @@ function saveCurrentAnswer() {
     return;
 }
 
-function getSelectedOptionValue(questionName) {
-    const inputs = document.getElementsByName(questionName);
-    
-    // Always collect ALL selected values regardless of question type
-    // This allows multiple selections even for single-choice questions
-    const selectedValues = [];
-    inputs.forEach(input => {
-        if (input.checked) {
-            selectedValues.push(input.value);
-        }
-    });
-    
-    return selectedValues.length > 0 ? selectedValues : undefined;
-}
-
-
-function selectAnswer(optionId, isMultipleChoice) {
+function selectAnswer(optionId) {
     if (isFeedbackMode) return; 
 
     const question = currentCategory.questions[currentQuestionIndex];
@@ -2108,9 +2111,7 @@ function finishTest() {
 function prepareReview() {
     const reviewContainer = document.getElementById('answerReview');
     reviewContainer.innerHTML = '<h3 style="margin-bottom: 20px;">Answer Review</h3>';
-    
 
-    
     let displayedQuestions = 0;
     let questionsWithAnswers = 0;
     let questionsWithoutAnswers = 0;
@@ -2119,9 +2120,7 @@ function prepareReview() {
         const uniqueQuestionKey = generateUniqueAnswerKey(question);
         const userAnswer = userAnswers[uniqueQuestionKey] || [];
         const correctAnswer = question.correct_answers;
-        
-
-        
+    
         if (userAnswer.length > 0) {
             questionsWithAnswers++;
         } else {
@@ -2175,8 +2174,6 @@ function prepareReview() {
         reviewContainer.appendChild(reviewDiv);
         displayedQuestions++;
     });
-    
-
 }
 
 function showReview() {
