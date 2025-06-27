@@ -1179,7 +1179,7 @@
                 "question_text": "If a class X has pointer variable members, then the class should also contain:",
                 "options": [
                   {"id": "a", "text": "an empty destructor X(){}"},
-                  {"id": "b", "text": "a fiend function that copies an object of class X"},
+                  {"id": "b", "text": "a friend function that copies an object of class X"},
                   {"id": "c", "text": "an overload of the assignment operator"},
                   {"id": "d", "text": "a copy constructor"},
                   {"id": "e", "text": "an overload of the == operator"},
@@ -1216,11 +1216,36 @@
                 "question_id": 7,
                 "question_text": "Which of the following code snippets is the correct implementation of the static function MyClass* instance() declared in class MyClass?",
                 "options": [
-                  {"id": "a", "text": "static MyClass* MyClass::instance() {return new MyClass; }"},
-                  {"id": "b", "text": "MyClass* instance() { return new MyClass; }"},
-                  {"id": "c", "text": "MyClass MyClass::instance() { return new MyClass; }"},
-                  {"id": "d", "text": "MyClass* MyClass::instance() { return new MyClass; }"},
-                  {"id": "e", "text": "MyClass::MyClass* instance() { return new MyClass; }"}
+                  {
+                    "id": "a", 
+                    "text": "static MyClass* MyClass::instance() {return new MyClass; }",
+                    "syntax":"cpp", 
+                    "is_code": true
+                  },
+                  {
+                    "id": "b", 
+                    "text": "MyClass* instance() { return new MyClass; }", 
+                    "syntax": "cpp", 
+                    "is_code": true
+                  },
+                  {
+                    "id": "c", 
+                    "text": "MyClass MyClass::instance() { return new MyClass; }",
+                    "syntax": "cpp",
+                    "is_code": true
+                  },
+                  {
+                    "id": "d", 
+                    "text": "MyClass* MyClass::instance() { return new MyClass; }",
+                    "syntax": "cpp",
+                    "is_code": true
+                  },
+                  {
+                    "id": "e", 
+                    "text": "MyClass::MyClass* instance() { return new MyClass; }",
+                    "syntax": "cpp",
+                    "is_code": true
+                  }
                 ],
                 "correct_answers": ["d"]
               },
@@ -1564,7 +1589,7 @@
             "questions": [
               {
                 "question_id": 1,
-                "question_text": "If T2 is executed under repeatable read isolation level, which statements are true?",
+                "question_text": "Given the relation R(A) with two tuples in it {(1), (2)} and the following two transactions.\nIf T2 is executed under repeatable read isolation level, which statements are true?",
                 "question_code": "(T1) UPDATE R SET A = A*2\n(T2) SELECT AVG(A) FROM R; SELECT MAX(A) FROM R",
                 "question_syntax": "sql",
                 "options": [
