@@ -1905,10 +1905,30 @@
                 "question_id": 7,
                 "question_text": "Which sequence of Java code correctly and completely describes the relations of class Journal?",
                 "options": [
-                  {"id": "a", "text": "class Journal extends OnlineJurnal implements Product { private Collection <Article> articles; ...}"},
-                  {"id": "b", "text": "class Journal implements Product { private Collection <Article> articles = new ArrayList<>(); private OnlineJurnal jurnal; ...}"},
-                  {"id": "c", "text": "class Journal implements Product { private Collection <Article> articles = new ArrayList<>(); ...}"},
-                  {"id": "d", "text": "class Journal extends OnlineJurnal { private Collection <Article> articles = new ArrayList<>(); private Product product; ...}"}
+                  {
+                    "id": "a", 
+                    "text": "class Journal extends OnlineJurnal implements Product { private Collection <Article> articles; ...}",
+                    "syntax": "java",
+                    "is_code": true
+                  },
+                  {
+                    "id": "b", 
+                    "text": "class Journal implements Product { private Collection <Article> articles = new ArrayList<>(); private OnlineJurnal jurnal; ...}",
+                    "syntax": "java",
+                    "is_code": true
+                  },
+                  {
+                    "id": "c", 
+                    "text": "class Journal implements Product { private Collection <Article> articles = new ArrayList<>(); ...}",
+                    "syntax": "java",
+                    "is_code": true
+                  },
+                  {
+                    "id": "d", 
+                    "text": "class Journal extends OnlineJurnal { private Collection <Article> articles = new ArrayList<>(); private Product product; ...}",
+                    "syntax": "java",
+                    "is_code": true
+                  }
                 ],
                 "correct_answers": ["c"]
               },
