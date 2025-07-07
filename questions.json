@@ -892,7 +892,7 @@
               },
               {
                 "question_id": 5,
-                "question_text": "Which of the following statements are TRUE about generators (in Python): \n(BTW modified answers here, as one was wrong)",
+                "question_text": "Which of the following statements are TRUE about generators (in Python):",
                 "options": [
                   {"id": "a", "text": "Generators are lazy in nature"},
                   {"id": "b", "text": "Generators are eager in nature"},
@@ -900,7 +900,7 @@
                   {"id": "d", "text": "Generators could make your program to perform faster if the values are generated multiple times"},
                   {"id": "e", "text": "Generators could make your program to perform slower"}
                 ],
-                "correct_answers": ["a", "c", "e"]
+                "correct_answers": ["a", "c", "d"]
               },
               {
                 "question_id": 6,
